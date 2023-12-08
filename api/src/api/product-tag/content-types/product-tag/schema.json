@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_tags",
+  "info": {
+    "singularName": "product-tag",
+    "pluralName": "product-tags",
+    "displayName": "Product tag",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "color": {
+      "type": "customField",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+      "required": true,
+      "customField": "plugin::color-picker.color"
+    }
+  }
+}

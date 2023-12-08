@@ -1,0 +1,25 @@
+.back-btn {
+	border: unset;
+
+	padding: 8px 16px;
+	border-radius: radius(md);
+
+	height: $icon-btn-height;
+	color: var(--color-primary-dark);
+	background-color: var(--bg-primary-dark);
+
+	cursor: pointer;
+
+	transition:
+		color anim(),
+		background-color anim();
+
+	@include hover-active-focus {
+		color: var(--color-primary);
+		background-color: var(--bg-primary-very-dark);
+	}
+
+	svg {
+		height: 100%;
+	}
+}

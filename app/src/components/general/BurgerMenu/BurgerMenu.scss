@@ -1,0 +1,132 @@
+.burger {
+	align-self: normal; //todo -> not ideal
+	position: relative;
+	margin-bottom: cgap(lg);
+
+	//just for keyboard navigation, :has() is okay here
+	&:has(a:focus-visible) &__menu {
+		transform: scaleY(1);
+		filter: opacity(1);
+		pointer-events: unset;
+	}
+
+	&__btn[data-visible="true"] ~ &__menu {
+		transform: scaleY(1);
+		filter: opacity(1);
+		pointer-events: unset;
+	}
+
+	&__btn {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: flex-end;
+
+		width: 56px;
+		height: $icon-btn-height;
+		padding: 8px;
+		cursor: pointer;
+
+		@include hover-active-focus {
+			.bar {
+				background-color: var(--color-primary);
+
+				&:nth-of-type(1),
+				&:nth-of-type(2),
+				&:nth-of-type(3) {
+					width: 100%;
+				}
+			}
+		}
+
+		&[data-visible="true"] {
+			.bar {
+				background-color: var(--color-primary);
+
+				&:nth-of-type(1),
+				&:nth-of-type(2),
+				&:nth-of-type(3) {
+					width: 100%;
+				}
+			}
+		}
+
+		.bar {
+			display: flex;
+			width: 100%;
+			height: 5px;
+			background-color: var(--color-primary-dark);
+			border-radius: radius(md);
+
+			transition:
+				width anim(),
+				background-color anim();
+
+			&:nth-of-type(1) {
+				width: 60%;
+			}
+
+			&:nth-of-type(2) {
+				width: 100%;
+			}
+
+			&:nth-of-type(3) {
+				width: 75%;
+			}
+		}
+	}
+
+	&__menu {
+		margin: unset;
+		padding: unset;
+		list-style: none;
+
+		position: absolute;
+		top: calc(100% + 1rem);
+		left: 0;
+		overflow: hidden;
+
+		display: flex;
+		flex-direction: column;
+
+		border-radius: radius(xs);
+		box-shadow: var(--shadow);
+
+		transform-origin: top center;
+		transform: scaleY(0.9) translateY(-0.25rem);
+		filter: opacity(0);
+		pointer-events: none;
+
+		transition:
+			transform anim(fast),
+			filter anim(fast);
+
+		color: var(--bg-secondary);
+
+		li {
+			display: inline-flex;
+
+			a {
+				@include font-size(1.15rem);
+
+				color: inherit;
+				flex-basis: 100%;
+				outline: 0;
+				text-decoration: none;
+				font-weight: 500;
+				padding: 0.6rem 1rem;
+				background-color: var(--color-primary);
+
+				transition:
+					background-color anim(fast),
+					color anim(fast),
+					filter anim(fast);
+
+				@include hover-active-focus {
+					color: var(--color-primary);
+					background-color: var(--bg-secondary);
+				}
+			}
+		}
+	}
+}
