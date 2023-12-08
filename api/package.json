@@ -1,0 +1,33 @@
+{
+  "name": "portfolio-api",
+  "version": "1.0.0",
+  "description": "My portfolio api",
+  "scripts": {
+    "dev": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.202",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "eslint": "^8.50.0",
+    "lodash": "^4.17.21"
+  },
+  "dependencies": {
+    "@strapi/plugin-color-picker": "^4.14.0",
+    "@strapi/plugin-i18n": "4.14.0",
+    "@strapi/plugin-users-permissions": "4.14.0",
+    "@strapi/strapi": "4.14.0",
+    "better-sqlite3": "8.6.0",
+    "strapi-plugin-populate-deep": "^3.0.0"
+  },
+  "strapi": {
+    "uuid": "d4fa12f7-ad5f-43c3-a620-b13632374abd"
+  },
+  "engines": {
+    "node": ">=16.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  }
+}

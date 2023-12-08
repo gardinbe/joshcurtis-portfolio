@@ -1,0 +1,36 @@
+@mixin hover-active {
+	@media (pointer: fine) {
+		&:hover {
+			@content;
+		}
+	}
+	@media (pointer: coarse) {
+		&:active {
+			@content;
+		}
+	}
+}
+
+@mixin hover-focus {
+	&:hover,
+	&:focus-visible {
+		@content;
+	}
+}
+
+@mixin hover-active-focus {
+	@media (pointer: fine) {
+		&:hover {
+			@content;
+		}
+	}
+	@media (pointer: coarse) {
+		&:active {
+			@content;
+		}
+	}
+
+	&:focus-visible {
+		@content;
+	}
+}

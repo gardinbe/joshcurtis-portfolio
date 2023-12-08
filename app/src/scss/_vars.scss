@@ -1,0 +1,14 @@
+:root {
+	--color-primary: #{$color-primary};
+	--color-primary-dark: #{$color-primary-dark};
+	--color-alt: rgb(105, 195, 201);
+	--color-alt-dark: rgb(74, 138, 143);
+	--bg-primary-light: #{$bg-primary-light};
+	--bg-primary: #{$bg-primary};
+	--bg-primary-dark: #{$bg-primary-dark};
+	--bg-primary-very-dark: #{$bg-primary-very-dark};
+	--bg-primary-very-very-dark: #{$bg-primary-very-very-dark};
+	--bg-secondary: #{$bg-secondary};
+	--bg-secondary-dark: #{$bg-secondary-dark};
+	--shadow: #{$shadow};
+}

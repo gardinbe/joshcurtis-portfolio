@@ -1,0 +1,52 @@
+services:
+  # the api
+  - type: web
+    plan: starter
+    # region: frankfurt # need to get upgrade
+    numInstances: 1
+    name: portfolio-api
+    runtime: node
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: rsync -a public/ /data/public/ && npm start
+    healthCheckPath: /_health
+    autoDeploy: false
+    disk: # need to get upgrade
+      name: strapi-data
+      mountPath: /data
+      sizeGB: 20
+    envVars:
+      - key: NODE_VERSION
+        value: ~20.7.0
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_FILENAME
+        value: /data/strapi.db # need to get upgrade
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_JWT_SECRET
+        generateValue: true
+      - key: APP_KEYS
+        generateValue: true
+  # the web app
+  - type: web
+    name: portfolio-app
+    runtime: static
+    branch: dev
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    healthCheckPath: /_health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: ~20.7.0
+      - key: VITE_STRAPI_URL
+        value: https://portfolio-api-yi9v.onrender.com
+    headers:
+    - path: /*
+      name: X-Frame-Options
+      value: sameorigin
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
