@@ -4,7 +4,7 @@ services:
     plan: starter
     # region: frankfurt # need to get upgrade
     numInstances: 1
-    name: portfolio-api
+    name: joshcurtis-portfolio-api
     rootDir: api
     runtime: node
     branch: master
@@ -21,6 +21,8 @@ services:
         value: ~20.7.0
       - key: NODE_ENV
         value: production
+      - key: DATABASE_CLIENT
+        value: sqlite
       - key: DATABASE_FILENAME
         value: /data/strapi.db # need to get upgrade
       - key: JWT_SECRET
@@ -31,7 +33,7 @@ services:
         generateValue: true
   # the web app
   - type: web
-    name: portfolio-app
+    name: joshcurtis-portfolio-app
     rootDir: app
     runtime: static
     branch: master
