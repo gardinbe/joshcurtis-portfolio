@@ -75,6 +75,7 @@ const shortSwipe = {
 	/** Threshold time in milliseconds to check if this is a shortswipe. */
 	threshold: 250,
 	startTime: 0,
+	startPos: 0,
 	elapsed: 0,
 	isShortSwipe: false,
 	startTimer() {
@@ -82,7 +83,9 @@ const shortSwipe = {
 	},
 	stopTimer() {
 		this.elapsed = Date.now() - this.startTime;
-		this.isShortSwipe = this.elapsed <= this.threshold;
+		this.isShortSwipe = this.elapsed <= this.threshold
+			&& panelDistanceTravelled !== null
+			&& panelDistanceTravelled > 0;
 	}
 };
 
@@ -123,8 +126,6 @@ const touchEndHandler = () => {
 
 	shortSwipe.stopTimer();
 	panelStartingPosX = null;
-
-	console.log(shortSwipe);
 
 	//readd transition delay and unset transform
 	panelElRef.value.style.transition = "";
