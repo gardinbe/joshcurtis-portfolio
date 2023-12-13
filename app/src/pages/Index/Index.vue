@@ -25,8 +25,8 @@
 					</TerminalText>
 
 					<Button
-						size="large"
 						mode="ghost"
+						size="large"
 						@click="router.push('contact')"
 					>
 						{{ data.cta }}

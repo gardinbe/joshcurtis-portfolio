@@ -15,7 +15,8 @@
 					v-for="link of data.social_links.data"
 					:key="link.id"
 				>
-					<a
+					<Button
+						mode="filled-dark"
 						class="btn social-link-icon"
 						:style="{ backgroundColor: link.attributes.background_color }"
 						target="_blank"
@@ -27,7 +28,7 @@
 							lazy
 							no-fallback-color
 						/>
-					</a>
+					</Button>
 				</li>
 			</ul>
 		</div>
@@ -36,10 +37,11 @@
 
 <script setup lang="ts">
 import StandardContent from "@/components/sections/StandardContent/StandardContent.vue";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
+import Button from "@/components/Button/Button.vue";
 import { ContactResponse } from "@/types/api/pages/contact";
 import { strapi } from "@/utils";
 import { parse } from "marked";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 
 const response = await strapi.get<ContactResponse>("contact");
 const data = response.data.attributes;
