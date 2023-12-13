@@ -1,22 +1,23 @@
-import { required } from "@/utils/common";
-import { castEnv } from "@/utils/env";
+import { envCast } from "@/utils";
 
 export default {
-	strapiUrl:
-		required(castEnv.asString(
-			import.meta.env.VITE_STRAPI_URL as string | undefined
-		)),
-	enableContentCaching:
-		required(castEnv.asBool(
-			import.meta.env.VITE_ENABLE_CONTENT_CACHING as string | undefined
-		)),
-	artificialDelay:
-		required(castEnv.asBool(
-			import.meta.env.VITE_ARTIFICAL_DELAY as string | undefined
-		)),
-	artificialDelayDuration:
-		castEnv.asNumber(
-			import.meta.env.VITE_ARTIFICAL_DELAY_DURATION as string | undefined
-		)
-		?? 250
-};
+	strapiUrl: envCast.string(
+		import.meta.env.VITE_STRAPI_URL
+	),
+	strapiTimeoutDuration: envCast.number(
+		import.meta.env.VITE_STRAPI_TIMEOUT_DURATION,
+		30000
+	),
+	contentCaching: envCast.bool(
+		import.meta.env.VITE_CONTENT_CACHING,
+		true
+	),
+	artificialDelay: envCast.bool(
+		import.meta.env.VITE_ARTIFICIAL_DELAY,
+		false
+	),
+	artificialDelayDuration: envCast.number(
+		import.meta.env.VITE_ARTIFICIAL_DELAY_DURATION,
+		1000
+	)
+} as const;

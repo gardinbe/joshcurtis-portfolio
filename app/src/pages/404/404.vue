@@ -1,8 +1,9 @@
 <template>
 	<p>
-		Page not found. <RouterLink to="/">
+		404 - Page not found.
+		<RouterLink to="/">
 			Return to homepage
-		</RouterLink>.
+		</RouterLink>
 	</p>
 </template>
 

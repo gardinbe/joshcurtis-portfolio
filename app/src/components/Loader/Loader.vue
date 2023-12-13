@@ -1,7 +1,7 @@
 <template>
 	<section
 		class="loader-wrapper"
-		:class="{ inline, prioritise, fixed }"
+		:class="{ inline, fixed }"
 	>
 		<Transition
 			appear
@@ -16,12 +16,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+
+export type LoaderProps = {
 	inline?: boolean;
-	prioritise?: boolean;
 	fixed?: boolean;
-	initialPageLoad?: boolean;
-}>();
+};
+
+defineProps<LoaderProps>();
 </script>
 
 <style scoped src="./Loader.scss" />

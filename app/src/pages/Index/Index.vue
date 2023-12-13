@@ -3,92 +3,81 @@
 <!-- also known as 'Home' ! -->
 
 <template>
-	<Transition
-		appear
-		name="content-loaded"
-	>
-		<Loader
-			v-if="showLoader"
-			fixed
-			prioritise
-		/>
-	</Transition>
-
 	<SplitContent
-		v-if="data !== null"
-		min-vp-height-slots
+		viewport-height
 		second-slot-type="image"
 		class="index"
 	>
 		<template #first>
 			<BurgerMenu :items="burgerMenuItems" />
 
-			<div class="index__main-content">
-				<hgroup>
-					<h1>{{ data.title }}</h1>
-				</hgroup>
+			<div class="index__content">
+				<div class="index__main-content">
+					<hgroup>
+						<h1>{{ data.title }}</h1>
+					</hgroup>
 
-				<TerminalText
-					class="index__subtitle mb-4"
-					fixed-height
-					:delay="config.artificialDelay ? config.artificialDelayDuration : undefined"
-				>
-					<div v-html="parse(data.content)" />
-				</TerminalText>
-
-				<Button
-					size="large"
-					mode="ghost"
-					@click="router.push('contact')"
-				>
-					{{ data.cta }}
-				</Button>
-			</div>
-
-			<div class="index__footer">
-				<span v-if="data.social_links.data.length > 0">
-					Find/contact me on
-					<template
-						v-for="(link, index) of data.social_links.data "
-						:key="link.attributes"
+					<TerminalText
+						class="index__subtitle mb-4"
+						predetermined-height
 					>
+						<div v-html="parse(data.content)" />
+					</TerminalText>
 
-						<template v-if="data.social_links.data.length === 1">
-							<a
-								target="_blank"
-								:href="link.attributes.url"
-							>{{ link.attributes.name }}</a>.
+					<Button
+						size="large"
+						mode="ghost"
+						@click="router.push('contact')"
+					>
+						{{ data.cta }}
+					</Button>
+				</div>
+
+				<div class="index__footer">
+					<p v-if="data.social_links.data.length > 0">
+						Find and contact me on
+						<template
+							v-for="(link, index) of data.social_links.data "
+							:key="link.attributes"
+						>
+							<template v-if="data.social_links.data.length === 1">
+								<a
+									target="_blank"
+									:href="link.attributes.url"
+								>{{ link.attributes.name }}</a>.
+							</template>
+
+							<template v-else-if="index === data.social_links.data.length - 1">
+								and <a
+									target="_blank"
+									:href="link.attributes.url"
+								>{{ link.attributes.name }}</a>.
+							</template>
+
+							<template v-else-if="index === data.social_links.data.length - 2">
+								<a
+									target="_blank"
+									:href="link.attributes.url"
+								>{{ link.attributes.name }}</a>
+							</template>
+
+							<template v-else>
+								<a
+									target="_blank"
+									:href="link.attributes.url"
+								>{{ link.attributes.name }}</a>,
+							</template>
 						</template>
+					</p>
 
-						<template v-else-if="index === data.social_links.data.length - 1">
-							and <a
-								target="_blank"
-								:href="link.attributes.url"
-							>{{ link.attributes.name }}</a>.
-						</template>
-
-						<template v-else-if="index === data.social_links.data.length - 2">
-							<a
-								target="_blank"
-								:href="link.attributes.url"
-							>{{ link.attributes.name }}</a>
-						</template>
-
-						<template v-else>
-							<a
-								target="_blank"
-								:href="link.attributes.url"
-							>{{ link.attributes.name }}</a>,
-						</template>
-
-					</template>
-				</span>
-
-				<span>Download
-					<a
-						target="_blank"
-						:href="strapiUrl(data.resume.data.attributes.url)"
-					>my resume</a>.</span>
+					<p>
+						Download
+						<a
+							target="_blank"
+							:href="strapi.mediaUrl(data.resume.data.attributes.url)"
+						>my resume</a> here.
+					</p>
+				</div>
 			</div>
 		</template>
 
@@ -104,48 +93,46 @@
 		:open="panelOpen"
 		:close-action="closePanel"
 	>
-		<RouterView />
+		<RouterView v-slot="{ Component }">
+			<AsyncComponentLoader :component="Component" />
+		</RouterView>
 	</Panel>
 </template>
 
 <script setup lang="ts">
-import Loader from "@/components/general/Loader/Loader.vue";
 import SplitContent from "@/components/sections/SplitContent/SplitContent.vue";
-import BurgerMenu from "@/components/general/BurgerMenu/BurgerMenu.vue";
-import Button from "@/components/general/Button/Button.vue";
-import TerminalText from "@/components/general/TerminalText/TerminalText.vue";
-import StrapiImage from "@/components/general/StrapiImage/StrapiImage.vue";
-import Panel from "@/components/general/Panel/Panel.vue";
-import { HomeResponse, HomeData } from "@/types/api/pages/home.models";
-import { getFromStrapi, strapiUrl } from "@/utils/strapi";
-import { ref, computed } from "vue";
+import BurgerMenu from "@/components/BurgerMenu/BurgerMenu.vue";
+import Button from "@/components/Button/Button.vue";
+import TerminalText from "@/components/TerminalText/TerminalText.vue";
+import AsyncComponentLoader from "@/components/AsyncComponentLoader/AsyncComponentLoader.vue";
+import Panel from "@/components/Panel/Panel.vue";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
+import { HomeResponse } from "@/types/api/pages/home";
+import { strapi } from "@/utils";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { parse } from "marked";
-import config from "@/config";
-import { delay } from "@/utils/common";
 
 const router = useRouter();
+
 const burgerMenuItems = router.getRoutes()
 	.find(route => route.path === "/")?.children
 	.map(route => ({
-		label: route.name?.toString() ?? "...",
+		label: route.name as string | undefined ?? "",
 		href: route.path
 	})) ?? [];
 
-//when on child page
-const panelOpen = computed(() => router.currentRoute.value.path !== "/");
-const closePanel = () => void router.push("/");
+const panelOpen = ref(router.currentRoute.value.name !== "Index");
+router.beforeEach(to => { panelOpen.value = to.name !== "Index"; });
 
-const data = ref<HomeData | null>(null);
-const showLoader = ref(true);
+const closePanel = () => {
+	void router.push("/");
+	panelOpen.value = false; //not strictly necessary
+};
 
-void (async () => {
-	const response = await getFromStrapi<HomeResponse>("home");
-	data.value = response.data.attributes;
-	if (config.artificialDelay)
-		await delay(config.artificialDelayDuration);
-	showLoader.value = false;
-})();
+const response = await strapi.get<HomeResponse>("home");
+const data = response.data.attributes;
+
 </script>
 
 <style scoped src="./Index.scss" />

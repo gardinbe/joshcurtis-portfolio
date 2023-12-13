@@ -1,9 +1,16 @@
 <template>
-	<section class="section-standard-content">
+	<section class="standard-content">
+		<BackButton v-if="hasBackBtn" />
 		<slot />
 	</section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BackButton from "@/components/BackButton/BackButton.vue";
 
-<style src="./StandardContent.scss" />
+defineProps<{
+	hasBackBtn?: boolean;
+}>();
+</script>
+
+<style scoped src="./StandardContent.scss" />

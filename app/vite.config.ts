@@ -6,8 +6,8 @@ import { compression } from "vite-plugin-compression2";
 export default defineConfig({
 	plugins: [
 		vue(),
-		compression(),
-		compression({ algorithm: "brotliCompress", exclude: [/\.(br)$/, /\.(gz)$/], deleteOriginalAssets: false })
+		compression(), //gzip
+		compression({ algorithm: "brotliCompress", exclude: [/\.(br)$/, /\.(gz)$/], deleteOriginalAssets: false }) //brotli
 	],
 	resolve: {
 		alias: {
@@ -26,7 +26,7 @@ export default defineConfig({
 					@import "@/scss/functions";
 					@import "@/scss/mixins";
 					@import "@/scss/variables";
-				` //this is fine, as its just sass logic. do not import the whole fucking bootstrap library over and over for each module. that is fucking awful.
+				`
 			}
 		}
 	}

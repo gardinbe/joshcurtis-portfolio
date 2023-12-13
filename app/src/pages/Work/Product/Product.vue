@@ -1,20 +1,11 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<Transition
-		appear
-		name="content-loaded"
-	>
-		<Loader v-if="showLoader" />
-	</Transition>
-
 	<SplitContent
-		v-if="data !== null"
 		second-slot-type="image"
 		class="product"
+		has-back-btn
 	>
 		<template #first>
-			<BackButton />
-
 			<div class="product__main-content">
 				<hgroup>
 					<h1>
@@ -59,17 +50,12 @@
 </template>
 
 <script setup lang="ts">
-import BackButton from "@/components/general/BackButton/BackButton.vue";
-import Button from "@/components/general/Button/Button.vue";
-import Loader from "@/components/general/Loader/Loader.vue";
-import StrapiImage from "@/components/general/StrapiImage/StrapiImage.vue";
+import Button from "@/components/Button/Button.vue";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import SplitContent from "@/components/sections/SplitContent/SplitContent.vue";
-import config from "@/config";
-import { ProductResponse, Product } from "@/types/api/pages/products.models";
-import { delay } from "@/utils/common";
-import { getFromStrapi } from "@/utils/strapi";
+import { ProductResponse } from "@/types/api/pages/products";
+import { strapi } from "@/utils";
 import { parse } from "marked";
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -78,16 +64,10 @@ if (typeof router.currentRoute.value.params.productID !== "string")
 	throw new Error("Missing product ID from request");
 
 const productID = parseInt(router.currentRoute.value.params.productID);
-const data = ref<Product | null>(null);
-const showLoader = ref(true);
 
-void (async () => {
-	const response = await getFromStrapi<ProductResponse>(`products/${productID}`);
-	data.value = response.data.attributes;
-	if (config.artificialDelay)
-		await delay(config.artificialDelayDuration);
-	showLoader.value = false;
-})();
+const response = await strapi.get<ProductResponse>(`products/${productID}`);
+const data = response.data.attributes;
+
 </script>
 
-<style scoped src="./Product.scss" />@/utils/strapi
+<style scoped src="./Product.scss" />

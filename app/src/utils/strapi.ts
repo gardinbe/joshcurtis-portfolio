@@ -1,82 +1,70 @@
 import config from "@/config";
-import Strapi from "@/types/api/strapi.models";
-import { delay } from "@/utils/common";
+import { Response } from "@/types/api/strapi";
+import { Api, ApiOptions } from "@/utils/api";
 
-/**
- * Send a GET request to a Strapi API endpoint. The response type must be defined
- * to provide effective typing functionality.
- * @param endpoint Endpoint to use
- * @returns Promise containing response data
- */
-export const getFromStrapi = async <T extends Strapi.Response>(endpoint: string) => {
-	if (config.enableContentCaching) {
-		const cachedResponseData = getCachedStrapiResponseData<T>(endpoint);
-		if (cachedResponseData !== null)
-			return cachedResponseData;
+class StrapiApi extends Api {
+	private cachedData: Map<string, Response>;
+
+	constructor(options: Partial<ApiOptions>) {
+		super(options);
+		this.cachedData = new Map();
 	}
 
-	const fetchData = async () => {
-		let data: T;
+	/**
+	 * Set a cached Strapi API response into sessionStorage.
+	 * @param endpoint Selected endpoint
+	 * @param response Response to be cached
+	 */
+	private setCachedData(endpoint: string, response: Response) {
+		this.cachedData.set(`strapi-cached-response-${endpoint}`, response);
+	}
 
-		try {
-			const res = await fetch(`${config.strapiUrl}/api/${endpoint}?populate=deep`);
+	/**
+	 * Get a cached Strapi API response from sessionStorage.
+	 * @param endpoint Selected endpoint
+	 * @returns Cached data
+	 */
+	private getCachedData<T extends Response>(endpoint: string) {
+		return (this.cachedData.get(`strapi-cached-response-${endpoint}`) ?? null) as T | null;
+	}
 
-			switch (res.status) {
-				case 200:
-					data = await res.json() as T;
-					break;
+	/**
+	 * Fix a Strapi media items' URL: if the media item is being served directly from Strapi then we
+	 * have to prepend the Strapi URL to the media items' path.
+	 * @param url Target url
+	 */
+	mediaUrl(url: string) {
+		return url.startsWith("/")
+			? config.strapiUrl + url
+			: url;
+	}
 
-				case 404:
-					throw new Error("404 - Requested content not found");
-
-				default:
-					throw new Error("API request failed");
-			}
-
-		} catch (e) {
-			if (e === "404") //todo -> hmm
-				throw new Error(`API request failed: ${e}`); //rethrow
-			else
-				console.error("API request failed. Trying again shortly...");
-
-			await delay(2500);
-			data = await fetchData();
+	/**
+	 * Send a GET request to a Strapi API endpoint. The response type must be defined
+	 * to provide effective typing functionality.
+	 * @param endpoint Endpoint to use
+	 * @returns Promise containing response data
+	 */
+	async get<T extends Response>(endpoint: string) {
+		if (config.contentCaching) {
+			const cachedData = this.getCachedData<T>(endpoint);
+			if (cachedData !== null)
+				return cachedData;
 		}
 
+		const res = await this.httpClient.get<T>(endpoint);
+		const data = res.data;
+
+		if (config.contentCaching)
+			this.setCachedData(endpoint, data);
+
 		return data;
-	};
+	}
+}
 
-	const data = await fetchData();
-
-	if (config.enableContentCaching)
-		setCachedStrapiResponseData(endpoint, data);
-
-	return data;
-};
-
-/**
- * Get a cached Strapi API response from sessionStorage.
- * @param endpoint Selected endpoint
- * @returns Cached data
- */
-const getCachedStrapiResponseData = <T extends Strapi.Response = Strapi.Response>(endpoint: string): T | null => {
-	const stringifiedResponse = sessionStorage.getItem(`strapi-cached-response-${endpoint}`);
-	if (stringifiedResponse === null)
-		return null;
-
-	return JSON.parse(stringifiedResponse) as T;
-};
-
-/**
- * Set a cached Strapi API response into sessionStorage.
- * @param endpoint Selected endpoint
- * @param response Response to be cached
- */
-const setCachedStrapiResponseData = (endpoint: string, response: Strapi.Response) => sessionStorage.setItem(`strapi-cached-response-${endpoint}`, JSON.stringify(response));
-
-/**
- * Fix a Strapi images' URL: if the image is being served directly from Strapi then we
- * have to prepend the Strapi URL to the image path.
- * @param url Target url
- */
-export const strapiUrl = (url: string) => url.startsWith("/") ? config.strapiUrl + url : url;
+export const strapi = new StrapiApi({
+	baseURL: `${config.strapiUrl}/api/`,
+	params: { populate: "deep" },
+	retryCount: 5,
+	timeout: config.strapiTimeoutDuration
+});
