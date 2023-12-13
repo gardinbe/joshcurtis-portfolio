@@ -1,14 +1,11 @@
-.section-split-content {
+.split-content {
 	$this: &;
 
-	--bg: var(--bg-primary);
-	--color: var(--color-primary);
-
-	height: 100%; //big one
+	height: 100%;
 
 	display: flex;
-	background-color: var(--bg);
-	color: var(--color);
+	background-color: var(--bg-primary);
+	color: var(--color-primary);
 	overflow: auto;
 
 	@include media-breakpoint-down(lg) {
@@ -17,38 +14,49 @@
 
 	/* theme styles */
 	.btn {
-		background-color: var(--color-primary);
-		color: var(--bg-secondary);
+		background-color: var(--bg-primary);
+		color: var(--color-primary);
 	}
 
-	&__first,
-	&__second {
-		flex-basis: 100%;
-	}
-
-	&__first {
+	.first {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
-		overflow-y: auto;
-		padding: cgap(xxl);
-
-		@include media-breakpoint-down(xl) {
-			padding: cgap(xl);
-		}
+		flex-basis: 100%;
 
 		@include media-breakpoint-down(lg) {
-			overflow-y: unset;
-			margin-bottom: auto;
+			flex-basis: unset;
 		}
 
-		@include media-breakpoint-down(md) {
-			padding: cgap(lg);
+		&__content {
+			display: flex;
+			flex-direction: column;
+
+			flex-basis: 100%;
+			overflow-y: auto;
+			padding: cgap(xxl);
+
+			@include media-breakpoint-down(xl) {
+				padding: cgap(xl);
+			}
+
+			@include media-breakpoint-down(lg) {
+				overflow-y: unset;
+			}
+
+			@include media-breakpoint-down(md) {
+				padding: cgap(lg);
+			}
+
+			.back-btn {
+				margin-bottom: cgap(lg);
+				margin-right: auto;
+			}
 		}
 	}
 
-	&__second {
+	.second {
 		display: flex;
+		flex-basis: 100%;
 		overflow: hidden;
 
 		@include media-breakpoint-down(lg) {
@@ -60,17 +68,20 @@
 			align-items: center;
 
 			@include media-breakpoint-down(lg) {
+				max-height: 90%;
 				align-items: unset;
 			}
 
-			img {
+			::v-deep img {
 				object-fit: cover;
 				min-width: 100%;
 				min-height: 100%;
 				width: auto;
 
 				@include media-breakpoint-down(lg) {
-					max-height: max(60vh, 300px);
+					max-height: unset;
+					width: 100%;
+					height: auto;
 				}
 			}
 		}
@@ -81,13 +92,21 @@
 			align-items: center;
 			color: var(--bg-secondary);
 
-			.swiper {
+			::v-deep .swiper {
 				display: flex;
 				flex-direction: column;
 				width: 100%;
 				flex-basis: 100%;
 				padding: cgap(md) 0;
-				height: 55%;
+				height: 60%;
+
+				@include media-breakpoint-down(xxl) {
+					height: 70%;
+				}
+
+				@include media-breakpoint-down(xl) {
+					height: 80%;
+				}
 
 				@include media-breakpoint-down(lg) {
 					height: 100%;
@@ -100,7 +119,6 @@
 
 				.swiper-wrapper {
 					.swiper-slide {
-						min-height: min(70vh, 250px);
 						border-radius: radius(lg);
 						background-repeat: no-repeat;
 						background-position: center;
@@ -111,9 +129,8 @@
 		}
 	}
 
-	&--min-vp-height-slots {
-		#{$this}__first {
-			max-height: unset;
+	&--viewport-height {
+		.first__content {
 			min-height: 100vh;
 			min-height: 100svh;
 

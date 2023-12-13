@@ -1,4 +1,4 @@
-import Strapi from "@/types/api/strapi.models";
+import Strapi from "@/types/api/strapi";
 
 export type SocialLink = {
 	name: string;

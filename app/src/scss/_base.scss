@@ -4,8 +4,13 @@ body {
 	font-family: Inter, sans-serif;
 	word-break: break-word;
 	// hyphens: auto; //todo -> hmm
+	height: 100vh;
+	height: 100svh;
 	min-height: 100vh;
 	min-height: 100svh;
+
+	color: var(--color-primary);
+	background-color: var(--bg-primary);
 
 	::selection {
 		background-color: var(--bg-secondary);
@@ -35,15 +40,12 @@ hgroup {
 }
 
 h1,
-h2 {
-	font-weight: 700;
-}
-
+h2,
 h3,
 h4,
 h5,
 h6 {
-	font-weight: 500;
+	font-weight: 700;
 }
 
 p {

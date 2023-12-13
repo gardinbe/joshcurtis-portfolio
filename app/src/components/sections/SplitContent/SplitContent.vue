@@ -1,16 +1,19 @@
 <template>
 	<section
-		class="section-split-content"
-		:class="{ 'section-split-content--min-vp-height-slots': minVpHeightSlots }"
+		class="split-content"
+		:class="{ 'split-content--viewport-height': viewportHeight }"
 	>
-		<div class="section-split-content__first">
-			<slot name="first" />
+		<div class="first">
+			<div class="first__content">
+				<BackButton v-if="hasBackBtn" />
+				<slot name="first" />
+			</div>
 		</div>
 		<div
-			class="section-split-content__second"
+			class="second"
 			:class="{
-				'section-split-content__second--image': secondSlotType === 'image',
-				'section-split-content__second--swiper': secondSlotType === 'swiper'
+				'second--image': secondSlotType === 'image',
+				'second--swiper': secondSlotType === 'swiper'
 			}"
 		>
 			<slot name="second" />
@@ -19,11 +22,13 @@
 </template>
 
 <script setup lang="ts">
+import BackButton from "@/components/BackButton/BackButton.vue";
+
 defineProps<{
-	minVpHeightSlots?: boolean;
-	secondSlotType?: "image" | "swiper";
+	viewportHeight?: boolean;
+	secondSlotType: "image" | "swiper";
+	hasBackBtn?: boolean;
 }>();
 </script>
 
-<!-- unscoped! -->
-<style src="./SplitContent.scss" />
+<style scoped src="./SplitContent.scss" />

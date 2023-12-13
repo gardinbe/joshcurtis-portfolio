@@ -1,17 +1,9 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<Transition
-		appear
-		name="content-loaded"
-	>
-		<Loader v-if="showLoader" />
-	</Transition>
-
 	<StandardContent
-		v-if="data !== null"
 		class="contact"
+		has-back-btn
 	>
-		<BackButton />
 		<div class="contact__content">
 			<hgroup>
 				<h1>{{ data.title }}</h1>
@@ -33,6 +25,7 @@
 							:image="link.attributes.icon"
 							format="thumbnail"
 							lazy
+							no-fallback-color
 						/>
 					</a>
 				</li>
@@ -42,27 +35,15 @@
 </template>
 
 <script setup lang="ts">
-import Loader from "@/components/general/Loader/Loader.vue";
 import StandardContent from "@/components/sections/StandardContent/StandardContent.vue";
-import { ContactResponse, ContactData } from "@/types/api/pages/contact.models";
-import { getFromStrapi } from "@/utils/strapi";
-import { ref } from "vue";
+import { ContactResponse } from "@/types/api/pages/contact";
+import { strapi } from "@/utils";
 import { parse } from "marked";
-import StrapiImage from "@/components/general/StrapiImage/StrapiImage.vue";
-import BackButton from "@/components/general/BackButton/BackButton.vue";
-import config from "@/config";
-import { delay } from "@/utils/common";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 
-const data = ref<ContactData | null>(null);
-const showLoader = ref(true);
+const response = await strapi.get<ContactResponse>("contact");
+const data = response.data.attributes;
 
-void (async () => {
-	const response = await getFromStrapi<ContactResponse>("contact");
-	data.value = response.data.attributes;
-	if (config.artificialDelay)
-		await delay(config.artificialDelayDuration);
-	showLoader.value = false;
-})();
 </script>
 
 <style scoped src="./Contact.scss" />

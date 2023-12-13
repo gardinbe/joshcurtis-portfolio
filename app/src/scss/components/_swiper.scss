@@ -2,10 +2,14 @@
 
 .swiper {
 	$pagination-mt: cgap(md);
-	$btn-offset: cgap(lg);
+	--btn-offset: #{cgap(lg)};
 
 	z-index: unset;
 	position: unset;
+
+	@include media-breakpoint-down(xxl) {
+		--btn-offset: #{cgap(sm)};
+	}
 
 	&-wrapper {
 		display: flex;
@@ -20,6 +24,7 @@
 
 	&-slide {
 		height: unset;
+		background-color: var(--bg-primary-light);
 	}
 
 	&-button {
@@ -32,7 +37,6 @@
 			margin-top: calc(3rem * -0.5 - $pagination-mt);
 			height: 3.75rem;
 			width: 3rem;
-			text-align: center;
 
 			background-color: rgba($bg-secondary, 0.3);
 
@@ -57,19 +61,33 @@
 			}
 
 			&:after {
+				position: absolute;
+				inset: 0;
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-top: -0.4rem;
+
 				color: var(--color-primary);
-				line-height: 0.725;
-				font-size: 4.5rem;
-				padding-bottom: 0.5rem; //scuffed
+				font-size: 4.2rem;
 
 				transition:
 					color anim(fast),
 					filter anim(fast);
+
+				@include media-breakpoint-down(xxl) {
+					font-size: 3.6rem;
+				}
+
+				@include media-breakpoint-down(lg) {
+					font-size: 3.2rem;
+				}
 			}
 		}
 
 		&-next {
-			right: $btn-offset;
+			right: var(--btn-offset);
 
 			&:after {
 				content: "\203A";
@@ -77,7 +95,7 @@
 		}
 
 		&-prev {
-			left: $btn-offset;
+			left: var(--btn-offset);
 
 			&:after {
 				content: "\2039";

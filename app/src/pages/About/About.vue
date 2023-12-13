@@ -1,20 +1,11 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<Transition
-		appear
-		name="content-loaded"
-	>
-		<Loader v-if="showLoader" />
-	</Transition>
-
 	<SplitContent
-		v-if="data !== null"
 		second-slot-type="image"
 		class="about"
+		has-back-btn
 	>
 		<template #first>
-			<BackButton />
-
 			<div class="about__content">
 				<div class="about__main-content">
 					<hgroup>
@@ -51,27 +42,15 @@
 </template>
 
 <script setup lang="ts">
-import Loader from "@/components/general/Loader/Loader.vue";
 import SplitContent from "@/components/sections/SplitContent/SplitContent.vue";
-import StrapiImage from "@/components/general/StrapiImage/StrapiImage.vue";
-import BackButton from "@/components/general/BackButton/BackButton.vue";
-import config from "@/config";
-import { AboutResponse, AboutData } from "@/types/api/pages/about.models";
-import { getFromStrapi } from "@/utils/strapi";
-import { ref } from "vue";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
+import { AboutResponse } from "@/types/api/pages/about";
+import { strapi } from "@/utils";
 import { parse } from "marked";
-import { delay } from "@/utils/common";
 
-const data = ref<AboutData | null>(null);
-const showLoader = ref(true);
+const response = await strapi.get<AboutResponse>("about");
+const data = response.data.attributes;
 
-void (async () => {
-	const response = await getFromStrapi<AboutResponse>("about");
-	data.value = response.data.attributes;
-	if (config.artificialDelay)
-		await delay(config.artificialDelayDuration);
-	showLoader.value = false;
-})();
 </script>
 
 <style scoped src="./About.scss" />

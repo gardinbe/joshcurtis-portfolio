@@ -7,9 +7,9 @@
 			v-if="open"
 			class="panel-backdrop"
 			@click="closeAction"
-			@touchstart="getPanelStartingPosX"
-			@touchmove="ev => slidePanel(ev.touches[0]!.clientX)"
-			@touchend="checkIfShouldClosePanel"
+			@touchstart="touchStartHandler"
+			@touchmove="ev => touchMoveHandler(ev.touches[0]!.clientX)"
+			@touchend="touchEndHandler"
 		/>
 	</Transition>
 
@@ -28,24 +28,24 @@
 </template>
 
 <script setup lang="ts">
-import { delay } from "@/utils/common";
+import { delay } from "@/utils";
 import { computed, onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
 	open: boolean;
+	keepOverflowHiddenOnClose?: boolean;
 	closeAction: () => void;
 }>();
 
-const checkPanel = (value = props.open) => {
-	if (value) {
+const panelOpenListener = () => {
+	if (props.open || props.keepOverflowHiddenOnClose)
 		document.body.style.overflow = "hidden";
-	} else {
+	else
 		document.body.style.overflow = "";
-	}
 };
 
-onMounted(checkPanel);
-watch(computed(() => props.open), checkPanel);
+onMounted(panelOpenListener);
+watch(computed(() => props.open), panelOpenListener);
 
 /**
  * Delay timer exists to stop Transition playing half an animation on page load.
@@ -66,54 +66,83 @@ const panelElRef = ref<HTMLElement | null>(null);
 
 /**
  * The position of the most recent Touch event, relative to the panel's
- * currently set starting position.
+ * currently set starting position. Negative if backwards, positive if forwards.
  */
-let posX_relativeToPanel: number | null = null;
+let panelDistanceTravelled: number | null = null;
 let panelStartingPosX: number | null = null;
 
-const getPanelStartingPosX = () => panelStartingPosX = panelElRef.value?.getBoundingClientRect().left ?? 0;
+const shortSwipe = {
+	/** Threshold time in milliseconds to check if this is a shortswipe. */
+	threshold: 250,
+	startTime: 0,
+	elapsed: 0,
+	isShortSwipe: false,
+	startTimer() {
+		this.startTime = Date.now();
+	},
+	stopTimer() {
+		this.elapsed = Date.now() - this.startTime;
+		this.isShortSwipe = this.elapsed <= this.threshold;
+	}
+};
+
+/**
+ * Set the starting position of the panel.
+ */
+const touchStartHandler = () => {
+	shortSwipe.startTimer();
+	panelStartingPosX = panelElRef.value?.getBoundingClientRect().left ?? 0;
+};
 
 /**
  * Attempt to slide the panel relative to `posX`.
  * @param posX X position of TouchEvent
  */
-const slidePanel = (posX: number) => {
+const touchMoveHandler = (posX: number) => {
 	if (panelElRef.value === null || panelStartingPosX === null)
 		return;
 
-	posX_relativeToPanel = posX - panelStartingPosX;
+	panelDistanceTravelled = posX - panelStartingPosX;
 
 	//dont go backwards
-	if (posX_relativeToPanel < 0)
+	if (panelDistanceTravelled < 0)
 		return;
 
 	//remove transition delay and set transform
 	panelElRef.value.style.transition = "unset";
-	panelElRef.value.style.transform = `translateX(${posX_relativeToPanel}px)`;
+	panelElRef.value.style.transform = `translateX(${panelDistanceTravelled}px)`;
 };
 
 /**
  * Check to see if the panel should remain open or if the panel should
  * be closed after `touchend` event is fired.
  */
-const checkIfShouldClosePanel = () => {
-	if (panelElRef.value === null || posX_relativeToPanel === null)
+const touchEndHandler = () => {
+	if (panelElRef.value === null || panelDistanceTravelled === null)
 		return;
 
+	shortSwipe.stopTimer();
 	panelStartingPosX = null;
+
+	console.log(shortSwipe);
 
 	//readd transition delay and unset transform
 	panelElRef.value.style.transition = "";
 	panelElRef.value.style.transform = "";
 
-	//if less than halfway dragged, keep panel open
-	if (posX_relativeToPanel <= panelElRef.value.clientWidth / 2)
+	if (
+		//if shortswipe is over the threshold
+		!shortSwipe.isShortSwipe
+		//if less than halfway dragged
+		&& panelDistanceTravelled < panelElRef.value.clientWidth / 2
+	)
 		return;
 
-	//otherwise, close panel
-	posX_relativeToPanel = null;
+	//close panel
+	panelDistanceTravelled = null;
 	props.closeAction();
 };
+
 </script>
 
 <style scoped src="./Panel.scss" />
