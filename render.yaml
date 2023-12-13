@@ -4,10 +4,10 @@ services:
     plan: starter
     # region: frankfurt # need to get upgrade
     numInstances: 1
-    name: portfolio-api
+    name: joshcurtis-portfolio-api
     rootDir: api
     runtime: node
-    branch: main
+    branch: master
     buildCommand: npm install && npm run build
     startCommand: rsync -a public/ /data/public/ && npm start
     healthCheckPath: /_health
@@ -21,20 +21,28 @@ services:
         value: ~20.7.0
       - key: NODE_ENV
         value: production
-      - key: DATABASE_FILENAME
-        value: /data/strapi.db # need to get upgrade
+      - key: HOST_URL
+        value: https://joshcurtis-portfolio-api.onrender.com
+      - key: APP_KEYS
+        generateValue: true
+      - key: API_TOKEN_SALT
+        generateValue: true
       - key: JWT_SECRET
         generateValue: true
       - key: ADMIN_JWT_SECRET
         generateValue: true
-      - key: APP_KEYS
+      - key: TRANSFER_TOKEN_SALT
         generateValue: true
+      - key: DATABASE_CLIENT
+        value: sqlite
+      - key: DATABASE_FILENAME
+        value: /data/strapi.db # need to get upgrade
   # the web app
   - type: web
-    name: portfolio-app
+    name: joshcurtis-portfolio-app
     rootDir: app
     runtime: static
-    branch: dev
+    branch: master
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     healthCheckPath: /_health
@@ -42,8 +50,10 @@ services:
     envVars:
       - key: NODE_VERSION
         value: ~20.7.0
+      - key: NODE_ENV
+        value: production
       - key: VITE_STRAPI_URL
-        value: https://portfolio-api-yi9v.onrender.com
+        value: https://joshcurtis-portfolio-api.onrender.com
     headers:
     - path: /*
       name: X-Frame-Options
