@@ -21,16 +21,22 @@ services:
         value: ~20.7.0
       - key: NODE_ENV
         value: production
-      - key: DATABASE_CLIENT
-        value: sqlite
-      - key: DATABASE_FILENAME
-        value: /data/strapi.db # need to get upgrade
+      - key: HOST_URL
+        value: https://joshcurtis-portfolio-api.onrender.com
+      - key: APP_KEYS
+        generateValue: true
+      - key: API_TOKEN_SALT
+        generateValue: true
       - key: JWT_SECRET
         generateValue: true
       - key: ADMIN_JWT_SECRET
         generateValue: true
-      - key: APP_KEYS
+      - key: TRANSFER_TOKEN_SALT
         generateValue: true
+      - key: DATABASE_CLIENT
+        value: sqlite
+      - key: DATABASE_FILENAME
+        value: /data/strapi.db # need to get upgrade
   # the web app
   - type: web
     name: joshcurtis-portfolio-app
@@ -44,6 +50,8 @@ services:
     envVars:
       - key: NODE_VERSION
         value: ~20.7.0
+      - key: NODE_ENV
+        value: production
       - key: VITE_STRAPI_URL
         value: https://portfolio-api-yi9v.onrender.com
     headers:
