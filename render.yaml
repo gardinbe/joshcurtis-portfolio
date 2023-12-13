@@ -53,7 +53,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: VITE_STRAPI_URL
-        value: https://portfolio-api-yi9v.onrender.com
+        value: https://joshcurtis-portfolio-api.onrender.com
     headers:
     - path: /*
       name: X-Frame-Options
