@@ -14,4 +14,9 @@
 	@include media-breakpoint-down(md) {
 		padding: cgap(lg);
 	}
+
+	.back-btn {
+		margin-bottom: cgap(lg);
+		margin-right: auto;
+	}
 }
