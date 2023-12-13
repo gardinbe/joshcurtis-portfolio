@@ -6,6 +6,7 @@
 			:class="{
 				'btn--large': size === 'large',
 				'btn--filled': mode === 'filled',
+				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'
 			}"
 			:href="href"
@@ -21,6 +22,7 @@
 			:class="{
 				'btn--large': size === 'large',
 				'btn--filled': mode === 'filled',
+				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'
 			}"
 		>
@@ -32,7 +34,7 @@
 <script setup lang="ts">
 defineProps<{
 	size?: "normal" | "large";
-	mode: "filled" | "ghost";
+	mode: "filled" | "filled-dark" | "ghost";
 	href?: string;
 }>();
 </script>

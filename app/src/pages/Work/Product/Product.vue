@@ -29,9 +29,9 @@
 					</li>
 				</ul>
 				<Button
+					mode="filled"
 					class="product__link"
 					size="large"
-					mode="filled"
 					:href="data.link"
 				>
 					Visit the site
