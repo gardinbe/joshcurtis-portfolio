@@ -1,7 +1,7 @@
 .terminal-text {
 	$this: &;
 
-	::v-deep .cursor {
+	:deep(.cursor) {
 		display: inline-block;
 
 		width: 0.7rem;

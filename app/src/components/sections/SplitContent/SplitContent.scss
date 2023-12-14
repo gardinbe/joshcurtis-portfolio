@@ -35,7 +35,7 @@
 			overflow-y: auto;
 			padding: cgap(xxl);
 
-			@include media-breakpoint-down(xl) {
+			@include media-breakpoint-down(xxl) {
 				padding: cgap(xl);
 			}
 
@@ -72,16 +72,16 @@
 				align-items: unset;
 			}
 
-			::v-deep img {
+			:deep(img) {
 				object-fit: cover;
 				min-width: 100%;
 				min-height: 100%;
 				width: auto;
+				height: auto;
 
 				@include media-breakpoint-down(lg) {
 					max-height: unset;
 					width: 100%;
-					height: auto;
 				}
 			}
 		}
@@ -92,7 +92,7 @@
 			align-items: center;
 			color: var(--bg-secondary);
 
-			::v-deep .swiper {
+			:deep(.swiper) {
 				display: flex;
 				flex-direction: column;
 				width: 100%;

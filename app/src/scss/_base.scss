@@ -19,15 +19,19 @@ body {
 
 @media (pointer: fine) {
 	::-webkit-scrollbar {
-		width: 0.5rem;
+		width: 0.75rem;
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: var(--bg-primary-very-dark);
+		background: var(--bg-primary-very-very-dark);
 
 		&:hover {
-			background: var(--bg-primary-very-very-dark);
+			background: var(--bg-primary-dark);
 		}
+	}
+
+	::-webkit-scrollbar-track {
+		background: var(--bg-primary-light);
 	}
 }
 
