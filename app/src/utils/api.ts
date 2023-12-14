@@ -4,7 +4,7 @@ import axios, { AxiosInstance } from "axios";
 import axiosRetry from "axios-retry";
 
 export type ApiOptions = {
-	/** Base url of the API. */
+	/** Base URL of the API. */
 	baseURL: string;
 	/** Default URL parameters to be passed on every request. */
 	params: Record<string, string>;

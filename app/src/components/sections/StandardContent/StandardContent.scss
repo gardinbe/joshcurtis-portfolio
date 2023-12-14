@@ -7,7 +7,7 @@
 	background-color: var(--bg-primary);
 	overflow: auto;
 
-	@include media-breakpoint-down(xl) {
+	@include media-breakpoint-down(xxl) {
 		padding: cgap(xl);
 	}
 

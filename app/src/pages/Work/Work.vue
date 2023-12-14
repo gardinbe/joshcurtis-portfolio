@@ -8,9 +8,7 @@
 		<template #first>
 			<div class="work__main-content">
 				<hgroup>
-					<h1>
-						{{ data.title }}
-					</h1>
+					<h1>{{ data.title }}</h1>
 				</hgroup>
 
 				<div v-html="parse(data.content)" />
@@ -129,7 +127,7 @@ const handleProductTouchMove = (touch: Touch) =>
 		y: touch.clientY
 	};
 
-const productTapDeadzone = 16;
+const productTapThreshold = 16;
 
 /**
  * Hacky fix to replace a standard click event - there is a noticable delay
@@ -150,8 +148,8 @@ const handleProductTouchEnd = (ev: TouchEvent, productID: number) => {
 	lastProductTouchPos = null;
 
 	if (
-		Math.abs(firstPos.x - lastPos.x) > productTapDeadzone ||
-		Math.abs(firstPos.y - lastPos.y) > productTapDeadzone
+		Math.abs(firstPos.x - lastPos.x) > productTapThreshold ||
+		Math.abs(firstPos.y - lastPos.y) > productTapThreshold
 	)
 		return;
 
