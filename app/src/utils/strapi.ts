@@ -11,7 +11,7 @@ class StrapiApi extends Api {
 	}
 
 	/**
-	 * Set a cached Strapi API response into sessionStorage.
+	 * Set a cached Strapi API response into memory.
 	 * @param endpoint Selected endpoint
 	 * @param response Response to be cached
 	 */
@@ -20,7 +20,7 @@ class StrapiApi extends Api {
 	}
 
 	/**
-	 * Get a cached Strapi API response from sessionStorage.
+	 * Get a cached Strapi API response from memory.
 	 * @param endpoint Selected endpoint
 	 * @returns Cached data
 	 */

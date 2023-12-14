@@ -1,47 +1,5 @@
 import { delay, randomDelay } from "@/utils";
 
-/** Either an individal character or a text modifier. */
-type TextFragment = Char | Modifier | Marker;
-
-type Char = string;
-
-
-
-//Modifiers
-
-/** A modifier within a text string that performs actions to the string. */
-
-type Modifier = DelayModifier | DeleteModifier;
-
-type ModifierBase = {
-	type: "modifier";
-};
-
-type DelayModifier = ModifierBase & {
-	option: "delay";
-	value: number;
-};
-
-type DeleteModifier = ModifierBase & {
-	option: "delete";
-	value: DeleteModifierValue;
-};
-type DeleteModifierValue = number | "line" | "element";
-
-
-//Markers
-
-/** A marker within a text string that indicates a point for an event to occur. */
-type Marker = MinHeightMarker;
-
-type MarkerBase = {
-	type: "marker";
-};
-
-type MinHeightMarker = MarkerBase & {
-	option: "minHeight";
-};
-
 export class TerminalText {
 	private elmts: {
 		text: HTMLElement;
@@ -120,41 +78,6 @@ export class TerminalText {
 		this.elmts.cursor.dataset.blink = "false";
 	}
 
-	private getParsedText() {
-		const textNodes = this.getTextNodes(this.elmts.text);
-		const parsedTextNodes = new Map<Node, TextFragment[]>();
-
-		for (const node of textNodes) {
-			parsedTextNodes.set(node, this.parseTextNode(node));
-			node.textContent = "";
-		}
-
-		return parsedTextNodes;
-	}
-
-	/**
-	 * Return all the text nodes on an element.
-	 * @param elmt Target element
-	 * @returns All text nodes
-	 */
-	private getTextNodes(elmt: Node) {
-		const textNodes: Node[] = [];
-
-		for (const node of elmt.childNodes) {
-			if (node.nodeType !== Node.TEXT_NODE) {
-				textNodes.push(...this.getTextNodes(node));
-				continue;
-			}
-
-			if (node.textContent === "\n")
-				continue;
-
-			textNodes.push(node);
-		}
-
-		return textNodes;
-	}
-
 	/**
 	 * Insert the text fragments onto a Text Node incrementally, with a random duration between each insertion.
 	 * @param textNode Target text node
@@ -209,7 +132,117 @@ export class TerminalText {
 	}
 
 	/**
-	 * Parse a string as a long array of `SpecialChar`s. This can probably be done in a better way.
+	 * Perform the 'delete' modifier and remove chars from the text.
+	 * @param node Target text node
+	 * @param quantity Quantity of chars to remove
+	 */
+	private async deleteChars(node: Node, quantity: DeleteModifierValue) {
+		const remaining = quantity === "line" || quantity === "element"
+			? node.textContent?.length ?? 0
+			: quantity;
+
+		for (let i = 0; i < remaining; i++) {
+			node.textContent = node.textContent?.slice(0, node.textContent.length - 1) ?? null;
+			await randomDelay(10, 50);
+		}
+
+		const parentElmt = node.parentNode as HTMLElement | null;
+		if (parentElmt === null)
+			throw new Error("Terminal text node is missing parent element");
+
+		if (quantity === "element") {
+			parentElmt.previousElementSibling?.appendChild(this.elmts.cursor);
+			parentElmt.remove();
+		}
+	}
+}
+
+/** Either an individal character or a text modifier. */
+type TextFragment = Char | Modifier | Marker;
+
+type Char = string;
+
+//Modifiers
+
+/** A modifier within a text string that performs actions to the string. */
+
+type Modifier = DelayModifier | DeleteModifier;
+
+type ModifierBase = {
+	type: "modifier";
+};
+
+type DelayModifier = ModifierBase & {
+	option: "delay";
+	value: number;
+};
+
+type DeleteModifier = ModifierBase & {
+	option: "delete";
+	value: DeleteModifierValue;
+};
+type DeleteModifierValue = number | "line" | "element";
+
+//Markers
+
+/** A marker within a text string that indicates a point for an event to occur. */
+type Marker = MinHeightMarker;
+
+type MarkerBase = {
+	type: "marker";
+};
+
+type MinHeightMarker = MarkerBase & {
+	option: "minHeight";
+};
+
+class TerminalTextParser {
+	private elmts: {
+		text: HTMLElement;
+	}
+
+	constructor(textElmt: HTMLElement) {
+		this.elmts = { text: textElmt };
+	}
+
+	private getParsedText() {
+		const textNodes = this.getTextNodes(this.elmts.text);
+		const parsedTextNodes = new Map<Node, TextFragment[]>();
+
+		for (const node of textNodes) {
+			parsedTextNodes.set(node, this.parseTextNode(node));
+			node.textContent = "";
+		}
+
+		return parsedTextNodes;
+	}
+
+	/**
+	 * Return all the text nodes on an element.
+	 * @param elmt Target element
+	 * @returns All text nodes
+	 */
+	private getTextNodes(elmt: Node) {
+		const textNodes: Node[] = [];
+
+		for (const node of elmt.childNodes) {
+			if (node.nodeType !== Node.TEXT_NODE) {
+				textNodes.push(...this.getTextNodes(node));
+				continue;
+			}
+
+			if (node.textContent === "\n")
+				continue;
+
+			textNodes.push(node);
+		}
+
+		return textNodes;
+	}
+
+	/**
+	 * Parse a string as a long array of `SpecialChar`s. This can probably be
+	 * done in a better way.
 	 * @param text Target text
 	 * @returns Parsed text
 	 */
@@ -321,30 +354,5 @@ export class TerminalText {
 
 		const marker: Marker = { type: "marker", option };
 		return marker;
-	}
-
-	/**
-	 * Perform the 'delete' modifier and remove chars from the text.
-	 * @param node Target text node
-	 * @param quantity Quantity of chars to remove
-	 */
-	private async deleteChars(node: Node, quantity: DeleteModifierValue) {
-		const remaining = quantity === "line" || quantity === "element"
-			? node.textContent?.length ?? 0
-			: quantity;
-
-		for (let i = 0; i < remaining; i++) {
-			node.textContent = node.textContent?.slice(0, node.textContent.length - 1) ?? null;
-			await randomDelay(10, 50);
-		}
-
-		const parentElmt = node.parentNode as HTMLElement | null;
-		if (parentElmt === null)
-			throw new Error("Terminal text node is missing parent element");
-
-		if (quantity === "element") {
-			parentElmt.previousElementSibling?.appendChild(this.elmts.cursor);
-			parentElmt.remove();
-		}
 	}
 }
