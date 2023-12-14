@@ -17,18 +17,16 @@ const props = defineProps<{
 
 const terminalTextElRef = ref<HTMLElement | null>(null);
 
-onMounted(() => {
+onMounted(async () => {
 	if (terminalTextElRef.value === null)
 		throw new Error("Missing terminal text element reference");
 
-	const terminalText = new TerminalText({
-		textElmt: terminalTextElRef.value,
-		options: {
-			predeterminedHeight: props.predeterminedHeight
-		}
-	});
+	const terminalText = new TerminalText({ textElmt: terminalTextElRef.value });
 
-	void terminalText.start();
+	if (props.predeterminedHeight)
+		await terminalText.setPredeterminedHeight();
+
+	await terminalText.start();
 });
 
 

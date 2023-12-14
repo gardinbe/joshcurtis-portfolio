@@ -13,31 +13,21 @@ type Modifier = {
 
 type ModifierType = "delay" | "delete";
 
-type TerminalTextOptions = {
-	predeterminedHeight: boolean;
-};
-
 export class TerminalText {
 	private elmts: {
 		text: HTMLElement;
 		cursor: HTMLElement;
 	};
-	private options: TerminalTextOptions;
 	private parsedTextNodes: Map<Node, TextFragment[]>;
+	private predeterminedHeightSet = false;
 
-	constructor(config: {
-		textElmt: HTMLElement;
-		options?: Partial<TerminalTextOptions>;
-	}) {
+	constructor(config: { textElmt: HTMLElement; }) {
 		this.elmts = {
 			text: config.textElmt,
 			cursor: this.createCursorElmt()
 		};
 
-		this.options = {
-			predeterminedHeight: false,
-			...config.options
-		};
+		this.elmts.text.style.visibility = "hidden";
 
 		this.parsedTextNodes = this.getParsedText();
 	}
@@ -46,13 +36,37 @@ export class TerminalText {
 	 * Start the terminal text effect.
 	 */
 	async start() {
+		this.elmts.text.style.visibility = "";
+
 		//and wait for all chars to be added
 		for (const [node, fragments] of this.parsedTextNodes)
 			await this.insertChars(node, fragments);
 
-		//if predetermined height requested - remove the previously calculated min height
-		if (this.options.predeterminedHeight)
+		//if predetermined height set - remove the previously calculated min height
+		if (this.predeterminedHeightSet)
 			this.elmts.text.style.minHeight = "";
+	}
+
+	/**
+	 * Display the final message very temporarily to accurately get and set the final height.
+	 * Sets a short timeout that, after resolving, sets the pretedermined height.
+	 */
+	async setPredeterminedHeight() {
+		for (const [node, fragments] of this.parsedTextNodes) {
+			node.textContent = fragments
+				.map(fragment => typeof fragment === "string"
+					? fragment
+					: "")
+				.join("");
+		}
+
+		await delay(250);
+		this.elmts.text.style.minHeight = `${this.elmts.text.clientHeight}px`;
+
+		for (const [node] of this.parsedTextNodes)
+			node.textContent = "";
+
+		this.predeterminedHeightSet = true;
 	}
 
 	private createCursorElmt() {
@@ -71,32 +85,13 @@ export class TerminalText {
 	}
 
 	private getParsedText() {
-		this.elmts.text.style.visibility = "hidden";
-
 		const textNodes = this.getTextNodes(this.elmts.text);
 		const parsedTextNodes = new Map<Node, TextFragment[]>();
 
-		for (const node of textNodes)
+		for (const node of textNodes) {
 			parsedTextNodes.set(node, this.parseTextNode(node));
-
-		//if predetermined height requested - remove the modifiers from the text nodes temporarily to accurately get and set the final height
-		if (this.options.predeterminedHeight) {
-			for (const [node, fragments] of parsedTextNodes) {
-				node.textContent = fragments
-					.map(fragment => typeof fragment === "string"
-						? fragment
-						: "")
-					.join("");
-			}
-
-			this.elmts.text.style.minHeight = `${this.elmts.text.clientHeight}px`;
-		}
-
-		//now remove all characters
-		for (const node of textNodes)
 			node.textContent = "";
-
-		this.elmts.text.style.visibility = "";
+		}
 
 		return parsedTextNodes;
 	}
