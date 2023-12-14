@@ -1,12 +1,19 @@
 import { delay, randomDelay } from "@/utils";
 
+/**
+ * Apply a terminal-text/typewriter effect to an element with text nodes inside of
+ * it.
+ * 
+ * Using the provided syntax, modifiers and effects can be applied to the text.
+ */
 export class TerminalText {
 	private elmts: {
 		text: HTMLElement;
 		cursor: HTMLElement;
 	};
-	private parsedTextNodes: Map<Node, TextFragment[]>;
+
 	private predeterminedHeightSet = false;
+	private parsedTextNodes: Map<Node, TextFragment[]>;
 
 	constructor(config: { textElmt: HTMLElement; }) {
 		this.elmts = {
@@ -16,7 +23,7 @@ export class TerminalText {
 
 		this.elmts.text.style.visibility = "hidden";
 
-		this.parsedTextNodes = this.getParsedText();
+		this.parsedTextNodes = TerminalTextParser.parseElmt(this.elmts.text);
 	}
 
 	/**
@@ -196,17 +203,13 @@ type MinHeightMarker = MarkerBase & {
 	option: "minHeight";
 };
 
+/**
+ * Parser for the terminal text effect. Responsible for parsing chars, modifiers and
+ * markers within the text of an element.
+ */
 class TerminalTextParser {
-	private elmts: {
-		text: HTMLElement;
-	}
-
-	constructor(textElmt: HTMLElement) {
-		this.elmts = { text: textElmt };
-	}
-
-	private getParsedText() {
-		const textNodes = this.getTextNodes(this.elmts.text);
+	static parseElmt(elmt: HTMLElement) {
+		const textNodes = this.getTextNodes(elmt);
 		const parsedTextNodes = new Map<Node, TextFragment[]>();
 
 		for (const node of textNodes) {
@@ -222,7 +225,7 @@ class TerminalTextParser {
 	 * @param elmt Target element
 	 * @returns All text nodes
 	 */
-	private getTextNodes(elmt: Node) {
+	private static getTextNodes(elmt: Node) {
 		const textNodes: Node[] = [];
 
 		for (const node of elmt.childNodes) {
@@ -246,7 +249,7 @@ class TerminalTextParser {
 	 * @param text Target text
 	 * @returns Parsed text
 	 */
-	private parseTextNode(node: Node) {
+	private static parseTextNode(node: Node) {
 		const fragments: TextFragment[] = [];
 		let text = node.textContent ?? "";
 
@@ -286,7 +289,7 @@ class TerminalTextParser {
 	 * @param str
 	 * @returns Text modifier
 	 */
-	private getModifier(this: void, str: string) {
+	private static getModifier(this: void, str: string) {
 		const seperatorIndex = str.indexOf(":");
 		if (seperatorIndex === -1)
 			throw new Error("Terminal text modifier is missing seperator colon");
@@ -344,7 +347,7 @@ class TerminalTextParser {
 	 * @param str
 	 * @returns Text marker
 	 */
-	private getMarker(this: void, str: string) {
+	private static getMarker(this: void, str: string) {
 		const option = str.trim();
 
 		if (
