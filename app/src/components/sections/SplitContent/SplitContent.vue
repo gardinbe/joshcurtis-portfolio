@@ -29,6 +29,7 @@ defineProps<{
 	secondSlotType: "image" | "swiper";
 	hasBackBtn?: boolean;
 }>();
+
 </script>
 
 <style scoped src="./SplitContent.scss" />

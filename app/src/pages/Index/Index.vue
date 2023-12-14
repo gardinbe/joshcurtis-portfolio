@@ -37,7 +37,7 @@
 					<p v-if="data.social_links.data.length > 0">
 						Find and contact me on
 						<template
-							v-for="(link, index) of data.social_links.data "
+							v-for="(link, index) of data.social_links.data"
 							:key="link.attributes"
 						>
 							<template v-if="data.social_links.data.length === 1">

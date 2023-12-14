@@ -29,7 +29,6 @@ onMounted(async () => {
 	await terminalText.start();
 });
 
-
 </script>
 
 <style scoped src="./TerminalText.scss" />

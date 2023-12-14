@@ -11,6 +11,7 @@ import BackButton from "@/components/BackButton/BackButton.vue";
 defineProps<{
 	hasBackBtn?: boolean;
 }>();
+
 </script>
 
 <style scoped src="./StandardContent.scss" />

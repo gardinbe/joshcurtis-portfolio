@@ -22,6 +22,7 @@ const props = defineProps<{
 }>();
 
 const format = computed(() => props.image.data.attributes.formats[props.format]);
+
 </script>
 
 <style scoped src="./StrapiImage.scss" />

@@ -23,6 +23,7 @@ export type LoaderProps = {
 };
 
 defineProps<LoaderProps>();
+
 </script>
 
 <style scoped src="./Loader.scss" />
