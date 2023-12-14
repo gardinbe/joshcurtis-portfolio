@@ -17,10 +17,10 @@
 				>
 					<Button
 						mode="filled-dark"
-						class="btn social-link-icon"
+						class="social-link-icon"
 						:style="{ backgroundColor: link.attributes.background_color }"
-						target="_blank"
 						:href="link.attributes.url"
+						target="_blank"
 					>
 						<StrapiImage
 							:image="link.attributes.icon"
