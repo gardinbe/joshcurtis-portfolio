@@ -27,6 +27,7 @@ onMounted(() => {
 			predeterminedHeight: props.predeterminedHeight
 		}
 	});
+
 	void terminalText.start();
 });
 

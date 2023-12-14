@@ -53,8 +53,6 @@ export class TerminalText {
 		//if predetermined height requested - remove the previously calculated min height
 		if (this.options.predeterminedHeight)
 			this.elmts.text.style.minHeight = "";
-
-		this.startBlinking();
 	}
 
 	private createCursorElmt() {
@@ -140,6 +138,8 @@ export class TerminalText {
 		else if (node.parentNode !== this.elmts.text)
 			node.parentNode.appendChild(this.elmts.cursor);
 
+		this.stopBlinking();
+
 		//insert each char
 		for (const fragment of fragments) {
 			//if its just a string character: append it
@@ -168,6 +168,8 @@ export class TerminalText {
 					break;
 			}
 		}
+
+		this.startBlinking();
 	}
 
 	/**
