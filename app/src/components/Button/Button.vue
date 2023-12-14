@@ -32,11 +32,13 @@
 </template>
 
 <script setup lang="ts">
+
 defineProps<{
 	size?: "normal" | "large";
 	mode: "filled" | "filled-dark" | "ghost";
 	href?: string;
 }>();
+
 </script>
 
 <style scoped src="./Button.scss" />

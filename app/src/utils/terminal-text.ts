@@ -1,61 +1,76 @@
 import { delay, randomDelay } from "@/utils";
 
-/** Either an individal character or a text modifier. */
-type TextFragment = Char | Modifier;
-
-type Char = string;
-
-/** A modifier within a text string that performs actions to the string. */
-type Modifier = {
-	type: ModifierType;
-	value: number | string;
-};
-
-type ModifierType = "delay" | "delete";
-
-type TerminalTextOptions = {
-	predeterminedHeight: boolean;
-};
-
+/**
+ * Apply a terminal-text/typewriter effect to an element with text nodes inside of
+ * it.
+ * 
+ * Using the provided syntax, modifiers and effects can be applied to the text.
+ */
 export class TerminalText {
 	private elmts: {
 		text: HTMLElement;
 		cursor: HTMLElement;
 	};
-	private options: TerminalTextOptions;
+
+	private predeterminedHeightSet = false;
 	private parsedTextNodes: Map<Node, TextFragment[]>;
 
-	constructor(config: {
-		textElmt: HTMLElement;
-		options?: Partial<TerminalTextOptions>;
-	}) {
+	constructor(config: { textElmt: HTMLElement; }) {
 		this.elmts = {
 			text: config.textElmt,
 			cursor: this.createCursorElmt()
 		};
 
-		this.options = {
-			predeterminedHeight: false,
-			...config.options
-		};
+		this.elmts.text.style.visibility = "hidden";
 
-		this.parsedTextNodes = this.getParsedText();
+		this.parsedTextNodes = TerminalTextParser.parseElmt(this.elmts.text);
 	}
 
 	/**
 	 * Start the terminal text effect.
 	 */
 	async start() {
+		this.elmts.text.style.visibility = "";
+
 		//and wait for all chars to be added
 		for (const [node, fragments] of this.parsedTextNodes)
-			await this.insertChars(node, fragments);
+			await this.insertFragments(node, fragments);
 
-		//if predetermined height requested - remove the previously calculated min height
-		if (this.options.predeterminedHeight)
+		//if predetermined height set - remove the previously calculated min height
+		if (this.predeterminedHeightSet)
 			this.elmts.text.style.minHeight = "";
 	}
 
-	private createCursorElmt() {
+	/**
+	 * Display the final message very temporarily to accurately get and set the final height.
+	 * Sets a short timeout that, after resolving, sets the pretedermined height.
+	 */
+	async setPredeterminedHeight() {
+		outer:
+		for (const [node, fragments] of this.parsedTextNodes) {
+			for (const fragment of fragments) {
+				if (typeof fragment !== "string") {
+					if (fragment.type === "marker" && fragment.option === "minHeight")
+						break outer;
+
+					continue;
+				}
+
+				node.textContent += fragment;
+			}
+		}
+
+		await delay(250);
+
+		this.elmts.text.style.minHeight = `${this.elmts.text.clientHeight}px`;
+
+		for (const [node] of this.parsedTextNodes)
+			node.textContent = "";
+
+		this.predeterminedHeightSet = true;
+	}
+
+	private createCursorElmt(this: void) {
 		const elmt = document.createElement("span");
 		elmt.classList.add("cursor");
 		elmt.dataset.blink = "false";
@@ -70,33 +85,137 @@ export class TerminalText {
 		this.elmts.cursor.dataset.blink = "false";
 	}
 
-	private getParsedText() {
-		this.elmts.text.style.visibility = "hidden";
+	/**
+	 * Insert the text fragments onto a Text Node incrementally, with a random duration between each insertion.
+	 * @param textNode Target text node
+	 */
+	private async insertFragments(node: Node, fragments: TextFragment[]) {
+		//insert the cursor after this node
+		if (node.parentNode === null)
+			throw new Error("Terminal text text node has missing parent node");
 
-		const textNodes = this.getTextNodes(this.elmts.text);
-		const parsedTextNodes = new Map<Node, TextFragment[]>();
+		if (node.nextSibling !== null)
+			node.parentNode.insertBefore(this.elmts.cursor, node.nextSibling);
+		else if (node.parentNode !== this.elmts.text)
+			node.parentNode.appendChild(this.elmts.cursor);
 
-		for (const node of textNodes)
-			parsedTextNodes.set(node, this.parseTextNode(node));
+		this.stopBlinking();
 
-		//if predetermined height requested - remove the modifiers from the text nodes temporarily to accurately get and set the final height
-		if (this.options.predeterminedHeight) {
-			for (const [node, fragments] of parsedTextNodes) {
-				node.textContent = fragments
-					.map(fragment => typeof fragment === "string"
-						? fragment
-						: "")
-					.join("");
+		//insert each char
+		for (const fragment of fragments) {
+			//if its just a char, append it
+			if (typeof fragment === "string") {
+				node.textContent = (node.textContent ?? "") + fragment;
+				await randomDelay(10, 50);
+				continue;
 			}
 
-			this.elmts.text.style.minHeight = `${this.elmts.text.clientHeight}px`;
+			//if its a non-char item, apply it
+			switch (fragment.type) {
+				case "modifier":
+					switch (fragment.option) {
+						case "delay":
+							this.startBlinking();
+							await delay((fragment).value);
+							this.stopBlinking();
+							break;
+
+						case "delete":
+							await this.deleteChars(node, (fragment).value);
+							break;
+					}
+					break;
+
+				case "marker":
+					switch (fragment.option) {
+						case "minHeight":
+							break;
+					}
+					break;
+			}
 		}
 
-		//now remove all characters
-		for (const node of textNodes)
-			node.textContent = "";
+		this.startBlinking();
+	}
 
-		this.elmts.text.style.visibility = "";
+	/**
+	 * Perform the 'delete' modifier and remove chars from the text.
+	 * @param node Target text node
+	 * @param quantity Quantity of chars to remove
+	 */
+	private async deleteChars(node: Node, quantity: DeleteModifierValue) {
+		const remaining = quantity === "line" || quantity === "element"
+			? node.textContent?.length ?? 0
+			: quantity;
+
+		for (let i = 0; i < remaining; i++) {
+			node.textContent = node.textContent?.slice(0, node.textContent.length - 1) ?? null;
+			await randomDelay(10, 50);
+		}
+
+		const parentElmt = node.parentNode as HTMLElement | null;
+		if (parentElmt === null)
+			throw new Error("Terminal text node is missing parent element");
+
+		if (quantity === "element") {
+			parentElmt.previousElementSibling?.appendChild(this.elmts.cursor);
+			parentElmt.remove();
+		}
+	}
+}
+
+/** Either an individal character or a text modifier. */
+type TextFragment = Char | Modifier | Marker;
+
+type Char = string;
+
+//Modifiers
+
+/** A modifier within a text string that performs actions to the string. */
+
+type Modifier = DelayModifier | DeleteModifier;
+
+type ModifierBase = {
+	type: "modifier";
+};
+
+type DelayModifier = ModifierBase & {
+	option: "delay";
+	value: number;
+};
+
+type DeleteModifier = ModifierBase & {
+	option: "delete";
+	value: DeleteModifierValue;
+};
+type DeleteModifierValue = number | "line" | "element";
+
+//Markers
+
+/** A marker within a text string that indicates a point for an event to occur. */
+type Marker = MinHeightMarker;
+
+type MarkerBase = {
+	type: "marker";
+};
+
+type MinHeightMarker = MarkerBase & {
+	option: "minHeight";
+};
+
+/**
+ * Parser for the terminal text effect. Responsible for parsing chars, modifiers and
+ * markers within the text of an element.
+ */
+class TerminalTextParser {
+	static parseElmt(elmt: HTMLElement) {
+		const textNodes = this.getTextNodes(elmt);
+		const parsedTextNodes = new Map<Node, TextFragment[]>();
+
+		for (const node of textNodes) {
+			parsedTextNodes.set(node, this.parseTextNode(node));
+			node.textContent = "";
+		}
 
 		return parsedTextNodes;
 	}
@@ -106,7 +225,7 @@ export class TerminalText {
 	 * @param elmt Target element
 	 * @returns All text nodes
 	 */
-	private getTextNodes(elmt: Node) {
+	private static getTextNodes(elmt: Node) {
 		const textNodes: Node[] = [];
 
 		for (const node of elmt.childNodes) {
@@ -125,124 +244,118 @@ export class TerminalText {
 	}
 
 	/**
-	 * Insert the text fragments onto a Text Node incrementally, with a random duration between each insertion.
-	 * @param textNode Target text node
-	 */
-	private async insertChars(node: Node, fragments: TextFragment[]) {
-		//insert the cursor after this node
-		if (node.parentNode === null)
-			throw new Error("Terminal text text node has missing parent node");
-
-		if (node.nextSibling !== null)
-			node.parentNode.insertBefore(this.elmts.cursor, node.nextSibling);
-		else if (node.parentNode !== this.elmts.text)
-			node.parentNode.appendChild(this.elmts.cursor);
-
-		this.stopBlinking();
-
-		//insert each char
-		for (const fragment of fragments) {
-			//if its just a string character: append it
-			if (typeof fragment === "string") {
-				await randomDelay(10, 50);
-				node.textContent = (node.textContent ?? "") + fragment;
-				continue;
-			}
-
-			//otherwise, if its a modifier: apply that modifier
-			switch (fragment.type) {
-				case "delay":
-					if (typeof fragment.value !== "number")
-						throw new Error("Terminal text 'delay' modifier has invalid value");
-
-					this.startBlinking();
-					await delay(fragment.value);
-					this.stopBlinking();
-					break;
-
-				case "delete":
-					if (typeof fragment.value !== "number" && fragment.value !== "line")
-						throw new Error("Terminal text 'delete' modifier has invalid value");
-
-					await this.removeChars(node, fragment.value);
-					break;
-			}
-		}
-
-		this.startBlinking();
-	}
-
-	/**
-	 * Parse a string as a long array of `SpecialChar`s. This can probably be done in a better way.
+	 * Parse a string as a long array of `SpecialChar`s. This can probably be
+	 * done in a better way.
 	 * @param text Target text
 	 * @returns Parsed text
 	 */
-	private parseTextNode(node: Node) {
+	private static parseTextNode(node: Node) {
 		const fragments: TextFragment[] = [];
 		let text = node.textContent ?? "";
 
-		while (text.includes("{") && text.includes("}")) {
-			const start = text.indexOf("{");
-			const end = text.indexOf("}", start);
-			if (end === -1)
-				throw new Error("Terminal text modifier bracket was opened but never closed");
+		const handleNonCharItems = (
+			startSymbol: string,
+			endSymbol: string,
+			parser: (str: string) => Modifier | Marker
+		) => {
+			while (text.includes(startSymbol) && text.includes(endSymbol)) {
+				const start = text.indexOf(startSymbol);
+				const end = text.indexOf(endSymbol, start);
+				if (end === -1)
+					throw new Error(`Terminal text missing closing '${endSymbol}'`);
 
-			const modString = text.slice(start + 1, end).trim();
-			const mod = this.getModifier(modString);
+				const itemString = text
+					.slice(start + startSymbol.length, end)
+					.trim();
+				const item = parser(itemString);
 
-			fragments.push(...text.slice(0, start).split(""));
-			fragments.push(mod);
+				fragments.push(...text.slice(0, start).split(""));
+				fragments.push(item);
 
-			text = text.slice(end + 1, text.length);
-		}
+				text = text.slice(end + endSymbol.length, text.length); //smelly
+			}
+		};
+
+		handleNonCharItems("{{", "}}", this.getModifier);
+		handleNonCharItems("[[", "]]", this.getMarker);
 
 		fragments.push(...text);
+
 		return fragments;
 	}
 
 	/**
 	 * Gets a modifier using a string in the form "name: value".
-	 * @param string
+	 * @param str
 	 * @returns Text modifier
 	 */
-	private getModifier(string: string) {
-		const seperatorIndex = string.indexOf(":");
+	private static getModifier(this: void, str: string) {
+		const seperatorIndex = str.indexOf(":");
 		if (seperatorIndex === -1)
 			throw new Error("Terminal text modifier is missing seperator colon");
 
-		const type = string
+		const parseDeleteValue = (value: unknown) => {
+			if (
+				typeof value !== "number" &&
+				value !== "line" &&
+				value !== "element"
+			)
+				throw new Error(`Terminal text delete modifier value '${value as string}' is invalid`);
+
+			return value;
+		};
+
+		const parseDelayValue = (value: unknown) => {
+			if (typeof value !== "number")
+				throw new Error(`Terminal text delay modifier value '${value as string}' is invalid`);
+
+			return value;
+		};
+
+		const option = str
 			.slice(0, seperatorIndex)
 			.trim();
 
-		if (!["delay", "delete"].includes(type))
-			throw new Error("Terminal text modifier type is invalid");
-
-		const rawValue = string
-			.slice(seperatorIndex + 1, string.length)
+		const rawValue: string | number = str
+			.slice(seperatorIndex + 1, str.length)
 			.trim();
+
 		const rawValueAsNumber = parseFloat(rawValue);
+
 		const value = isNaN(rawValueAsNumber)
 			? rawValue
 			: rawValueAsNumber;
 
-		const modifier: Modifier = { type: type as ModifierType, value };
+		const modifier = { type: "modifier", option } as Modifier; //smelly
+
+		switch (option) {
+			case "delay":
+				modifier.value = parseDelayValue(value);
+				break;
+			case "delete":
+				modifier.value = parseDeleteValue(value);
+				break;
+			default:
+				throw new Error(`Terminal text modifier option '${option}' is invalid`);
+		}
+
 		return modifier;
 	}
 
 	/**
-	 * Perform the 'delete' modifier and remove chars from the text. This is basic, and cannot
-	 * handle climbing up to the previous text node.
-	 * @param textNode Target text node
-	 * @param quantity Quantity of chars to remove
+	 * Gets a marker using a string in the form "name".
+	 * @param str
+	 * @returns Text marker
 	 */
-	private async removeChars(textNode: Node, quantity: number | "line") {
-		const remaining = quantity === "line"
-			? textNode.textContent?.length ?? 0
-			: quantity;
+	private static getMarker(this: void, str: string) {
+		const option = str.trim();
 
-		for (let i = 0; i < remaining; i++) {
-			await randomDelay(10, 50);
-			textNode.textContent = textNode.textContent?.slice(0, textNode.textContent.length - 1) ?? null;
-		}
+		if (
+			option !== "minHeight"
+		)
+			throw new Error(`Terminal text marker option '${option}' is invalid`);
+
+		const marker: Marker = { type: "marker", option };
+		return marker;
 	}
 }
