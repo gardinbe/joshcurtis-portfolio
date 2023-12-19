@@ -1,10 +1,14 @@
-# Portfolio app
+# Josh Curtis' portfolio
 
-This is a rework of my existing portfolio website using more modern and effective solutions:
-- Strapi Headless CMS integration
+This is [Josh Curtis](https://www.linkedin.com/in/josh-hcurtis)'s new portfolio.
+
+You can [view it here](https://joshcurtis-portfolio-app.onrender.com/).
+
+![desktop](https://github.com/gardinbe/joshcurtis-portfolio/assets/55744452/8bc144fa-b05b-4021-913f-f856ab362d73)
+
+Built using several modern technologies:
+- Strapi Headless CMS
 - Vite
-- Vue3 Composition API
-- Bootstrap
+- Vue3 with composition api
+- Sass
 - Typescript
-
-Use latest node version.
