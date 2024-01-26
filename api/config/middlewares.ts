@@ -6,7 +6,12 @@ export default [
 		config: {
 			headers: "*",
 			origin: [
-				"*"
+				"http://localhost:1337",
+				"http://127.0.0.1:1337",
+				"http://joshuacurtis.co.uk",
+				"https://joshuacurtis.co.uk",
+				"http://www.joshuacurtis.co.uk",
+				"https://www.joshuacurtis.co.uk"
 			]
 		}
 	},

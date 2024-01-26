@@ -4,7 +4,7 @@ services:
     plan: starter
     # region: frankfurt # need to get upgrade
     numInstances: 1
-    name: joshcurtis-portfolio-api
+    name: joshuacurtis-portfolio-api
     rootDir: api
     runtime: node
     branch: master
@@ -22,7 +22,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: HOST_URL
-        value: https://joshcurtis-portfolio-api.onrender.com
+        value: https://api.joshuacurtis.co.uk
       - key: APP_KEYS
         generateValue: true
       - key: API_TOKEN_SALT
@@ -39,7 +39,7 @@ services:
         value: /data/strapi.db # need to get upgrade
   # the web app
   - type: web
-    name: joshcurtis-portfolio-app
+    name: joshuacurtis-portfolio-app
     rootDir: app
     runtime: static
     branch: master
@@ -53,7 +53,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: VITE_STRAPI_URL
-        value: https://joshcurtis-portfolio-api.onrender.com
+        value: https://api.joshuacurtis.co.uk
     headers:
     - path: /*
       name: X-Frame-Options
