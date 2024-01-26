@@ -207,7 +207,7 @@ type MinHeightMarker = MarkerBase & {
  * Parser for the terminal text effect. Responsible for parsing chars, modifiers and
  * markers within the text of an element.
  */
-class TerminalTextParser {
+abstract class TerminalTextParser {
 	static parseElmt(elmt: HTMLElement) {
 		const textNodes = this.getTextNodes(elmt);
 		const parsedTextNodes = new Map<Node, TextFragment[]>();
