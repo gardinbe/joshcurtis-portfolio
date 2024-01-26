@@ -41,7 +41,7 @@
 
 		<template #second>
 			<StrapiImage
-				:image="data.image"
+				:image="data.image.data"
 				format="large"
 				lazy
 			/>

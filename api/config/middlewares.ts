@@ -1,4 +1,6 @@
-export default [
+import { Config } from "../types/config.types";
+
+const config: Config = () => ([
 	"strapi::errors",
 	"strapi::security",
 	{
@@ -31,4 +33,6 @@ export default [
 			}
 		}
 	}
-];
+]);
+
+export default config;

@@ -2,7 +2,7 @@ import { Config } from "../types/config.types";
 import clientConfigs from "../utils/database-client-configs";
 import { requiredEnv } from "../utils/required-env";
 
-export default <Config>(({ env }) => {
+const config: Config = ({ env }) => {
 	const client = requiredEnv(env, "DATABASE_CLIENT");
 
 	const config = clientConfigs.get(client);
@@ -16,4 +16,6 @@ export default <Config>(({ env }) => {
 			acquireConnectionTimeout: env.int("DATABASE_CONNECTION_TIMEOUT", 60000)
 		}
 	};
-});
+};
+
+export default config;
