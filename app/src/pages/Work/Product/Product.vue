@@ -9,17 +9,17 @@
 			<div class="product__main-content">
 				<hgroup>
 					<h1>
-						{{ data.title }}
+						{{ page.attributes.title }}
 					</h1>
-					<h4 v-if="data.subtitle !== null">
-						{{ data.subtitle }}
+					<h4 v-if="page.attributes.subtitle !== null">
+						{{ page.attributes.subtitle }}
 					</h4>
 				</hgroup>
 
-				<div v-html="parse(data.content)" />
+				<div v-html="parse(page.attributes.content)" />
 				<ul class="product__tags">
 					<li
-						v-for="tag of data.tags.data"
+						v-for="tag of page.attributes.tags.data"
 						:key="tag.id"
 						:style="'--product-tag-color: ' + tag.attributes.color"
 						class="product-tag"
@@ -32,7 +32,7 @@
 					mode="filled"
 					class="product__link"
 					size="large"
-					:href="data.link"
+					:href="page.attributes.link"
 				>
 					Visit the site
 				</Button>
@@ -41,32 +41,30 @@
 
 		<template #second>
 			<StrapiImage
-				:image="data.image.data"
+				:image="page.attributes.image.data"
 				format="large"
-				lazy
 			/>
 		</template>
 	</SplitContent>
 </template>
 
 <script setup lang="ts">
-import Button from "@/components/Button/Button.vue";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import SplitContent from "@/components/sections/SplitContent/SplitContent.vue";
-import { ProductResponse } from "@/types/api/pages/products";
-import { strapi } from "@/utils";
 import { parse } from "marked";
 import { useRouter } from "vue-router";
+import Button from "@/components/Button/Button.vue";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
+import SplitContent from "@/components/SplitContent/SplitContent.vue";
+import { strapi } from "@/lib/services";
+import { notFound } from "@/lib/utils";
 
 const router = useRouter();
 
-if (typeof router.currentRoute.value.params.productID !== "string")
-	throw new Error("Missing product ID from request");
+const slug = router.currentRoute.value.params.slug;
+if (typeof slug !== "string")
+	throw new Error("Missing product slug from request");
 
-const productID = parseInt(router.currentRoute.value.params.productID);
-
-const response = await strapi.get<ProductResponse>(`products/${productID}`);
-const data = response.data.attributes;
+const page = await strapi.getProduct({ slug })
+	.catch(notFound);
 
 </script>
 

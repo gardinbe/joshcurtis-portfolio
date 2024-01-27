@@ -1,23 +1,18 @@
-import { envCast } from "@/utils";
+import { castEnv } from "@/lib/utils";
 
 export default {
-	strapiUrl: envCast.string(
-		import.meta.env.VITE_STRAPI_URL
+	/** Hostname of the Strapi API. */
+	STRAPI_HOST: castEnv.string(
+		import.meta.env.VITE_STRAPI_HOST
 	),
-	strapiTimeoutDuration: envCast.number(
-		import.meta.env.VITE_STRAPI_TIMEOUT_DURATION,
+	/** Hostname of the Strapi API's media provider. */
+	STRAPI_MEDIA_HOST: castEnv.string(
+		import.meta.env.VITE_STRAPI_MEDIA_HOST,
+		import.meta.env.VITE_STRAPI_HOST
+	),
+	/** The time to wait for a response (in seconds) before giving up. */
+	STRAPI_TIMEOUT: castEnv.number(
+		import.meta.env.VITE_STRAPI_TIMEOUT,
 		30000
-	),
-	contentCaching: envCast.bool(
-		import.meta.env.VITE_CONTENT_CACHING,
-		true
-	),
-	artificialDelay: envCast.bool(
-		import.meta.env.VITE_ARTIFICIAL_DELAY,
-		false
-	),
-	artificialDelayDuration: envCast.number(
-		import.meta.env.VITE_ARTIFICIAL_DELAY_DURATION,
-		1000
 	)
 } as const;

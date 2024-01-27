@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { delay } from "@/utils";
 import { computed, onMounted, ref, watch } from "vue";
+import { delay } from "@/lib/utils";
 
 const props = defineProps<{
 	open: boolean;
@@ -99,7 +99,7 @@ const touchStartHandler = () => {
 
 /**
  * Attempt to slide the panel relative to `posX`.
- * @param posX X position of TouchEvent
+ * @param posX - X position of TouchEvent
  */
 const touchMoveHandler = (posX: number) => {
 	if (panelElRef.value === null || panelStartingPosX === null)

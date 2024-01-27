@@ -52,12 +52,12 @@ services:
         value: ~20.7.0
       - key: NODE_ENV
         value: production
-      - key: VITE_STRAPI_URL
+      - key: VITE_STRAPI_HOST
         value: https://api.joshuacurtis.co.uk
     headers:
-    - path: /*
-      name: X-Frame-Options
-      value: sameorigin
+      - path: /*
+        name: X-Frame-Options
+        value: sameorigin
     routes:
       - type: rewrite
         source: /*

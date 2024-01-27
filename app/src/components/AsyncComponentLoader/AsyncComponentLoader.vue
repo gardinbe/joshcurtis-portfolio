@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import Loader, { LoaderProps } from "@/components/Loader/Loader.vue";
 import { VNode } from "vue";
+import Loader, { LoaderProps } from "@/components/Loader/Loader.vue";
 
 defineProps<{
 	component: VNode | undefined;

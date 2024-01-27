@@ -1,28 +1,40 @@
 <template>
 	<img
-		:class="{ 'no-fallback-color': noFallbackColor }"
-		:src="strapi.mediaUrl(format?.url)"
-		:width="format?.width"
-		:height="format?.height"
-		:alt="image.attributes.alternativeText ?? undefined"
-		:loading="lazy === true ? 'lazy' : undefined"
+		:src="strapiMedia.url(format.url)"
+		:width="format.width"
+		:height="format.height"
+		:alt="image.attributes.alternativeText ?? ''"
+		:loading="eager ? 'eager' : 'lazy'"
+		:style="{ backgroundColor: _fallbackColor }"
 	>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { strapi } from "@/utils";
-import { ImageData } from "@/types/api/strapi";
+import { Image, ImageFormatName } from "@/lib/types/strapi";
+import { strapiMedia } from "@/lib/services";
 
 const props = defineProps<{
-	image: ImageData;
-	format: keyof ImageData["attributes"]["formats"];
-	lazy?: boolean;
-	noFallbackColor?: boolean;
+	image: Image;
+	format: ImageFormatName;
+	eager?: boolean;
+	fallbackColor?: boolean;
 }>();
 
-const format = computed(() => props.image.attributes.formats[props.format]);
+const format = computed(() =>
+	strapiMedia.getImageFormat(
+		props.image,
+		props.format
+	));
+
+const _fallbackColor = computed(() =>
+	props.fallbackColor
+		? strapiMedia.fallbackColor ?? undefined
+		: undefined);
 
 </script>
 
-<style scoped src="./StrapiImage.scss" />
+<style
+	scoped
+	src="./StrapiImage.scss"
+/>

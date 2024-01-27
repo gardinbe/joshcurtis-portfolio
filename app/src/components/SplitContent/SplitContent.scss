@@ -1,0 +1,135 @@
+.split-content {
+	$this: &;
+
+	height: 100%;
+
+	display: flex;
+	background-color: var(--bg-primary);
+	color: var(--color-primary);
+	overflow: auto;
+
+	@include media-breakpoint-down(lg) {
+		flex-direction: column;
+	}
+
+	/* theme styles */
+	.btn {
+		background-color: var(--bg-primary);
+		color: var(--color-primary);
+	}
+
+	.first {
+		display: flex;
+		flex-direction: column;
+		flex-basis: 100%;
+
+		@include media-breakpoint-down(lg) {
+			flex-basis: unset;
+		}
+
+		&__content {
+			display: flex;
+			flex-direction: column;
+
+			flex-basis: 100%;
+			overflow-y: auto;
+			padding: cgap(xxl);
+
+			@include media-breakpoint-down(xxl) {
+				padding: cgap(xl);
+			}
+
+			@include media-breakpoint-down(lg) {
+				overflow-y: unset;
+			}
+
+			@include media-breakpoint-down(md) {
+				padding: cgap(lg);
+			}
+
+			.back-btn {
+				margin-bottom: cgap(lg);
+				margin-right: auto;
+			}
+		}
+	}
+
+	.second {
+		display: flex;
+		flex-basis: 100%;
+		overflow: hidden;
+
+		@include media-breakpoint-down(lg) {
+			overflow: unset;
+		}
+
+		&--image {
+			max-height: 100%;
+			align-items: center;
+
+			@include media-breakpoint-down(lg) {
+				max-height: 90%;
+				align-items: unset;
+			}
+
+			:deep(img) {
+				min-height: 100%;
+				width: 100%;
+			}
+		}
+
+		&--swiper {
+			position: relative;
+			background-color: white;
+			align-items: center;
+			color: var(--bg-secondary);
+
+			:deep(.swiper) {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+				flex-basis: 100%;
+				padding: cgap(md) 0;
+				height: 60%;
+
+				@include media-breakpoint-down(xxl) {
+					height: 70%;
+				}
+
+				@include media-breakpoint-down(xl) {
+					height: 80%;
+				}
+
+				@include media-breakpoint-down(lg) {
+					height: 100%;
+					padding: cgap(xl) 0;
+				}
+
+				@include media-breakpoint-down(md) {
+					padding: cgap(lg) 0;
+				}
+
+				.swiper-wrapper {
+					.swiper-slide {
+						border-radius: radius(lg);
+						background-repeat: no-repeat;
+						background-position: center;
+						background-size: cover;
+					}
+				}
+			}
+		}
+	}
+
+	&--viewport-height {
+		.first__content {
+			min-height: 100vh;
+			min-height: 100svh;
+
+			@include media-breakpoint-down(lg) {
+				min-height: 95vh;
+				min-height: 95svh;
+			}
+		}
+	}
+}

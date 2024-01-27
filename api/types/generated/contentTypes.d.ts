@@ -690,7 +690,7 @@ export interface ApiAboutAbout extends Schema.SingleType {
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
-    description: Attribute.Text & Attribute.Required;
+    content: Attribute.RichText & Attribute.Required;
     image: Attribute.Media & Attribute.Required;
     info_blocks: Attribute.Component<'about.info-block', true>;
     createdAt: Attribute.DateTime;
@@ -724,7 +724,7 @@ export interface ApiContactContact extends Schema.SingleType {
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
-    description: Attribute.RichText & Attribute.Required;
+    content: Attribute.RichText & Attribute.Required;
     social_links: Attribute.Relation<
       'api::contact.contact',
       'oneToMany',
@@ -761,7 +761,7 @@ export interface ApiHomeHome extends Schema.SingleType {
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
-    subtitle: Attribute.RichText & Attribute.Required;
+    content: Attribute.RichText & Attribute.Required;
     cta: Attribute.String & Attribute.Required;
     image: Attribute.Media & Attribute.Required;
     social_links: Attribute.Relation<
@@ -786,14 +786,16 @@ export interface ApiProductProduct extends Schema.CollectionType {
     singularName: 'product';
     pluralName: 'products';
     displayName: 'Product';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
+    slug: Attribute.UID<'api::product.product', 'title'> & Attribute.Required;
     subtitle: Attribute.String;
-    description: Attribute.RichText & Attribute.Required;
+    content: Attribute.RichText & Attribute.Required;
     link: Attribute.String & Attribute.Required;
     image: Attribute.Media & Attribute.Required;
     tags: Attribute.Relation<
@@ -868,7 +870,9 @@ export interface ApiSocialLinkSocialLink extends Schema.CollectionType {
     name: Attribute.String & Attribute.Required;
     url: Attribute.String & Attribute.Required;
     icon: Attribute.Media & Attribute.Required;
-    background_color: Attribute.String & Attribute.Required;
+    background_color: Attribute.String &
+      Attribute.Required &
+      Attribute.CustomField<'plugin::color-picker.color'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -900,7 +904,7 @@ export interface ApiWorkWork extends Schema.SingleType {
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
-    description: Attribute.RichText & Attribute.Required;
+    content: Attribute.RichText & Attribute.Required;
     products: Attribute.Relation<
       'api::work.work',
       'oneToMany',
