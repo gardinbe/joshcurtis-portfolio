@@ -6,13 +6,13 @@
 	>
 		<div class="contact__content">
 			<hgroup>
-				<h1>{{ data.title }}</h1>
+				<h1>{{ page.attributes.title }}</h1>
 			</hgroup>
 
-			<p v-html="parse(data.content)" />
+			<p v-html="parse(page.attributes.content)" />
 			<ul class="social-link-icons">
 				<li
-					v-for="link of data.social_links.data"
+					v-for="link of page.attributes.social_links.data"
 					:key="link.id"
 				>
 					<Button
@@ -23,10 +23,9 @@
 						target="_blank"
 					>
 						<StrapiImage
-							:image="link.attributes.icon"
+							:image="link.attributes.icon.data"
 							format="thumbnail"
-							lazy
-							no-fallback-color
+							:fallback-color="false"
 						/>
 					</Button>
 				</li>
@@ -36,15 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import StandardContent from "@/components/sections/StandardContent/StandardContent.vue";
+import { parse } from "marked";
+import StandardContent from "@/components/StandardContent/StandardContent.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import Button from "@/components/Button/Button.vue";
-import { ContactResponse } from "@/types/api/pages/contact";
-import { strapi } from "@/utils";
-import { parse } from "marked";
+import { strapi } from "@/lib/services";
 
-const response = await strapi.get<ContactResponse>("contact");
-const data = response.data.attributes;
+const page = await strapi.getContactPage();
 
 </script>
 

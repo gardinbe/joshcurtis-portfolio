@@ -1,7 +1,7 @@
 <template>
 	<div class="burger">
 		<div
-			ref="burgerBtnElRef"
+			ref="burgerBtn"
 			class="burger__btn"
 			@click="toggle"
 		>
@@ -10,7 +10,7 @@
 			<span class="bar" />
 		</div>
 		<menu
-			ref="burgerMenuElRef"
+			ref="burgerMenu"
 			class="burger__menu"
 		>
 			<li
@@ -38,38 +38,38 @@ defineProps<{
 	}[];
 }>();
 
-const burgerBtnElRef = ref<HTMLElement | null>(null);
-const burgerMenuElRef = ref<HTMLElement | null>(null);
+const burgerBtn = ref<HTMLElement | null>(null);
+const burgerMenu = ref<HTMLElement | null>(null);
 let opened = false;
 
 const toggle = () => opened ? close() : open();
 
 onMounted(() => {
-	if (burgerBtnElRef.value === null)
+	if (burgerBtn.value === null)
 		return;
 
-	burgerBtnElRef.value.dataset.visible = "false";
+	burgerBtn.value.dataset.visible = "false";
 });
 
 const open = () => {
-	if (burgerBtnElRef.value === null)
+	if (burgerBtn.value === null)
 		return;
-	burgerBtnElRef.value.dataset.visible = "true";
+	burgerBtn.value.dataset.visible = "true";
 	setTimeout(() => addEventListener("click", closeWhenClickingOff), 0);
 	opened = true;
 };
 
 const close = () => {
-	if (burgerBtnElRef.value === null)
+	if (burgerBtn.value === null)
 		return;
-	burgerBtnElRef.value.dataset.visible = "false";
+	burgerBtn.value.dataset.visible = "false";
 	removeEventListener("click", closeWhenClickingOff);
 	opened = false;
 };
 
 const closeWhenClickingOff = (ev: MouseEvent) => {
 	const target = ev.target as HTMLElement;
-	if (burgerMenuElRef.value?.contains(target) === true)
+	if (burgerMenu.value?.contains(target) === true)
 		return;
 
 	close();

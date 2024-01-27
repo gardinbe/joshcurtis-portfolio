@@ -9,18 +9,48 @@
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended-requiring-type-checking"
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:import/recommended",
+		"plugin:import/typescript"
 	],
 	"plugins": [
-		"@typescript-eslint"
+		"@typescript-eslint",
+		"import",
+		"eslint-plugin-tsdoc"
 	],
 	"parserOptions": {
-		"project": [
-			"tsconfig.json"
-		],
+		// "project": "tsconfig.json", //OVERRIDE
 		"parser": "@typescript-eslint/parser"
 	},
+	"settings": {
+		"import/parsers": {
+			"@typescript-eslint/parser": [
+				".ts",
+				".tsx"
+			]
+		},
+		"import/resolver": {
+			"typescript": {
+				"alwaysTryTypes": true //always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+				// "project": "tsconfig.json" //OVERRIDE
+			}
+		}
+	},
 	"rules": {
+		"tsdoc/syntax": "warn",
+		"import/order": [
+			"error"
+		],
+		"import/newline-after-import": [
+			"error",
+			{
+				"count": 1,
+				"exactCount": true,
+				"considerComments": true
+			}
+		],
+		"@typescript-eslint/no-explicit-any": "error",
+		"@typescript-eslint/semi": "error",
 		"@typescript-eslint/member-delimiter-style": [
 			"error",
 			{
@@ -34,8 +64,7 @@
 				}
 			}
 		],
-		"@typescript-eslint/no-explicit-any": "error",
-		"@typescript-eslint/semi": "error",
+		"@typescript-eslint/promise-function-async": "error",
 		"quote-props": [
 			"error",
 			"consistent-as-needed"
@@ -46,6 +75,10 @@
 			"error",
 			"double"
 		],
+		"jsx-quotes": [
+			"error",
+			"prefer-double"
+		],
 		"arrow-parens": [
 			"error",
 			"as-needed"
@@ -53,6 +86,10 @@
 		"newline-per-chained-call": "off",
 		"array-element-newline": "off",
 		"function-paren-newline": [
+			"error",
+			"consistent"
+		],
+		"function-call-argument-newline": [
 			"error",
 			"consistent"
 		],
@@ -78,6 +115,7 @@
 				"ignoreTemplateLiterals": true,
 				"ignoreRegExpLiterals": true
 			}
-		]
+		],
+		"no-trailing-spaces": "error"
 	}
 }

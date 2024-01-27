@@ -8,10 +8,10 @@
 		<template #first>
 			<div class="work__main-content">
 				<hgroup>
-					<h1>{{ data.title }}</h1>
+					<h1>{{ page.attributes.title }}</h1>
 				</hgroup>
 
-				<div v-html="parse(data.content)" />
+				<div v-html="parse(page.attributes.content)" />
 			</div>
 		</template>
 
@@ -32,19 +32,18 @@
 				}"
 			>
 				<SwiperSlide
-					v-for="product of data.products.data"
+					v-for="product of page.attributes.products.data"
 					:key="product.id"
 					class="product"
 					:aria-label="product.attributes.title"
-					:style="{
-						backgroundImage: `url('${strapi.mediaUrl(
-							product.attributes.image.data.attributes.formats.large?.url ?? ''
-						)}')`
-					}"
-					@click="handleProductClick(product.id)"
+					:style="strapiMedia.createBackground(
+						product.attributes.image.data,
+						'large'
+					)"
+					@click="handleProductClick(product.attributes.slug)"
 					@touchstart="ev => handleProductTouchStart(ev.touches[0]!)"
 					@touchmove="ev => handleProductTouchMove(ev.touches[0]!)"
-					@touchend="ev => handleProductTouchEnd(ev, product.id)"
+					@touchend="ev => handleProductTouchEnd(ev, product.attributes.slug)"
 				>
 					<div class="product__overlay">
 						<hgroup>
@@ -69,16 +68,15 @@
 </template>
 
 <script setup lang="ts">
-import Panel from "@/components/Panel/Panel.vue";
-import SplitContent from "@/components/sections/SplitContent/SplitContent.vue";
-import AsyncComponentLoader from "@/components/AsyncComponentLoader/AsyncComponentLoader.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { strapi } from "@/utils";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import { WorkResponse } from "@/types/api/pages/work";
 import { SwiperContainer } from "swiper/element";
 import { parse } from "marked";
+import Panel from "@/components/Panel/Panel.vue";
+import SplitContent from "@/components/SplitContent/SplitContent.vue";
+import AsyncComponentLoader from "@/components/AsyncComponentLoader/AsyncComponentLoader.vue";
+import { strapi, strapiMedia } from "@/lib/services";
 
 const router = useRouter();
 
@@ -96,19 +94,16 @@ const closePanel = () => {
 
 /**
  * Handle clicking on a product, and disable the click event when on mobile.
- * @param productID Target product ID
+ * @param slug - Target product slug
  */
-const handleProductClick = (productID: number) => {
+const handleProductClick = (slug: string) => {
 	if (matchMedia("(pointer: coarse)").matches)
 		return;
 
-	void router.push(`${router.currentRoute.value.path}/${productID}`);
+	void router.push(`${router.currentRoute.value.path}/${slug}`);
 };
 
-type Position = {
-	x: number;
-	y: number;
-};
+type Position = { x: number; y: number; };
 
 let firstProductTouchPos: Position | null = null;
 let lastProductTouchPos: Position | null = null;
@@ -121,23 +116,26 @@ const handleProductTouchStart = (touch: Touch) => {
 	lastProductTouchPos = firstProductTouchPos;
 };
 
-const handleProductTouchMove = (touch: Touch) =>
+const handleProductTouchMove = (touch: Touch) => {
 	lastProductTouchPos = {
 		x: touch.clientX,
 		y: touch.clientY
 	};
+};
 
 const productTapThreshold = 16;
 
 /**
  * Hacky fix to replace a standard click event - there is a noticable delay
  * when trying to tap swiperjs slides on mobile...
- * @param productID Target product ID
+ * @param slug - Target product slug
  */
-const handleProductTouchEnd = (ev: TouchEvent, productID: number) => {
+const handleProductTouchEnd = (ev: TouchEvent, slug: string) => {
 	if (
-		productSlider.value?.swiper === undefined || productSlider.value.swiper.animating ||
-		firstProductTouchPos === null || lastProductTouchPos === null
+		productSlider.value?.swiper === undefined
+		|| productSlider.value.swiper.animating
+		|| firstProductTouchPos === null
+		|| lastProductTouchPos === null
 	)
 		return;
 
@@ -148,18 +146,17 @@ const handleProductTouchEnd = (ev: TouchEvent, productID: number) => {
 	lastProductTouchPos = null;
 
 	if (
-		Math.abs(firstPos.x - lastPos.x) > productTapThreshold ||
-		Math.abs(firstPos.y - lastPos.y) > productTapThreshold
+		Math.abs(firstPos.x - lastPos.x) > productTapThreshold
+		|| Math.abs(firstPos.y - lastPos.y) > productTapThreshold
 	)
 		return;
 
 	ev.preventDefault(); //important!
 
-	void router.push(`${router.currentRoute.value.path}/${productID}`);
+	void router.push(`${router.currentRoute.value.path}/${slug}`);
 };
 
-const response = await strapi.get<WorkResponse>("work");
-const data = response.data.attributes;
+const page = await strapi.getWorkPage();
 
 </script>
 

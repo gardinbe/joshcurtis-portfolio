@@ -8,7 +8,7 @@ export interface AboutInfoBlock extends Schema.Component {
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
-    description: Attribute.RichText & Attribute.Required;
+    content: Attribute.RichText & Attribute.Required;
   };
 }
 
