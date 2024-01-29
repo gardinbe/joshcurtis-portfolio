@@ -1,23 +1,19 @@
 .back-btn {
-	border: unset;
-
 	flex-shrink: 0;
 	padding: 8px 16px;
 	border-radius: radius(md);
 
 	height: $icon-btn-height;
-	color: var(--color-primary-dark);
-	background-color: var(--bg-primary-dark);
-
-	cursor: pointer;
+	color: $color-primary-d-1;
+	background-color: $bg-primary-d-1;
 
 	transition:
 		color anim(),
 		background-color anim();
 
-	@include hover-active-focus {
-		color: var(--color-primary);
-		background-color: var(--bg-primary-very-dark);
+	@include hover-active-swap-focus-visible {
+		color: $color-primary;
+		background-color: $bg-primary-d-2;
 	}
 
 	svg {

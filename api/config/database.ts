@@ -1,18 +1,17 @@
-import { Config } from "../types/config.types";
-import clientConfigs from "../utils/database-client-configs";
-import { requiredEnv } from "../utils/required-env";
+import { Config } from "./lib/types/config";
+import { databaseClientConfigs, throwExp } from "./lib/utils";
 
 const config: Config = ({ env }) => {
-	const client = requiredEnv(env, "DATABASE_CLIENT");
+	const client = env("DATABASE_CLIENT")
+		?? throwExp("Missing 'DATABASE_CLIENT' environment variable");
 
-	const config = clientConfigs.get(client);
-	if (config === undefined)
-		throw new Error("Invalid database connection type provided");
+	const clientConfig = databaseClientConfigs.get(client)
+		?? throwExp("Invalid database connection type provided");
 
 	return {
 		connection: {
 			client,
-			...config(env),
+			...clientConfig(env),
 			acquireConnectionTimeout: env.int("DATABASE_CONNECTION_TIMEOUT", 60000)
 		}
 	};

@@ -9,14 +9,15 @@ module.exports = {
 	"extends": [
 		"../.eslintrc"
 	],
-	"settings": {
-    "import/resolver": {
-      "typescript": {
-        "project": join(__dirname, "tsconfig.json")
-      }
-    }
-  },
 	"parserOptions": {
-		"tsconfigRootDir": __dirname
+		"tsconfigRootDir": __dirname,
+		"project": "tsconfig.json"
+	},
+	"settings": {
+		"import/resolver": {
+			"typescript": {
+				"project": join(__dirname, "tsconfig.json")
+			}
+		}
 	}
 };

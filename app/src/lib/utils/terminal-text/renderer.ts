@@ -101,7 +101,7 @@ export class TerminalTextRenderer {
 
 		temporarilySetText();
 
-		await delay(250);
+		await delay(500);
 
 		elmt.style.minHeight = `${elmt.clientHeight}px`;
 
@@ -124,7 +124,7 @@ export class TerminalTextRenderer {
 	private createCursorElmt() {
 		const elmt = document.createElement("span");
 		elmt.classList.add("cursor");
-		elmt.dataset.blink = "false";
+		elmt.dataset.blinking = "false";
 		return elmt;
 	}
 
@@ -132,14 +132,14 @@ export class TerminalTextRenderer {
 	 * Start blinking the cursor.
 	 */
 	private startBlinking() {
-		this.cursor.dataset.blink = "true";
+		this.cursor.dataset.blinking = "true";
 	}
 
 	/**
 	 * Stop blinking the cursor.
 	 */
 	private stopBlinking() {
-		this.cursor.dataset.blink = "false";
+		this.cursor.dataset.blinking = "false";
 	}
 
 	/**
@@ -229,13 +229,21 @@ export class TerminalTextRenderer {
 	 * @param quantity - Quantity of chars to remove
 	 */
 	private async deleteChars(node: Node, quantity: DeleteModifierValue) {
-		const remaining = quantity === "line" || quantity === "element"
+		let remaining = quantity === "line" || quantity === "element"
 			? node.textContent?.length ?? 0
 			: quantity;
 
-		for (let i = 0; i < remaining; i++) {
-			node.textContent = node.textContent?.slice(0, node.textContent.length - 1) ?? null;
-			await randomDelay(10, 50);
+		const deleteLastChar = () =>
+			node.textContent = node.textContent?.slice(0, node.textContent.length - 1)
+			?? null;
+
+		deleteLastChar();
+		await delay(350);
+
+		while (remaining > 0) {
+			deleteLastChar();
+			await delay(40);
+			remaining--;
 		}
 
 		if (quantity === "element") {

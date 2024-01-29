@@ -1,15 +1,7 @@
-/* Content loader */
-.content-loaded {
-	&-leave-active {
-		animation: FadeOut anim(slow);
-	}
-}
+//global vue transitions
 
-/* Slide */
 .slide {
-	//in from
 	&-in-from {
-		//left
 		&-left {
 			&-enter-active,
 			&-leave-active {
@@ -27,7 +19,6 @@
 			}
 		}
 
-		//right
 		&-right {
 			&-enter-active,
 			&-leave-active {
@@ -47,52 +38,47 @@
 	}
 }
 
-/* Fade */
 .fade {
-	//in and out
-	&-enter-active {
-		animation: FadeIn anim(slow);
-	}
+	&-enter-active,
 	&-leave-active {
-		animation: FadeOut anim(slow);
+		transition: filter anim(slow);
 	}
 
-	//in only
+	&-enter-from,
+	&-leave-to {
+		filter: opacity(0);
+	}
+
+	&-enter-to,
+	&-leave-from {
+		filter: opacity(1);
+	}
+
 	&-in {
 		&-enter-active {
-			animation: FadeIn anim(slow);
+			transition: filter anim(slow);
+		}
+
+		&-enter-from {
+			filter: opacity(0);
+		}
+
+		&-enter-to {
+			filter: opacity(1);
 		}
 	}
 
-	//out only
 	&-out {
 		&-leave-active {
-			animation: FadeOut anim(slow);
-		}
-	}
-
-	//slow
-	&-slow {
-		//in and out
-		&-enter-active {
-			animation: FadeIn anim(very-slow);
-		}
-		&-leave-active {
-			animation: FadeOut anim(very-slow);
+			transition: filter anim(slow);
 		}
 
-		//in only
-		&-in {
-			&-enter-active {
-				animation: FadeIn anim(very-slow);
-			}
+		&-leave-to {
+			filter: opacity(0);
 		}
 
-		//out only
-		&-out {
-			&-leave-active {
-				animation: FadeOut anim(very-slow);
-			}
+		&-leave-from {
+			filter: opacity(1);
 		}
 	}
 }

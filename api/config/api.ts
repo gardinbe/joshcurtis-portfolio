@@ -1,4 +1,4 @@
-import { Config } from "../types/config.types";
+import { Config } from "./lib/types/config";
 
 const config: Config = () => ({
 	rest: {

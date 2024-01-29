@@ -1,8 +1,6 @@
 .btn {
-	text-decoration: none;
-	outline: unset;
-	border: unset;
-	user-select: none;
+	text-decoration: none; //anchor
+	// outline: unset;
 
 	display: inline-flex;
 	justify-content: center;
@@ -22,7 +20,7 @@
 		padding: 8px 20px;
 	}
 
-	@include hover-active-focus {
+	@include hover-active-swap-focus-visible {
 		transform: scale(1.055);
 	}
 
@@ -32,31 +30,31 @@
 	}
 
 	&--filled {
-		background-color: var(--color-primary);
-		color: var(--bg-secondary);
+		background-color: $color-primary;
+		color: $bg-secondary;
 
-		@include hover-active-focus {
-			background-color: var(--color-primary-dark);
+		@include hover-active-swap-focus-visible {
+			background-color: $color-primary-d-1;
 		}
 	}
 
 	&--filled-dark {
-		background-color: var(--bg-secondary);
-		color: var(--color-primary);
+		background-color: $bg-secondary;
+		color: $color-primary;
 
-		@include hover-active-focus {
-			background-color: var(--bg-secondary-dark);
+		@include hover-active-swap-focus-visible {
+			background-color: $bg-secondary-d-1;
 		}
 	}
 
 	&--ghost {
-		color: var(--color-primary);
+		color: $color-primary;
 		background-color: transparent;
-		border: 2px solid var(--color-primary);
+		border: 2px solid $color-primary;
 
-		@include hover-active-focus {
-			color: var(--bg-primary);
-			background-color: var(--color-primary);
+		@include hover-active-swap-focus-visible {
+			color: $bg-primary;
+			background-color: $color-primary;
 		}
 	}
 }

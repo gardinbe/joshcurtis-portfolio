@@ -1,9 +1,9 @@
 import path from "path";
-import { EnvFunction } from "../types/config.types";
+import { EnvFunction } from "../types/config";
 
-const clientConfigs = new Map<string, (env: EnvFunction) => object>();
+export const databaseClientConfigs = new Map<string, (env: EnvFunction) => object>();
 
-clientConfigs.set("mysql", env => ({
+databaseClientConfigs.set("mysql", env => ({
 	connection: {
 		connectionString: env("DATABASE_URL"),
 		host: env("DATABASE_HOST", "localhost"),
@@ -27,7 +27,7 @@ clientConfigs.set("mysql", env => ({
 	}
 }));
 
-clientConfigs.set("mysql2", env => ({
+databaseClientConfigs.set("mysql2", env => ({
 	connection: {
 		host: env("DATABASE_HOST", "localhost"),
 		port: env.int("DATABASE_PORT", 3306),
@@ -49,7 +49,7 @@ clientConfigs.set("mysql2", env => ({
 	}
 }));
 
-clientConfigs.set("postgres", env => ({
+databaseClientConfigs.set("postgres", env => ({
 	connection: {
 		connectionString: env("DATABASE_URL"),
 		host: env("DATABASE_HOST", "localhost"),
@@ -73,11 +73,9 @@ clientConfigs.set("postgres", env => ({
 	}
 }));
 
-clientConfigs.set("sqlite", env => ({
+databaseClientConfigs.set("sqlite", env => ({
 	connection: {
 		filename: env("DATABASE_FILENAME", path.join(__dirname, "..", "..", ".tmp/data.db"))
 	},
 	useNullAsDefault: true
 }));
-
-export default clientConfigs;

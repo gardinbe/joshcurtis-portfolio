@@ -1,26 +1,21 @@
 <template>
-	<Transition
-		v-if="initialDelayFinished"
-		name="fade"
-	>
+	<Transition name="fade">
 		<div
-			v-if="open"
+			v-if="openIf"
 			class="panel-backdrop"
-			@click="closeAction"
+			@click="close"
 			@touchstart="touchStartHandler"
 			@touchmove="ev => touchMoveHandler(ev.touches[0]!.clientX)"
 			@touchend="touchEndHandler"
 		/>
 	</Transition>
 
-	<Transition
-		v-if="initialDelayFinished"
-		name="slide-in-from-right"
-	>
+	<Transition name="slide-in-from-right">
 		<div
-			v-if="open"
+			v-if="openIf"
 			ref="panelElRef"
 			class="panel"
+			:inert="inert"
 		>
 			<slot />
 		</div>
@@ -29,37 +24,35 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { delay } from "@/lib/utils";
 
 const props = defineProps<{
-	open: boolean;
+	inert?: boolean;
+	//TODO -> this smells. would prefer `v-if` on parent, but multiple transitions...
+	//and even if nesting classes in transition, more problems arise...
+	openIf: boolean;
+	close: () => void;
 	keepOverflowHiddenOnClose?: boolean;
-	closeAction: () => void;
 }>();
 
-const panelOpenListener = () => {
-	if (props.open || props.keepOverflowHiddenOnClose)
-		document.body.style.overflow = "hidden";
-	else
-		document.body.style.overflow = "";
+const updateOverflow = () => {
+	document.body.style.overflow = props.openIf
+		? "hidden"
+		: props.keepOverflowHiddenOnClose
+			? "hidden"
+			: "";
 };
 
-onMounted(panelOpenListener);
-watch(computed(() => props.open), panelOpenListener);
+onMounted(updateOverflow);
+watch(computed(() => props.openIf), updateOverflow);
 
-/**
- * Delay timer exists to stop Transition playing half an animation on page load.
- */
-const initialDelayFinished = ref(false);
-void delay(0).then(() => initialDelayFinished.value = true);
 
 /**
  * Close panel on ESC keypress.
  */
 document.addEventListener("keydown", ev => {
-	if (ev.key !== "Escape" && ev.key !== "Esc")
+	if ((ev.key !== "Escape" && ev.key !== "Esc") || props.inert)
 		return;
-	props.closeAction();
+	props.close();
 });
 
 const panelElRef = ref<HTMLElement | null>(null);
@@ -141,7 +134,7 @@ const touchEndHandler = () => {
 
 	//close panel
 	panelDistanceTravelled = null;
-	props.closeAction();
+	props.close();
 };
 
 </script>

@@ -9,12 +9,10 @@
 		<p>
 			The page or content you are for does not exist, or has been removed.
 			You can
-			<span>
-				<RouterLink
-					to="/"
-					v-html="'Return to the homepage'"
-				/>
-			</span>
+			<RouterLink
+				to="/"
+				v-html="'return to the homepage'"
+			/>
 			here.
 		</p>
 	</main>

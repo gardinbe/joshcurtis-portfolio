@@ -11,17 +11,15 @@
 @import "~/bootstrap/scss/bootstrap-reboot";
 @import "~/bootstrap/scss/utilities";
 @import "~/bootstrap/scss/utilities/api";
-@import "~/swiper/swiper";
+// @import "~/swiper/swiper";
 
 //fonts
 @import "fonts/inter";
 
 //global styles
-@import "vars";
 @import "transitions";
 @import "utils";
 @import "base";
-@import "keyframes";
 
-//components
+//global components
 @import "components/swiper";

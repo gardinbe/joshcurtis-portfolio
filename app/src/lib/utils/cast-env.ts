@@ -1,6 +1,6 @@
 import { Defined } from "@/lib/types/utils";
 
-interface IEnvironmentVariableCaster {
+interface IEnvParser {
 	string(variable: string | undefined): string;
 	string<TDefault = unknown>(variable: string | undefined, defaultValue: TDefault): string | Defined<TDefault>;
 	bool(variable: string | undefined): boolean;
@@ -10,9 +10,9 @@ interface IEnvironmentVariableCaster {
 }
 
 /**
- * Functions to cast an environment variable to a given type.
+ * Functions to parse environment variables.
  */
-export const castEnv: IEnvironmentVariableCaster = {
+export const envParser: IEnvParser = {
 	string<TDefault>(variable: string | undefined, defaultValue?: TDefault) {
 		if (variable === undefined || variable === "") {
 			if (typeof defaultValue !== "undefined")

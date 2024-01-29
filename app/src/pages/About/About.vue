@@ -2,31 +2,27 @@
 <template>
 	<SplitContent
 		second-slot-type="image"
-		class="about"
-		has-back-btn
+		sizing="enlarge-first"
+		has-button
 	>
 		<template #first>
-			<div class="about__content">
-				<div class="about__main-content">
-					<hgroup>
-						<h1>{{ page.attributes.title }}</h1>
-					</hgroup>
+			<hgroup>
+				<h1>{{ page.attributes.title }}</h1>
+			</hgroup>
 
-					<p>{{ page.attributes.content }}</p>
-				</div>
+			<p>{{ page.attributes.content }}</p>
 
+			<div
+				v-if="page.attributes.info_blocks.length > 0"
+				class="info-blocks"
+			>
 				<div
-					v-if="page.attributes.info_blocks.length > 0"
-					class="about__info-blocks"
+					v-for="infoBlock of page.attributes.info_blocks"
+					:key="infoBlock.id"
+					class="info-block"
 				>
-					<div
-						v-for="infoBlock of page.attributes.info_blocks"
-						:key="infoBlock.id"
-						class="info-block"
-					>
-						<h4>{{ infoBlock.title }}</h4>
-						<div v-html="parse(infoBlock.content)" />
-					</div>
+					<h4>{{ infoBlock.title }}</h4>
+					<div v-html="parse(infoBlock.content)" />
 				</div>
 			</div>
 		</template>
@@ -45,8 +41,10 @@ import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import { strapi } from "@/lib/services";
+import { contentError } from "@/lib/utils";
 
-const page = await strapi.getAboutPage();
+const page = await strapi.getAboutPage()
+	.catch(contentError);
 
 </script>
 

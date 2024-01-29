@@ -1,29 +1,17 @@
 <template>
-	<section
-		class="loader-wrapper"
-		:class="{ inline, fixed }"
-	>
+	<div class="loader-wrapper">
 		<Transition
 			appear
-			name="fade-slow-in"
+			name="fade-in"
 		>
 			<div class="loader">
 				<span>{</span>
 				<span>}</span>
 			</div>
 		</Transition>
-	</section>
+	</div>
 </template>
 
-<script setup lang="ts">
-
-export type LoaderProps = {
-	inline?: boolean;
-	fixed?: boolean;
-};
-
-defineProps<LoaderProps>();
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped src="./Loader.scss" />

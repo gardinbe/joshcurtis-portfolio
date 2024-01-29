@@ -1,29 +1,6 @@
-.about {
-	&__content {
-		margin: auto 0;
-	}
-
-	&__main-content {
-		.title {
-			margin-bottom: 1.5rem;
-		}
-
-		// .description {
-		// }
-	}
-
-	&__info-blocks {
-		margin-top: 2rem;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-
-		// .info-block {
-		// 	.title {
-		// 	}
-
-		// 	.description {
-		// 	}
-		// }
-	}
+.info-blocks {
+	display: flex;
+	flex-direction: column;
+	gap: spacing(md);
+	margin-top: spacing(sm);
 }

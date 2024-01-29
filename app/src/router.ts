@@ -3,16 +3,18 @@ import { createRouter, createWebHistory } from "vue-router";
 import Loader from "@/components/Loader/Loader.vue";
 
 /**
- * Quick wrapper around internal vue component definitions to
- * render a loader while a component is loading.
+ * Routes can only resolve single components: create intermediary
+ * component to show/switch loader and route component.
  *
- * This is Vue black magic...
- * @param lazyComponent - Component to be lazy-loaded
+ * https://stackoverflow.com/a/59092610
+ *
+ * This is dodgy Vue business...
+ * @param component - Target component to be lazy-loaded
  */
-const lazyLoad = <T extends Component>(lazyComponent: () => Promise<T>) => {
+const lazy = <T extends Component>(component: Promise<T>) => {
 	const asyncComponent = defineAsyncComponent({
-		loader: lazyComponent,
-		loadingComponent: Loader as Component
+		loader: async () => component,
+		loadingComponent: Loader
 	});
 
 	return defineComponent({ render: () => h(asyncComponent) });
@@ -22,42 +24,41 @@ export default createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{
-			name: "NotFound",
+			name: "not-found",
 			path: "/:pathMatch(.*)*",
-			component: lazyLoad(async () =>
-				import("@/pages/NotFound/NotFound.vue"))
+			component: lazy(import("@/pages/NotFound/NotFound.vue"))
 		},
 		{
-			name: "Home",
+			name: "internal-error",
+			path: "/internal-error",
+			component: lazy(import("@/pages/InternalError/InternalError.vue"))
+		},
+		{
+			name: "home",
 			path: "/",
-			component: lazyLoad(async () =>
-				import("@/pages/Home/Home.vue")),
+			component: lazy(import("@/pages/Home/Home.vue")),
 			children: [
 				{
-					name: "About",
+					name: "about",
 					path: "/about",
-					component: lazyLoad(async () =>
-						import("@/pages/About/About.vue"))
+					component: lazy(import("@/pages/About/About.vue"))
 				},
 				{
-					name: "My work",
+					name: "work",
 					path: "/my-work",
-					component: lazyLoad(async () =>
-						import("@/pages/Work/Work.vue")),
+					component: lazy(import("@/pages/Work/Work.vue")),
 					children: [
 						{
 							name: "Product",
 							path: ":slug",
-							component: lazyLoad(async () =>
-								import("@/pages/Work/Product/Product.vue"))
+							component: lazy(import("@/pages/Work/Product/Product.vue"))
 						}
 					]
 				},
 				{
-					name: "Contact",
+					name: "contact",
 					path: "/contact",
-					component: lazyLoad(async () =>
-						import("@/pages/Contact/Contact.vue"))
+					component: lazy(import("@/pages/Contact/Contact.vue"))
 				}
 			]
 		}
