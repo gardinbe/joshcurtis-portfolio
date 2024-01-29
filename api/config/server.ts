@@ -1,6 +1,6 @@
-import { Config } from "../types/config.types";
+import { Config } from "./lib/types/config";
 
-export default <Config>(({ env }) => ({
+const config: Config = ({ env }) => ({
 	host: env("HOST", "0.0.0.0"),
 	port: env.int("PORT", 1337),
 	app: {
@@ -9,4 +9,6 @@ export default <Config>(({ env }) => ({
 	webhooks: {
 		populateRelations: env.bool("WEBHOOKS_POPULATE_RELATIONS", false)
 	}
-}));
+});
+
+export default config;

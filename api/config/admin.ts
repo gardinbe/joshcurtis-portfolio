@@ -1,6 +1,6 @@
-import { Config } from "../types/config.types";
+import { Config } from "./lib/types/config";
 
-export default <Config>(({ env }) => ({
+const config: Config = ({ env }) => ({
 	auth: {
 		secret: env("ADMIN_JWT_SECRET")
 	},
@@ -12,4 +12,6 @@ export default <Config>(({ env }) => ({
 			salt: env("TRANSFER_TOKEN_SALT")
 		}
 	}
-}));
+});
+
+export default config;

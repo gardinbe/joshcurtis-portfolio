@@ -1,50 +1,41 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<StandardContent
-		class="contact"
-		has-back-btn
-	>
-		<div class="contact__content">
-			<hgroup>
-				<h1>{{ data.title }}</h1>
-			</hgroup>
+	<StandardContent has-button>
+		<hgroup>
+			<h1>{{ page.attributes.title }}</h1>
+		</hgroup>
 
-			<p v-html="parse(data.content)" />
-			<ul class="social-link-icons">
-				<li
-					v-for="link of data.social_links.data"
-					:key="link.id"
-				>
-					<Button
-						mode="filled-dark"
-						class="social-link-icon"
-						:style="{ backgroundColor: link.attributes.background_color }"
-						:href="link.attributes.url"
-						target="_blank"
-					>
-						<StrapiImage
-							:image="link.attributes.icon"
-							format="thumbnail"
-							lazy
-							no-fallback-color
-						/>
-					</Button>
-				</li>
-			</ul>
+		<p v-html="parse(page.attributes.content)" />
+		<div class="social-link-icons">
+			<Button
+				v-for="link of page.attributes.social_links.data"
+				:key="link.id"
+				class="social-link-icon"
+				mode="filled-dark"
+				:style="{ backgroundColor: link.attributes.background_color }"
+				:href="link.attributes.url"
+			>
+				<StrapiImage
+					:image="link.attributes.icon.data"
+					format="thumbnail"
+					:fallback-color="false"
+					eager
+				/>
+			</Button>
 		</div>
 	</StandardContent>
 </template>
 
 <script setup lang="ts">
-import StandardContent from "@/components/sections/StandardContent/StandardContent.vue";
+import { parse } from "marked";
+import StandardContent from "@/components/StandardContent/StandardContent.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import Button from "@/components/Button/Button.vue";
-import { ContactResponse } from "@/types/api/pages/contact";
-import { strapi } from "@/utils";
-import { parse } from "marked";
+import { strapi } from "@/lib/services";
+import { contentError } from "@/lib/utils";
 
-const response = await strapi.get<ContactResponse>("contact");
-const data = response.data.attributes;
+const page = await strapi.getContactPage()
+	.catch(contentError);
 
 </script>
 

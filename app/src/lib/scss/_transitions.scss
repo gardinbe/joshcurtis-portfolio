@@ -1,0 +1,84 @@
+//global vue transitions
+
+.slide {
+	&-in-from {
+		&-left {
+			&-enter-active,
+			&-leave-active {
+				transition: transform anim(slow);
+			}
+
+			&-enter-from,
+			&-leave-to {
+				transform: translateX(-100%);
+			}
+
+			&-enter-to,
+			&-leave-from {
+				transform: translateX(0);
+			}
+		}
+
+		&-right {
+			&-enter-active,
+			&-leave-active {
+				transition: transform anim(slow);
+			}
+
+			&-enter-from,
+			&-leave-to {
+				transform: translateX(100vw);
+			}
+
+			&-enter-to,
+			&-leave-from {
+				transform: translateX(0);
+			}
+		}
+	}
+}
+
+.fade {
+	&-enter-active,
+	&-leave-active {
+		transition: filter anim(slow);
+	}
+
+	&-enter-from,
+	&-leave-to {
+		filter: opacity(0);
+	}
+
+	&-enter-to,
+	&-leave-from {
+		filter: opacity(1);
+	}
+
+	&-in {
+		&-enter-active {
+			transition: filter anim(slow);
+		}
+
+		&-enter-from {
+			filter: opacity(0);
+		}
+
+		&-enter-to {
+			filter: opacity(1);
+		}
+	}
+
+	&-out {
+		&-leave-active {
+			transition: filter anim(slow);
+		}
+
+		&-leave-to {
+			filter: opacity(0);
+		}
+
+		&-leave-from {
+			filter: opacity(1);
+		}
+	}
+}

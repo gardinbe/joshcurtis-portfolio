@@ -1,0 +1,156 @@
+@import "@/lib/scss/mixins";
+
+.swiper {
+	$swiper-pagination-mt: spacing(md);
+
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+
+	&:active {
+		cursor: grab;
+	}
+
+	&-wrapper {
+		display: flex;
+		height: 100%;
+	}
+
+	&-slide {
+		text-align: unset; //override button
+
+		position: relative;
+		overflow: hidden;
+
+		flex-shrink: 0;
+		border-radius: radius(lg);
+
+		background-color: var(--fallback-image-color);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+
+		&:active {
+			//this is to re-enable the 'grab' cursor on `swiper-wrapper`
+			cursor: unset !important;
+		}
+	}
+
+	&-button {
+		&-next,
+		&-prev {
+			--swiper-btn-offset: #{spacing(lg)};
+			position: absolute;
+			top: 50%;
+			z-index: 3;
+			border-radius: radius(md);
+			margin-top: calc(3rem * -0.5 - $swiper-pagination-mt);
+			height: 3.75rem;
+			width: 3rem;
+
+			background-color: rgba($bg-secondary, 0.3);
+			filter: opacity(1);
+			transition:
+				filter anim(fast),
+				background-color anim(fast);
+
+			@include hover-active-swap-focus-visible {
+				background-color: $bg-secondary;
+			}
+
+			@include media-breakpoint-down(xxl) {
+				--swiper-btn-offset: #{spacing(sm)};
+			}
+
+			@include media-breakpoint-down(sm) {
+				display: none;
+			}
+
+			&.swiper-button-disabled {
+				filter: opacity(0);
+				cursor: unset;
+				pointer-events: none;
+			}
+
+			&:after {
+				position: absolute;
+				inset: 0;
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-top: -0.4rem;
+
+				color: $color-primary;
+				font-size: 4.2rem;
+
+				transition:
+					color anim(fast),
+					filter anim(fast);
+
+				@include media-breakpoint-down(xxl) {
+					font-size: 3.6rem;
+				}
+
+				@include media-breakpoint-down(lg) {
+					font-size: 3.2rem;
+				}
+			}
+		}
+
+		&-next {
+			right: var(--swiper-btn-offset);
+
+			&:after {
+				content: "\203A";
+			}
+		}
+
+		&-prev {
+			left: var(--swiper-btn-offset);
+
+			&:after {
+				content: "\2039";
+			}
+		}
+	}
+
+	&-pagination {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		gap: 10px;
+
+		margin-top: $swiper-pagination-mt;
+
+		z-index: 3;
+
+		&-bullet {
+			$size: 0.9rem;
+
+			height: $size;
+			width: $size;
+			background-color: $bg-primary;
+			border-radius: 100%;
+
+			transition:
+				filter anim(fast),
+				background-color anim(fast);
+
+			filter: opacity(0.2);
+
+			&-active {
+				filter: opacity(1);
+			}
+
+			@include hover-active-swap-focus-visible {
+				filter: opacity(1);
+				background-color: $bg-primary-d-3;
+			}
+		}
+	}
+
+	&-notification {
+		display: none;
+	}
+}

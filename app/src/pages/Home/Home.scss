@@ -1,0 +1,15 @@
+.terminal-text {
+	@include font-size(1.1rem);
+	margin-bottom: spacing(lg);
+}
+
+.contact-btn {
+	margin-bottom: auto;
+}
+
+.footer {
+	display: flex;
+	flex-direction: column;
+	margin-top: spacing(lg);
+	@include font-size(0.9rem);
+}

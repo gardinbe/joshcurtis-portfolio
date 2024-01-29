@@ -1,5 +1,5 @@
-import vue from "@vitejs/plugin-vue";
 import path from "path";
+import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import { compression } from "vite-plugin-compression2";
 
@@ -23,9 +23,9 @@ export default defineConfig({
 					@import "~/bootstrap/scss/mixins/breakpoints";
 					@import "~/bootstrap/scss/variables";
 					@import "~/bootstrap/scss/vendor/rfs";		
-					@import "@/scss/functions";
-					@import "@/scss/mixins";
-					@import "@/scss/variables";
+					@import "@/lib/scss/functions";
+					@import "@/lib/scss/mixins";
+					@import "@/lib/scss/variables";
 				`
 			}
 		}

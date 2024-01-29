@@ -1,29 +1,26 @@
 {
 	"extends": [
-		"../tsconfig.json"
+		"../tsconfig.types.json"
 	],
 	"compilerOptions": {
-		"types": [
-			"vite/client"
-		],
-		//modules
 		"module": "ESNext",
 		"moduleResolution": "node",
-		"paths": {
-			"@/*": [
-				"./src/*"
-			]
-		},
-		//emit
 		"noEmit": true,
-		//interop constraints
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"isolatedModules": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		//language and environment
 		"target": "ESNext",
+		"types": [
+			"vite/client",
+			"./env.d.ts"
+		],
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		},
 	},
 	"include": [
 		"**/*.ts",

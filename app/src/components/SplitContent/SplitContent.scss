@@ -1,0 +1,131 @@
+.split-content {
+	height: 100%;
+
+	display: grid;
+	--split-content-columns: 1.3fr 1fr;
+	grid-template-columns: var(--split-content-columns);
+	grid-template-rows: 100%;
+
+	background-color: $bg-primary;
+	color: $color-primary;
+
+	&__btn {
+		margin-bottom: spacing(lg);
+		margin-right: auto;
+	}
+
+	&--viewport-height {
+		.first {
+			min-height: 100vh;
+			min-height: 100svh;
+
+			@include media-breakpoint-down(lg) {
+				min-height: 95vh;
+				min-height: 95svh;
+			}
+		}
+	}
+
+	&--evenly-sized {
+		--split-content-columns: 1fr 1fr;
+	}
+
+	&--enlarge-first {
+		--split-content-columns: 1.3fr 1fr;
+	}
+
+	&--enlarge-second {
+		--split-content-columns: 1fr 1.3fr;
+	}
+
+	@include media-breakpoint-down(lg) {
+		--split-content-columns: 100%;
+		grid-template-rows: max-content;
+	}
+}
+
+.first {
+	display: flex;
+	flex-direction: column;
+
+	overflow-y: auto;
+	padding: spacing(xxl);
+
+	@include media-breakpoint-down(xxl) {
+		padding: spacing(xl);
+	}
+
+	@include media-breakpoint-down(lg) {
+		overflow-y: unset;
+	}
+
+	@include media-breakpoint-down(md) {
+		padding: spacing(lg);
+	}
+
+	&__content {
+		//TODO -> flex might not be preferred here
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		flex-grow: 1;
+	}
+}
+
+.second {
+	display: flex;
+	overflow: hidden;
+
+	@include media-breakpoint-down(lg) {
+		overflow: unset;
+	}
+
+	&--image {
+		max-height: 100%;
+
+		align-items: center;
+
+		@include media-breakpoint-down(lg) {
+			max-height: 90vh; //TODO -> check vh is suitable here
+			align-items: unset;
+		}
+
+		:deep(img) {
+			min-height: 100%;
+			width: 100%;
+		}
+	}
+
+	&--swiper {
+		min-height: 400px;
+
+		position: relative;
+		background-color: white;
+		align-items: center;
+		color: $bg-secondary;
+
+		:deep(.swiper) {
+			flex-grow: 1; //when only 1 slide left
+			padding: spacing(md) 0;
+			height: 60%;
+
+			@include media-breakpoint-down(xxl) {
+				height: 70%;
+			}
+
+			@include media-breakpoint-down(xl) {
+				height: 80%;
+			}
+
+			@include media-breakpoint-down(lg) {
+				height: 100%;
+				padding: spacing(xl) 0;
+			}
+
+			@include media-breakpoint-down(md) {
+				padding: spacing(lg) 0;
+			}
+		}
+	}
+}

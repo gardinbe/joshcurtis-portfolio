@@ -1,32 +1,29 @@
 <template>
-	<span
-		ref="terminalTextElRef"
+	<div
+		ref="terminalTextElmt"
 		class="terminal-text"
 	>
 		<slot />
-	</span>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { TerminalText } from "@/utils";
 import { onMounted, ref } from "vue";
+import { TerminalText } from "@/lib/utils";
 
 const props = defineProps<{
-	predeterminedHeight?: boolean;
+	predetermineHeight?: boolean;
 }>();
 
-const terminalTextElRef = ref<HTMLElement | null>(null);
+const terminalTextElmt = ref<HTMLElement | null>(null);
 
 onMounted(async () => {
-	if (terminalTextElRef.value === null)
+	if (terminalTextElmt.value === null)
 		throw new Error("Missing terminal text element reference");
 
-	const terminalText = new TerminalText({ textElmt: terminalTextElRef.value });
-
-	if (props.predeterminedHeight)
-		await terminalText.setPredeterminedHeight();
-
-	await terminalText.start();
+	await new TerminalText(terminalTextElmt.value).start({
+		predetermineHeight: props.predetermineHeight
+	});
 });
 
 </script>

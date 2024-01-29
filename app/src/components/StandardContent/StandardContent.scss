@@ -1,0 +1,31 @@
+.standard-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	height: 100%; //big one
+	padding: spacing(xxl);
+	background-color: $bg-primary;
+	overflow: auto;
+
+	@include media-breakpoint-down(xxl) {
+		padding: spacing(xl);
+	}
+
+	@include media-breakpoint-down(md) {
+		padding: spacing(lg);
+	}
+
+	&__btn {
+		margin-bottom: spacing(lg);
+		margin-right: auto;
+	}
+
+	&__content {
+		//TODO -> flex might not be preferred here
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		flex-grow: 1;
+	}
+}

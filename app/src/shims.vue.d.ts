@@ -1,4 +1,8 @@
 /**
  * This shim is required for Typescript to understand `.vue` files.
  */
-declare module "*.vue";
+declare module "*.vue" {
+	import Vue from "vue";
+
+	export default Vue;
+}

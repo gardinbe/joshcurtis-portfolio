@@ -1,0 +1,14 @@
+.component-loader {
+	&.loader-fade-out {
+		&-leave-active {
+			transition: filter anim(slow);
+		}
+
+		&-leave-to {
+			filter: opacity(0);
+		}
+		&-leave-from {
+			filter: opacity(1);
+		}
+	}
+}

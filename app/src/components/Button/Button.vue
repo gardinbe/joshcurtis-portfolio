@@ -11,6 +11,7 @@
 			}"
 			:href="href"
 			target="_blank"
+			:aria-label="ariaLabel ?? ''"
 		>
 			<slot />
 		</a>
@@ -25,6 +26,7 @@
 				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'
 			}"
+			:aria-label="ariaLabel ?? ''"
 		>
 			<slot />
 		</button>
@@ -36,6 +38,7 @@
 defineProps<{
 	size?: "normal" | "large";
 	mode: "filled" | "filled-dark" | "ghost";
+	ariaLabel?: string;
 	href?: string;
 }>();
 

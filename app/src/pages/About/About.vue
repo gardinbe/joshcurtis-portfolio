@@ -2,54 +2,49 @@
 <template>
 	<SplitContent
 		second-slot-type="image"
-		class="about"
-		has-back-btn
+		sizing="enlarge-first"
+		has-button
 	>
 		<template #first>
-			<div class="about__content">
-				<div class="about__main-content">
-					<hgroup>
-						<h1>{{ data.title }}</h1>
-					</hgroup>
+			<hgroup>
+				<h1>{{ page.attributes.title }}</h1>
+			</hgroup>
 
-					<p>{{ data.content }}</p>
-				</div>
+			<p>{{ page.attributes.content }}</p>
 
+			<div
+				v-if="page.attributes.info_blocks.length > 0"
+				class="info-blocks"
+			>
 				<div
-					v-if="data.info_blocks.length > 0"
-					class="about__info-blocks"
+					v-for="infoBlock of page.attributes.info_blocks"
+					:key="infoBlock.id"
+					class="info-block"
 				>
-					<div
-						v-for="infoBlock of data.info_blocks"
-						:key="infoBlock.id"
-						class="info-block"
-					>
-						<h4>{{ infoBlock.title }}</h4>
-						<div v-html="parse(infoBlock.content)" />
-					</div>
+					<h4>{{ infoBlock.title }}</h4>
+					<div v-html="parse(infoBlock.content)" />
 				</div>
 			</div>
 		</template>
 
 		<template #second>
 			<StrapiImage
-				:image="data.image"
+				:image="page.attributes.image.data"
 				format="large"
-				lazy
 			/>
 		</template>
 	</SplitContent>
 </template>
 
 <script setup lang="ts">
-import SplitContent from "@/components/sections/SplitContent/SplitContent.vue";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import { AboutResponse } from "@/types/api/pages/about";
-import { strapi } from "@/utils";
 import { parse } from "marked";
+import SplitContent from "@/components/SplitContent/SplitContent.vue";
+import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
+import { strapi } from "@/lib/services";
+import { contentError } from "@/lib/utils";
 
-const response = await strapi.get<AboutResponse>("about");
-const data = response.data.attributes;
+const page = await strapi.getAboutPage()
+	.catch(contentError);
 
 </script>
 

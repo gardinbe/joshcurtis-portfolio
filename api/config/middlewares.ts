@@ -1,18 +1,13 @@
-export default [
+import { Config } from "./lib/types/config";
+
+const config: Config = () => ([
 	"strapi::errors",
 	"strapi::security",
 	{
 		name: "strapi::cors",
 		config: {
 			headers: "*",
-			origin: [
-				"http://localhost:1337",
-				"http://127.0.0.1:1337",
-				"http://joshuacurtis.co.uk",
-				"https://joshuacurtis.co.uk",
-				"http://www.joshuacurtis.co.uk",
-				"https://www.joshuacurtis.co.uk"
-			]
+			origin: ["*"]
 		}
 	},
 	"strapi::poweredBy",
@@ -28,12 +23,29 @@ export default [
 			contentSecurityPolicy: {
 				useDefaults: true,
 				directives: {
-					"connect-src": ["'self'", "https:"],
-					"img-src": ["'self'", "data:", "blob:", "market-assets.strapi.io", "res.cloudinary.com"],
-					"media-src": ["'self'", "data:", "blob:", "market-assets.strapi.io", "res.cloudinary.com"],
+					"connect-src": [
+						"'self'",
+						"https:"
+					],
+					"img-src": [
+						"'self'",
+						"data:",
+						"blob:",
+						"market-assets.strapi.io",
+						"res.cloudinary.com"
+					],
+					"media-src": [
+						"'self'",
+						"data:",
+						"blob:",
+						"market-assets.strapi.io",
+						"res.cloudinary.com"
+					],
 					"upgradeInsecureRequests": null
 				}
 			}
 		}
 	}
-];
+]);
+
+export default config;

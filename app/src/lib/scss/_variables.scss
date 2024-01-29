@@ -1,0 +1,49 @@
+@use "sass:map";
+
+$assets-path: "/assets";
+
+$font-weights: (
+	micro-line: 50,
+	hair-line: 100,
+	thin: 150,
+	ultra-light: 200,
+	extra-light: 250,
+	light: 300,
+	semi-light: 350,
+	regular: 400,
+	book: 450,
+	medium: 500,
+	550: 550,
+	demi-bold: 600,
+	semi-bold: 650,
+	bold: 700,
+	heavy: 750,
+	extra-bold: 800,
+	ultra-bold: 850,
+	black: 900,
+	extra-black: 950,
+	ultra-black: 1000
+);
+
+//bootstrap custom vars
+$grid-gutter-width: 64px;
+
+$icon-btn-height: 52px;
+
+//colors
+$color-primary: rgb(248, 246, 213);
+$color-primary-d-1: rgb(211, 209, 181);
+$color-link: rgb(105, 195, 201);
+$color-link-hover: rgb(74, 138, 143);
+$bg-primary-l-3: rgb(104, 121, 132);
+$bg-primary-l-2: rgb(85, 101, 111);
+$bg-primary-l-1: rgb(59, 76, 87);
+$bg-primary: rgb(47, 61, 70);
+$bg-primary-d-1: rgb(40, 52, 59);
+$bg-primary-d-2: rgb(34, 44, 50);
+$bg-primary-d-3: rgb(25, 32, 37);
+$bg-secondary: rgb(24, 31, 35);
+$bg-secondary-d-1: rgb(11, 13, 16);
+$fallback-image-color: $bg-primary-l-1;
+
+$shadow: 0px 0px 40px -14px black;
