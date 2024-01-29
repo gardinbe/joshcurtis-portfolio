@@ -1,7 +1,8 @@
 {
-  "name": "portfolio-api",
+  "private": true,
+  "name": "joshcurtis-portfolio-api",
+  "description": "Josh Curtis' portfolio API",
   "version": "1.0.0",
-  "description": "My portfolio api",
   "scripts": {
     "dev": "strapi develop",
     "start": "strapi start",
@@ -9,20 +10,24 @@
     "strapi": "strapi"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
-    "eslint": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-tsdoc": "^0.2.17"
   },
   "dependencies": {
-    "@strapi/plugin-color-picker": "^4.14.0",
-    "@strapi/plugin-i18n": "4.14.0",
-    "@strapi/plugin-users-permissions": "4.14.0",
-    "@strapi/strapi": "4.14.0",
-    "better-sqlite3": "8.6.0",
-    "strapi-plugin-populate-deep": "^3.0.0"
+    "@strapi/plugin-color-picker": "^4.19.0",
+    "@strapi/plugin-i18n": "^4.19.0",
+    "@strapi/plugin-users-permissions": "^4.19.0",
+    "@strapi/strapi": "4.19.0",
+    "better-sqlite3": "9.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^5.3.4",
+    "strapi-plugin-populate-deep": "^3.0.1",
+    "styled-components": "^5.3.3"
   },
   "strapi": {
     "uuid": "d4fa12f7-ad5f-43c3-a620-b13632374abd"
