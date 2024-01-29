@@ -4,7 +4,7 @@ services:
     plan: starter
     # region: frankfurt # need to get upgrade
     numInstances: 1
-    name: joshcurtis-portfolio-api
+    name: joshuacurtis-portfolio-api
     rootDir: api
     runtime: node
     branch: master
@@ -12,7 +12,7 @@ services:
     startCommand: rsync -a public/ /data/public/ && npm start
     healthCheckPath: /_health
     autoDeploy: false
-    disk: # need to get upgrade
+    disk:
       name: strapi-data
       mountPath: /data
       sizeGB: 20
@@ -22,7 +22,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: HOST_URL
-        value: https://api.joshcurtis.co.uk
+        value: https://api.joshuacurtis.co.uk
       - key: APP_KEYS
         generateValue: true
       - key: API_TOKEN_SALT
@@ -36,10 +36,12 @@ services:
       - key: DATABASE_CLIENT
         value: sqlite
       - key: DATABASE_FILENAME
-        value: /data/strapi.db # need to get upgrade
+        value: /data/strapi.db
+      - key: PUBLIC_PATH
+        value: /data/public
   # the web app
   - type: web
-    name: joshcurtis-portfolio-app
+    name: joshuacurtis-portfolio-app
     rootDir: app
     runtime: static
     branch: master
@@ -53,7 +55,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: VITE_STRAPI_HOST
-        value: https://api.joshcurtis.co.uk
+        value: https://api.joshuacurtis.co.uk
     headers:
       - path: /*
         name: X-Frame-Options

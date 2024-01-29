@@ -8,20 +8,22 @@ const config: Config = () => ([
 		config: {
 			headers: "*",
 			origin: [
-				"http://localhost:1337",
-				"http://127.0.0.1:1337",
-				"http://localhost:5173",
-				"http://127.0.0.1:5173",
-				"http://localhost:4173",
-				"http://127.0.0.1:4173",
-				"http://joshcurtis.co.uk",
-				"https://joshcurtis.co.uk",
-				"http://www.joshcurtis.co.uk",
-				"https://www.joshcurtis.co.uk",
-				"http://api.joshcurtis.co.uk",
-				"https://api.joshcurtis.co.uk",
-				"http://www.api.joshcurtis.co.uk",
-				"https://www.api.joshcurtis.co.uk"
+				"http://joshuacurtis.co.uk",
+				"https://joshuacurtis.co.uk",
+				"http://www.joshuacurtis.co.uk",
+				"https://www.joshuacurtis.co.uk",
+				"http://joshuacurtis-portfolio-app.onrender.com",
+				"https://joshuacurtis-portfolio-app.onrender.com",
+				"http://www.joshuacurtis-portfolio-app.onrender.com",
+				"https://www.joshuacurtis-portfolio-app.onrender.com",
+				"http://api.joshuacurtis.co.uk",
+				"https://api.joshuacurtis.co.uk",
+				"http://www.api.joshuacurtis.co.uk",
+				"https://www.api.joshuacurtis.co.uk",
+				"http://joshuacurtis-portfolio-api.onrender.com",
+				"https://joshuacurtis-portfolio-api.onrender.com",
+				"http://www.joshuacurtis-portfolio-api.onrender.com",
+				"https://www.joshuacurtis-portfolio-api.onrender.com"
 			]
 		}
 	},
@@ -40,21 +42,45 @@ const config: Config = () => ([
 				directives: {
 					"connect-src": [
 						"'self'",
-						"https:"
+						"https:",
+						"http://api.joshuacurtis.co.uk",
+						"https://api.joshuacurtis.co.uk",
+						"http://www.api.joshuacurtis.co.uk",
+						"https://www.api.joshuacurtis.co.uk",
+						"http://joshuacurtis-portfolio-api.onrender.com",
+						"https://joshuacurtis-portfolio-api.onrender.com",
+						"http://www.joshuacurtis-portfolio-api.onrender.com",
+						"https://www.joshuacurtis-portfolio-api.onrender.com"
 					],
 					"img-src": [
 						"'self'",
 						"data:",
 						"blob:",
 						"market-assets.strapi.io",
-						"res.cloudinary.com"
+						"res.cloudinary.com",
+						"http://api.joshuacurtis.co.uk",
+						"https://api.joshuacurtis.co.uk",
+						"http://www.api.joshuacurtis.co.uk",
+						"https://www.api.joshuacurtis.co.uk",
+						"http://joshuacurtis-portfolio-api.onrender.com",
+						"https://joshuacurtis-portfolio-api.onrender.com",
+						"http://www.joshuacurtis-portfolio-api.onrender.com",
+						"https://www.joshuacurtis-portfolio-api.onrender.com"
 					],
 					"media-src": [
 						"'self'",
 						"data:",
 						"blob:",
 						"market-assets.strapi.io",
-						"res.cloudinary.com"
+						"res.cloudinary.com",
+						"http://api.joshuacurtis.co.uk",
+						"https://api.joshuacurtis.co.uk",
+						"http://www.api.joshuacurtis.co.uk",
+						"https://www.api.joshuacurtis.co.uk",
+						"http://joshcurtis-portfolio-api.onrender.com",
+						"https://joshcurtis-portfolio-api.onrender.com",
+						"http://www.joshcurtis-portfolio-api.onrender.com",
+						"https://www.joshcurtis-portfolio-api.onrender.com"
 					],
 					"upgradeInsecureRequests": null
 				}
