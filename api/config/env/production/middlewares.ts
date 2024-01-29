@@ -14,14 +14,14 @@ const config: Config = () => ([
 				"http://127.0.0.1:5173",
 				"http://localhost:4173",
 				"http://127.0.0.1:4173",
-				"http://joshuacurtis.co.uk",
-				"https://joshuacurtis.co.uk",
-				"http://www.joshuacurtis.co.uk",
-				"https://www.joshuacurtis.co.uk",
-				"http://api.joshuacurtis.co.uk",
-				"https://api.joshuacurtis.co.uk",
-				"http://www.api.joshuacurtis.co.uk",
-				"https://www.api.joshuacurtis.co.uk"
+				"http://joshcurtis.co.uk",
+				"https://joshcurtis.co.uk",
+				"http://www.joshcurtis.co.uk",
+				"https://www.joshcurtis.co.uk",
+				"http://api.joshcurtis.co.uk",
+				"https://api.joshcurtis.co.uk",
+				"http://www.api.joshcurtis.co.uk",
+				"https://www.api.joshcurtis.co.uk"
 			]
 		}
 	},
