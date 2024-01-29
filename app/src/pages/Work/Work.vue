@@ -2,26 +2,24 @@
 <template>
 	<SplitContent
 		second-slot-type="swiper"
-		class="work"
-		has-back-btn
+		sizing="enlarge-second"
+		has-button
 	>
 		<template #first>
-			<div class="work__main-content">
-				<hgroup>
-					<h1>{{ page.attributes.title }}</h1>
-				</hgroup>
+			<hgroup>
+				<h1>{{ page.attributes.title }}</h1>
+			</hgroup>
 
-				<div v-html="parse(page.attributes.content)" />
-			</div>
+			<div v-html="parse(page.attributes.content)" />
 		</template>
 
 		<template #second>
 			<Swiper
-				class="products"
+				id="productSwiper"
 				:speed="150"
 				:space-between="16"
-				:centered-slides="true"
-				:navigation="true"
+				centered-slides
+				navigation
 				:pagination="{ clickable: true }"
 				:breakpoints="{
 					1400: { slidesPerView: 2 },
@@ -34,6 +32,7 @@
 				<SwiperSlide
 					v-for="product of page.attributes.products.data"
 					:key="product.id"
+					tag="button"
 					class="product"
 					:aria-label="product.attributes.title"
 					:style="strapiMedia.createBackground(
@@ -55,42 +54,22 @@
 			</Swiper>
 		</template>
 	</SplitContent>
-
-	<Panel
-		:open="panelOpen"
-		:close-action="closePanel"
-		keep-overflow-hidden-on-close
-	>
-		<RouterView v-slot="{ Component }">
-			<AsyncComponentLoader :component="Component" />
-		</RouterView>
-	</Panel>
 </template>
 
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { SwiperContainer } from "swiper/element";
 import { parse } from "marked";
-import Panel from "@/components/Panel/Panel.vue";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import AsyncComponentLoader from "@/components/AsyncComponentLoader/AsyncComponentLoader.vue";
 import { strapi, strapiMedia } from "@/lib/services";
+import { contentError } from "@/lib/utils";
 
 const router = useRouter();
 
-const productSlider = computed(() =>
-	document.querySelector<SwiperContainer>(".products.swiper"));
-
-const panelOpen = ref(router.currentRoute.value.name === "Product");
-router.beforeEach(to => { panelOpen.value = to.name === "Product"; });
-
-const closePanel = () => {
-	const matched = router.currentRoute.value.matched;
-	void router.push(matched[matched.length - 2]?.path ?? "/");
-	panelOpen.value = false; //not strictly necessary
-};
+const productSwiper = computed(() =>
+	document.querySelector<SwiperContainer>("#productSwiper"));
 
 /**
  * Handle clicking on a product, and disable the click event when on mobile.
@@ -103,7 +82,10 @@ const handleProductClick = (slug: string) => {
 	void router.push(`${router.currentRoute.value.path}/${slug}`);
 };
 
-type Position = { x: number; y: number; };
+interface Position {
+	x: number;
+	y: number;
+}
 
 let firstProductTouchPos: Position | null = null;
 let lastProductTouchPos: Position | null = null;
@@ -132,8 +114,8 @@ const productTapThreshold = 16;
  */
 const handleProductTouchEnd = (ev: TouchEvent, slug: string) => {
 	if (
-		productSlider.value?.swiper === undefined
-		|| productSlider.value.swiper.animating
+		productSwiper.value?.swiper === undefined
+		|| productSwiper.value.swiper.animating
 		|| firstProductTouchPos === null
 		|| lastProductTouchPos === null
 	)
@@ -156,7 +138,8 @@ const handleProductTouchEnd = (ev: TouchEvent, slug: string) => {
 	void router.push(`${router.currentRoute.value.path}/${slug}`);
 };
 
-const page = await strapi.getWorkPage();
+const page = await strapi.getWorkPage()
+	.catch(contentError);
 
 </script>
 

@@ -1,6 +1,4 @@
 .loader-wrapper {
-	--bg: var();
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -11,8 +9,8 @@
 	height: 100%;
 	user-select: none;
 
-	background-color: var(--bg-secondary);
-	color: var(--color-primary);
+	background-color: $bg-secondary;
+	color: $color-primary;
 
 	.loader {
 		font-family: Consolas, Menlo, Monaco, monospace;
@@ -45,21 +43,5 @@
 			transform: scale(0.8);
 			filter: opacity(0.5);
 		}
-	}
-
-	&.inline {
-		position: unset;
-		inset: unset;
-		transform: unset;
-		width: unset;
-		height: unset;
-	}
-
-	&.fixed {
-		position: fixed;
-		width: 100vw;
-		width: 100dvw;
-		height: 100vh;
-		height: 100dvh;
 	}
 }

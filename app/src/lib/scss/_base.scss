@@ -1,42 +1,49 @@
+:root {
+	--fallback-image-color: #{$fallback-image-color};
+}
+
 body {
 	position: relative;
-	overflow-x: hidden;
 	font-family: Inter, sans-serif;
 	word-break: break-word;
-	// hyphens: auto; //todo -> hmm
-	height: 100vh;
-	height: 100svh;
-	min-height: 100vh;
-	min-height: 100svh;
 
-	color: var(--color-primary);
-	background-color: var(--bg-primary);
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	min-height: 100dvh;
+	height: 100vh;
+	height: 100dvh;
+
+	color: $color-primary;
+	background-color: $bg-primary;
 
 	::selection {
-		background-color: var(--bg-secondary);
+		background-color: $bg-secondary;
 	}
 }
 
 @media (pointer: fine) {
 	::-webkit-scrollbar {
-		width: 0.75rem;
+		width: 10px;
+		height: 10px;
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: var(--bg-primary-very-very-light);
+		background: $bg-primary-l-2;
 
 		&:hover {
-			background: var(--bg-primary-very-light);
+			background: $bg-primary-l-3;
 		}
 	}
 
-	::-webkit-scrollbar-track {
-		background: var(--bg-primary-light);
+	::-webkit-scrollbar-track,
+	::-webkit-scrollbar-corner {
+		background: $bg-primary-l-1;
 	}
 }
 
 hgroup {
-	margin-bottom: cgap(md);
+	margin-bottom: spacing(md);
 
 	> *:last-child {
 		margin-bottom: unset;
@@ -59,11 +66,19 @@ p {
 }
 
 a {
-	color: var(--color-alt);
+	color: $color-link;
 
-	@include hover-focus {
-		color: var(--color-alt-dark);
+	&:hover,
+	&:focus-visible {
+		color: $color-link-hover;
 	}
+}
+
+button {
+	appearance: none;
+	border: unset;
+	background-color: unset;
+	cursor: pointer;
 }
 
 img {

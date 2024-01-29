@@ -1,57 +1,69 @@
 @import "@/lib/scss/mixins";
 
 .swiper {
-	$pagination-mt: cgap(md);
-	--btn-offset: #{cgap(lg)};
+	$swiper-pagination-mt: spacing(md);
 
-	z-index: unset;
-	position: unset;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 
-	@include media-breakpoint-down(xxl) {
-		--btn-offset: #{cgap(sm)};
+	&:active {
+		cursor: grab;
 	}
 
 	&-wrapper {
 		display: flex;
-
-		z-index: unset;
-		position: unset;
-
-		&:active {
-			cursor: grab !important;
-		}
+		height: 100%;
 	}
 
 	&-slide {
-		height: unset;
-		background-color: var(--bg-primary-light);
+		text-align: unset; //override button
+
+		position: relative;
+		overflow: hidden;
+
+		flex-shrink: 0;
+		border-radius: radius(lg);
+
+		background-color: var(--fallback-image-color);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+
+		&:active {
+			//this is to re-enable the 'grab' cursor on `swiper-wrapper`
+			cursor: unset !important;
+		}
 	}
 
 	&-button {
 		&-next,
 		&-prev {
+			--swiper-btn-offset: #{spacing(lg)};
 			position: absolute;
 			top: 50%;
 			z-index: 3;
 			border-radius: radius(md);
-			margin-top: calc(3rem * -0.5 - $pagination-mt);
+			margin-top: calc(3rem * -0.5 - $swiper-pagination-mt);
 			height: 3.75rem;
 			width: 3rem;
 
 			background-color: rgba($bg-secondary, 0.3);
-
 			filter: opacity(1);
-
 			transition:
 				filter anim(fast),
 				background-color anim(fast);
 
-			@include media-breakpoint-down(sm) {
-				display: none;
+			@include hover-active-swap-focus-visible {
+				background-color: $bg-secondary;
 			}
 
-			@include hover-active-focus {
-				background-color: var(--bg-secondary);
+			@include media-breakpoint-down(xxl) {
+				--swiper-btn-offset: #{spacing(sm)};
+			}
+
+			@include media-breakpoint-down(sm) {
+				display: none;
 			}
 
 			&.swiper-button-disabled {
@@ -69,7 +81,7 @@
 				align-items: center;
 				margin-top: -0.4rem;
 
-				color: var(--color-primary);
+				color: $color-primary;
 				font-size: 4.2rem;
 
 				transition:
@@ -87,7 +99,7 @@
 		}
 
 		&-next {
-			right: var(--btn-offset);
+			right: var(--swiper-btn-offset);
 
 			&:after {
 				content: "\203A";
@@ -95,7 +107,7 @@
 		}
 
 		&-prev {
-			left: var(--btn-offset);
+			left: var(--swiper-btn-offset);
 
 			&:after {
 				content: "\2039";
@@ -109,7 +121,7 @@
 		justify-content: center;
 		gap: 10px;
 
-		margin-top: $pagination-mt;
+		margin-top: $swiper-pagination-mt;
 
 		z-index: 3;
 
@@ -118,7 +130,7 @@
 
 			height: $size;
 			width: $size;
-			background-color: var(--bg-primary);
+			background-color: $bg-primary;
 			border-radius: 100%;
 
 			transition:
@@ -131,9 +143,9 @@
 				filter: opacity(1);
 			}
 
-			@include hover-active-focus {
+			@include hover-active-swap-focus-visible {
 				filter: opacity(1);
-				background-color: var(--bg-primary-very-very-dark);
+				background-color: $bg-primary-d-3;
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-import { Config } from "./lib/types/config";
+import { Config } from "../../lib/types/config";
 
 const config: Config = () => ([
 	"strapi::errors",
@@ -7,7 +7,22 @@ const config: Config = () => ([
 		name: "strapi::cors",
 		config: {
 			headers: "*",
-			origin: ["*"]
+			origin: [
+				"http://localhost:1337",
+				"http://127.0.0.1:1337",
+				"http://localhost:5173",
+				"http://127.0.0.1:5173",
+				"http://localhost:4173",
+				"http://127.0.0.1:4173",
+				"http://joshuacurtis.co.uk",
+				"https://joshuacurtis.co.uk",
+				"http://www.joshuacurtis.co.uk",
+				"https://www.joshuacurtis.co.uk",
+				"http://api.joshuacurtis.co.uk",
+				"https://api.joshuacurtis.co.uk",
+				"http://www.api.joshuacurtis.co.uk",
+				"https://www.api.joshuacurtis.co.uk"
+			]
 		}
 	},
 	"strapi::poweredBy",

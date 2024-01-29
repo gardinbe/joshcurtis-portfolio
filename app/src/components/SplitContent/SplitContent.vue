@@ -1,11 +1,28 @@
 <template>
 	<section
 		class="split-content"
-		:class="{ 'split-content--viewport-height': viewportHeight }"
+		:class="{
+			'split-content--viewport-height': viewportHeight,
+			'split-content--evenly-sized': sizing === 'evenly-sized',
+			'split-content--enlarge-first': sizing === 'enlarge-first',
+			'split-content--enlarge-second': sizing === 'enlarge-second'
+		}"
 	>
 		<div class="first">
+			<template v-if="hasButton">
+				<div
+					v-if="$slots.button"
+					class="split-content__btn"
+				>
+					<slot name="button" />
+				</div>
+				<BackButton
+					v-else
+					class="split-content__btn"
+				/>
+			</template>
+
 			<div class="first__content">
-				<BackButton v-if="hasBackBtn" />
 				<slot name="first" />
 			</div>
 		</div>
@@ -27,7 +44,9 @@ import BackButton from "@/components/BackButton/BackButton.vue";
 defineProps<{
 	viewportHeight?: boolean;
 	secondSlotType: "image" | "swiper";
-	hasBackBtn?: boolean;
+	//TODO -> dataset this, instead of BEM modifier?
+	sizing: "evenly-sized" | "enlarge-first" | "enlarge-second";
+	hasButton?: boolean;
 }>();
 
 </script>

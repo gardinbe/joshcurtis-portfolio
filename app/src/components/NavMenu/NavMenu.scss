@@ -1,16 +1,14 @@
-.burger {
-	align-self: normal; //todo -> not ideal
+.navMenu {
 	position: relative;
-	margin-bottom: cgap(lg);
 
 	//just for keyboard navigation, :has() is okay here
-	&:has(a:focus-visible) &__menu {
+	&:has(a:focus-visible) &__items {
 		transform: scaleY(1);
 		filter: opacity(1);
 		pointer-events: unset;
 	}
 
-	&__btn[data-visible="true"] ~ &__menu {
+	&__btn[data-visible="true"] ~ &__items {
 		transform: scaleY(1);
 		filter: opacity(1);
 		pointer-events: unset;
@@ -25,11 +23,10 @@
 		width: 56px;
 		height: $icon-btn-height;
 		padding: 8px;
-		cursor: pointer;
 
-		@include hover-active-focus {
+		@include hover-active-swap-focus-visible {
 			.bar {
-				background-color: var(--color-primary);
+				background-color: $color-primary;
 
 				&:nth-of-type(1),
 				&:nth-of-type(2),
@@ -41,7 +38,7 @@
 
 		&[data-visible="true"] {
 			.bar {
-				background-color: var(--color-primary);
+				background-color: $color-primary;
 
 				&:nth-of-type(1),
 				&:nth-of-type(2),
@@ -55,7 +52,7 @@
 			display: flex;
 			width: 100%;
 			height: 6px;
-			background-color: var(--color-primary-dark);
+			background-color: $color-primary-d-1;
 			border-radius: radius(md);
 
 			transition:
@@ -76,7 +73,7 @@
 		}
 	}
 
-	&__menu {
+	&__items {
 		margin: unset;
 		padding: unset;
 		list-style: none;
@@ -89,8 +86,9 @@
 		display: flex;
 		flex-direction: column;
 
+		white-space: nowrap;
 		border-radius: radius(xs);
-		box-shadow: var(--shadow);
+		box-shadow: $shadow;
 
 		transform-origin: top center;
 		transform: scaleY(0.9) translateY(-0.25rem);
@@ -101,30 +99,30 @@
 			transform anim(fast),
 			filter anim(fast);
 
-		color: var(--bg-secondary);
+		color: $bg-secondary;
 
 		li {
 			display: inline-flex;
 
 			a {
-				@include font-size(1.15rem);
-
-				color: inherit;
-				flex-basis: 100%;
-				outline: 0;
 				text-decoration: none;
+				outline: unset;
+				color: inherit;
+
+				@include font-size(1.15rem);
+				flex-grow: 1;
 				font-weight: 500;
 				padding: 0.6rem 1rem;
-				background-color: var(--color-primary);
+				background-color: $color-primary;
 
 				transition:
 					background-color anim(fast),
 					color anim(fast),
 					filter anim(fast);
 
-				@include hover-active-focus {
-					color: var(--color-primary);
-					background-color: var(--bg-secondary);
+				@include hover-active-swap-focus-visible {
+					color: $color-primary;
+					background-color: $bg-secondary;
 				}
 			}
 		}

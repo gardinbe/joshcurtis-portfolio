@@ -1,24 +1,24 @@
 <template>
-	<div class="burger">
-		<div
-			ref="burgerBtn"
-			class="burger__btn"
+	<div class="navMenu">
+		<button
+			ref="navMenuBtn"
+			class="navMenu__btn"
 			@click="toggle"
 		>
 			<span class="bar" />
 			<span class="bar" />
 			<span class="bar" />
-		</div>
+		</button>
 		<menu
-			ref="burgerMenu"
-			class="burger__menu"
+			ref="navMenu"
+			class="navMenu__items"
 		>
 			<li
 				v-for="item of items"
-				:key="item.label"
+				:key="item.link"
 			>
 				<RouterLink
-					:to="item.href"
+					:to="item.link"
 					@click="close"
 				>
 					{{ item.label }}
@@ -31,45 +31,40 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
+export interface NavItem {
+	label: string;
+	link: string;
+}
+
 defineProps<{
-	items: {
-		label: string;
-		href: string;
-	}[];
+	items: NavItem[];
 }>();
 
-const burgerBtn = ref<HTMLElement | null>(null);
-const burgerMenu = ref<HTMLElement | null>(null);
+const navMenuBtn = ref<HTMLElement | null>(null);
+const navMenu = ref<HTMLElement | null>(null);
 let opened = false;
 
 const toggle = () => opened ? close() : open();
 
 onMounted(() => {
-	if (burgerBtn.value === null)
-		return;
-
-	burgerBtn.value.dataset.visible = "false";
+	navMenuBtn.value!.dataset.visible = "false";
 });
 
 const open = () => {
-	if (burgerBtn.value === null)
-		return;
-	burgerBtn.value.dataset.visible = "true";
+	navMenuBtn.value!.dataset.visible = "true";
 	setTimeout(() => addEventListener("click", closeWhenClickingOff), 0);
 	opened = true;
 };
 
 const close = () => {
-	if (burgerBtn.value === null)
-		return;
-	burgerBtn.value.dataset.visible = "false";
+	navMenuBtn.value!.dataset.visible = "false";
 	removeEventListener("click", closeWhenClickingOff);
 	opened = false;
 };
 
 const closeWhenClickingOff = (ev: MouseEvent) => {
 	const target = ev.target as HTMLElement;
-	if (burgerMenu.value?.contains(target) === true)
+	if (navMenu.value!.contains(target) === true)
 		return;
 
 	close();
@@ -77,4 +72,4 @@ const closeWhenClickingOff = (ev: MouseEvent) => {
 
 </script>
 
-<style scoped src="./BurgerMenu.scss" />
+<style scoped src="./NavMenu.scss" />

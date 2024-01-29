@@ -1,12 +1,10 @@
 .terminal-text {
-	$this: &;
-
 	:deep(.cursor) {
 		display: inline-block;
 
 		width: 0.7rem;
 		height: 1rem;
-		background-color: var(--color-primary);
+		background-color: $color-primary;
 
 		margin-left: 0.15rem;
 
@@ -17,7 +15,7 @@
 		@include font-size(1.5rem);
 		line-height: 0;
 
-		&[data-blink="true"] {
+		&[data-blinking="true"] {
 			@keyframes Blink {
 				0% {
 					opacity: 1;

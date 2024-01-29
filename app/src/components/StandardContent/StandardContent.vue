@@ -1,7 +1,21 @@
 <template>
 	<section class="standard-content">
-		<BackButton v-if="hasBackBtn" />
-		<slot />
+		<template v-if="hasButton">
+			<div
+				v-if="$slots.button"
+				class="standard-content__btn"
+			>
+				<slot name="button" />
+			</div>
+			<BackButton
+				v-else
+				class="standard-content__btn"
+			/>
+		</template>
+
+		<div class="standard-content__content">
+			<slot />
+		</div>
 	</section>
 </template>
 
@@ -9,7 +23,7 @@
 import BackButton from "@/components/BackButton/BackButton.vue";
 
 defineProps<{
-	hasBackBtn?: boolean;
+	hasButton?: boolean;
 }>();
 
 </script>

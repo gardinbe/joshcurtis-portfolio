@@ -2,41 +2,39 @@
 <template>
 	<SplitContent
 		second-slot-type="image"
-		class="product"
-		has-back-btn
+		sizing="enlarge-first"
+		has-button
 	>
 		<template #first>
-			<div class="product__main-content">
-				<hgroup>
-					<h1>
-						{{ page.attributes.title }}
-					</h1>
-					<h4 v-if="page.attributes.subtitle !== null">
-						{{ page.attributes.subtitle }}
-					</h4>
-				</hgroup>
+			<hgroup>
+				<h1>
+					{{ page.attributes.title }}
+				</h1>
+				<h4 v-if="page.attributes.subtitle !== null">
+					{{ page.attributes.subtitle }}
+				</h4>
+			</hgroup>
 
-				<div v-html="parse(page.attributes.content)" />
-				<ul class="product__tags">
-					<li
-						v-for="tag of page.attributes.tags.data"
-						:key="tag.id"
-						:style="'--product-tag-color: ' + tag.attributes.color"
-						class="product-tag"
-						:aria-label="tag.attributes.name"
-					>
-						{{ tag.attributes.name }}
-					</li>
-				</ul>
-				<Button
-					mode="filled"
-					class="product__link"
-					size="large"
-					:href="page.attributes.link"
+			<div v-html="parse(page.attributes.content)" />
+			<ul class="tags">
+				<li
+					v-for="tag of page.attributes.tags.data"
+					:key="tag.id"
+					:style="'--tag-color: ' + tag.attributes.color"
+					class="tag"
+					:aria-label="tag.attributes.name"
 				>
-					Visit the site
-				</Button>
-			</div>
+					{{ tag.attributes.name }}
+				</li>
+			</ul>
+			<Button
+				class="link"
+				mode="filled"
+				size="large"
+				:href="page.attributes.link"
+			>
+				Visit the site
+			</Button>
 		</template>
 
 		<template #second>

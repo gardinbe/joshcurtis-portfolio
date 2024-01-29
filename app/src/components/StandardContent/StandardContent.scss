@@ -3,20 +3,29 @@
 	flex-direction: column;
 	align-items: flex-start;
 	height: 100%; //big one
-	padding: cgap(xxl);
-	background-color: var(--bg-primary);
+	padding: spacing(xxl);
+	background-color: $bg-primary;
 	overflow: auto;
 
 	@include media-breakpoint-down(xxl) {
-		padding: cgap(xl);
+		padding: spacing(xl);
 	}
 
 	@include media-breakpoint-down(md) {
-		padding: cgap(lg);
+		padding: spacing(lg);
 	}
 
-	.back-btn {
-		margin-bottom: cgap(lg);
+	&__btn {
+		margin-bottom: spacing(lg);
 		margin-right: auto;
+	}
+
+	&__content {
+		//TODO -> flex might not be preferred here
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		flex-grow: 1;
 	}
 }

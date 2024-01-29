@@ -1,10 +1,10 @@
 <template>
-	<span
+	<div
 		ref="terminalTextElmt"
 		class="terminal-text"
 	>
 		<slot />
-	</span>
+	</div>
 </template>
 
 <script setup lang="ts">
