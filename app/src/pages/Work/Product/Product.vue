@@ -10,7 +10,7 @@
 				<h1>
 					{{ page.attributes.title }}
 				</h1>
-				<h4 v-if="page.attributes.subtitle !== null">
+				<h4 v-if="page.attributes.subtitle">
 					{{ page.attributes.subtitle }}
 				</h4>
 			</hgroup>
@@ -29,6 +29,7 @@
 			</ul>
 			<Button
 				class="link"
+				type="anchor"
 				mode="filled"
 				size="large"
 				:href="page.attributes.link"
@@ -41,6 +42,7 @@
 			<StrapiImage
 				:image="page.attributes.image.data"
 				format="large"
+				eager
 			/>
 		</template>
 	</SplitContent>
@@ -53,16 +55,16 @@ import Button from "@/components/Button/Button.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import { strapi } from "@/lib/services";
-import { notFound } from "@/lib/utils";
+import { throwNotFoundError, notFoundError } from "@/lib/utils";
 
 const router = useRouter();
 
 const slug = router.currentRoute.value.params.slug;
 if (typeof slug !== "string")
-	throw new Error("Missing product slug from request");
+	throw notFoundError();
 
 const page = await strapi.getProduct({ slug })
-	.catch(notFound);
+	.catch(throwNotFoundError);
 
 </script>
 

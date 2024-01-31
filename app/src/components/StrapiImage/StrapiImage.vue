@@ -1,11 +1,11 @@
 <template>
 	<img
-		:src="strapiMedia.url(format.url)"
-		:width="format.width"
-		:height="format.height"
-		:alt="image.attributes.alternativeText ?? ''"
-		:loading="eager ? 'eager' : 'lazy'"
 		:style="{ backgroundColor: _fallbackColor }"
+		:src="strapiMedia.url(_format.url)"
+		:alt="image.attributes.alternativeText ?? ''"
+		:width="_format.width"
+		:height="_format.height"
+		:loading="eager ? 'eager' : 'lazy'"
 	>
 </template>
 
@@ -21,7 +21,7 @@ const props = defineProps<{
 	fallbackColor?: boolean;
 }>();
 
-const format = computed(() =>
+const _format = computed(() =>
 	strapiMedia.getImageFormat(
 		props.image,
 		props.format
@@ -34,7 +34,4 @@ const _fallbackColor = computed(() =>
 
 </script>
 
-<style
-	scoped
-	src="./StrapiImage.scss"
-/>
+<style scoped src="./StrapiImage.scss" />

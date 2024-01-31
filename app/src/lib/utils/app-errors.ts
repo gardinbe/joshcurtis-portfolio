@@ -7,30 +7,61 @@ enum AppError {
 }
 
 /**
- * Indicates that the requested content or page could not be found.
+ * Returns an `Error` instance that indicates that the requested content
+ * or page could not be found.
  *
- * Redirects the user to the 404 not found page.
+ * Redirects the user to the 'not found' page if thrown.
  */
-export const notFound = () => {
-	throw new Error(AppError.NOT_FOUND);
+export const notFoundError = () =>
+	new Error(AppError.NOT_FOUND);
+
+/**
+ * Throws an error that indicates that the requested content
+ * or page could not be found.
+ *
+ * Redirects the user to the 'not found' page.
+ */
+export const throwNotFoundError = () => {
+	throw notFoundError();
 };
 
 /**
- * Indicates that there was an internal application error.
+ * Returns an `Error` instance that indicates that there was an error setting
+ * or retrieving content.
  *
- * Redirects the user to the internal error page.
+ * Redirects the user to the 'internal error' page if thrown.
  */
-export const internalError = () => {
-	throw new Error(AppError.INTERNAL);
-};
+export const contentError = () =>
+	new Error(AppError.CONTENT);
 
 /**
- * Indicates that there was an error retrieving or setting content.
+ * Throws an error that indicates that there was an error setting
+ * or retrieving content.
  *
- * Redirects the user to the internal error page.
+ * Redirects the user to the 'internal error' page.
  */
-export const contentError = () => {
-	throw new Error(AppError.CONTENT);
+export const throwContentError = () => {
+	throw contentError();
+};
+
+
+/**
+ * Returns an `Error` instance that indicates that there was an internal
+ * application error.
+ *
+ * Redirects the user to the 'internal error' page if thrown.
+ */
+export const internalError = () =>
+	new Error(AppError.INTERNAL);
+
+/**
+ * Throws an error that indicates that there was an internal
+ * application error.
+ *
+ * Redirects the user to the 'internal error' page.
+ */
+export const throwInternalError = () => {
+	throw internalError();
 };
 
 /**
@@ -45,7 +76,7 @@ export const errorHandler = (router: Router) =>
 			return;
 		}
 
-		switch (err.message) {
+		switch (err.message as AppError) {
 			case AppError.NOT_FOUND:
 				console.error("Page or content not found");
 				void router.push("/not-found");
@@ -55,10 +86,10 @@ export const errorHandler = (router: Router) =>
 			case AppError.CONTENT:
 			default:
 				console.error("Internal application error occurred");
-				void router.push("/internal-error");
+				void router.push("/error");
 				break;
 		}
 
 		if (!import.meta.env.PROD)
-			throw err;
+			console.error(err);
 	};

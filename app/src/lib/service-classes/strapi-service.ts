@@ -1,36 +1,31 @@
 import { merge } from "lodash";
-import { StrapiService, StrapiServiceOptions } from "@/lib/service-classes/strapi";
+import { BaseStrapiService, BaseStrapiServiceOptions } from "@/lib/service-classes/base-strapi-service";
 import { Product } from "@/lib/types/strapi-data/collection-items";
 import { AboutPage, ContactPage, HomePage, WorkPage } from "@/lib/types/strapi-data/single-items";
 import { OptionalProps } from "@/lib/types/utils";
 
 /**
- * Options for a portfolio Strapi service.
+ * Options for a Strapi service.
  */
-export interface PortfolioStrapiServiceOptions extends StrapiServiceOptions { }
+export interface StrapiServiceOptions extends BaseStrapiServiceOptions { }
 
 /**
- * A service for handling and performing specific requests to a
- * Portfolio API.
+ * A service for handling and performing specific requests to the
+ * Portfolio Strapi API.
  */
-export class PortfolioStrapiService extends StrapiService {
-	/**
-	 * The default options for any Strapi service instance.
-	 */
-	static override readonly defaultOptions: Required<OptionalProps<PortfolioStrapiServiceOptions>> =
-		merge({}, StrapiService.defaultOptions);
+export class StrapiService extends BaseStrapiService {
+	static override readonly defaultOptions: Required<OptionalProps<
+		StrapiServiceOptions
+	>> = merge({}, BaseStrapiService.defaultOptions);
+
+	protected override readonly options: Required<StrapiServiceOptions>;
 
 	/**
-	 * The options set for this Strapi service instance.
-	 */
-	protected override readonly options: Required<PortfolioStrapiServiceOptions>;
-
-	/**
-	 * Creates a new instance of a Portfolio Strapi service.
+	 * Creates a new Strapi service instance.
 	 * @param options - Portfolio Strapi service options
 	 */
-	constructor(options: PortfolioStrapiServiceOptions) {
-		const _options = merge({}, StrapiService.defaultOptions, options);
+	constructor(options: StrapiServiceOptions) {
+		const _options = merge({}, BaseStrapiService.defaultOptions, options);
 		super(_options);
 		this.options = _options;
 	}

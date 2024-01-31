@@ -32,22 +32,22 @@
 				<SwiperSlide
 					v-for="product of page.attributes.products.data"
 					:key="product.id"
-					tag="button"
-					class="product"
-					:aria-label="product.attributes.title"
 					:style="strapiMedia.createBackground(
 						product.attributes.image.data,
 						'large'
 					)"
-					@click="handleProductClick(product.attributes.slug)"
-					@touchstart="ev => handleProductTouchStart(ev.touches[0]!)"
-					@touchmove="ev => handleProductTouchMove(ev.touches[0]!)"
-					@touchend="ev => handleProductTouchEnd(ev, product.attributes.slug)"
+					class="product"
+					tag="a"
+					:href="`${$route.path}/${product.attributes.slug}`"
+					:aria-label="product.attributes.title"
+					@click="productClick"
 				>
 					<div class="product__overlay">
 						<hgroup>
 							<h2>{{ product.attributes.title }}</h2>
-							<h6>{{ product.attributes.subtitle }}</h6>
+							<h6 v-if="product.attributes.subtitle">
+								{{ product.attributes.subtitle }}
+							</h6>
 						</hgroup>
 					</div>
 				</SwiperSlide>
@@ -58,88 +58,25 @@
 
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { SwiperContainer } from "swiper/element";
 import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import { strapi, strapiMedia } from "@/lib/services";
-import { contentError } from "@/lib/utils";
+import { throwContentError } from "@/lib/utils";
 
 const router = useRouter();
 
-const productSwiper = computed(() =>
-	document.querySelector<SwiperContainer>("#productSwiper"));
+const productClick = (ev: MouseEvent) => {
+	ev.preventDefault();
 
-/**
- * Handle clicking on a product, and disable the click event when on mobile.
- * @param slug - Target product slug
- */
-const handleProductClick = (slug: string) => {
-	if (matchMedia("(pointer: coarse)").matches)
-		return;
+	const href = (ev.currentTarget as HTMLAnchorElement)
+		.getAttribute("href")!;
 
-	void router.push(`${router.currentRoute.value.path}/${slug}`);
-};
-
-interface Position {
-	x: number;
-	y: number;
-}
-
-let firstProductTouchPos: Position | null = null;
-let lastProductTouchPos: Position | null = null;
-
-const handleProductTouchStart = (touch: Touch) => {
-	firstProductTouchPos = {
-		x: touch.clientX,
-		y: touch.clientY
-	};
-	lastProductTouchPos = firstProductTouchPos;
-};
-
-const handleProductTouchMove = (touch: Touch) => {
-	lastProductTouchPos = {
-		x: touch.clientX,
-		y: touch.clientY
-	};
-};
-
-const productTapThreshold = 16;
-
-/**
- * Hacky fix to replace a standard click event - there is a noticable delay
- * when trying to tap swiperjs slides on mobile...
- * @param slug - Target product slug
- */
-const handleProductTouchEnd = (ev: TouchEvent, slug: string) => {
-	if (
-		productSwiper.value?.swiper === undefined
-		|| productSwiper.value.swiper.animating
-		|| firstProductTouchPos === null
-		|| lastProductTouchPos === null
-	)
-		return;
-
-	const firstPos = firstProductTouchPos;
-	const lastPos = lastProductTouchPos;
-
-	firstProductTouchPos = null;
-	lastProductTouchPos = null;
-
-	if (
-		Math.abs(firstPos.x - lastPos.x) > productTapThreshold
-		|| Math.abs(firstPos.y - lastPos.y) > productTapThreshold
-	)
-		return;
-
-	ev.preventDefault(); //important!
-
-	void router.push(`${router.currentRoute.value.path}/${slug}`);
+	void router.push(href);
 };
 
 const page = await strapi.getWorkPage()
-	.catch(contentError);
+	.catch(throwContentError);
 
 </script>
 

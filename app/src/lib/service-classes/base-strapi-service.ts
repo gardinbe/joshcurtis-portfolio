@@ -1,35 +1,30 @@
 import { merge } from "lodash";
-import { ApiService, ApiServiceOptions } from "@/lib/service-classes/api";
+import { ApiService, ApiServiceOptions } from "@/lib/service-classes/api-service";
 import { StrapiResponse, SingleResponse, CollectionResponse, StrapiRequestParams, Item, SingleRequestParams, CollectionRequestParams } from "@/lib/types/strapi";
 import { OptionalProps } from "@/lib/types/utils";
 import { throwExp } from "@/lib/utils";
 
 /**
- * Options for a Strapi service.
+ * Options for a base Strapi service.
  */
-export interface StrapiServiceOptions extends ApiServiceOptions { }
+export interface BaseStrapiServiceOptions extends ApiServiceOptions { }
 
 /**
  * Service for handling and performing requests to a Strapi API.
  */
-export class StrapiService extends ApiService<StrapiResponse, StrapiRequestParams> {
-	/**
-	 * The default options for any Strapi service instance.
-	 */
-	static override readonly defaultOptions: Required<OptionalProps<StrapiServiceOptions>> =
-		merge({}, ApiService.defaultOptions);
+export class BaseStrapiService extends ApiService<StrapiResponse, StrapiRequestParams> {
+	static override readonly defaultOptions: Required<OptionalProps<
+		BaseStrapiServiceOptions
+	>> = merge({}, ApiService.defaultOptions);
+
+	protected override readonly options: Required<BaseStrapiServiceOptions>;
 
 	/**
-	 * The options set for this Strapi service instance.
-	 */
-	protected override readonly options: Required<StrapiServiceOptions>;
-
-	/**
-	 * Creates a new instance of a Strapi service.
+	 * Creates a new base Strapi service instance.
 	 * @param options - Strapi service options
 	 */
-	constructor(options: StrapiServiceOptions) {
-		const _options = merge({}, StrapiService.defaultOptions, options);
+	constructor(options: BaseStrapiServiceOptions) {
+		const _options = merge({}, BaseStrapiService.defaultOptions, options);
 		super(_options);
 		this.options = _options;
 	}
@@ -85,6 +80,7 @@ export class StrapiService extends ApiService<StrapiResponse, StrapiRequestParam
 	>(endpoint: string, params?: TParams, options?: RequestInit) {
 		return (
 			await this.get<TResponse, TParams>(endpoint, params, options)
-		).data[0] ?? throwExp("No result found");
+		).data[0]
+			?? throwExp("No result found");
 	}
 }

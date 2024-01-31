@@ -1,4 +1,4 @@
-import { Item, Component } from './item';
+import { Item, Component } from "./item";
 
 /**
  * A single Strapi component.

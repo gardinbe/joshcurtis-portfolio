@@ -4,7 +4,7 @@ import { ProductTag } from "@/lib/types/strapi-data/collection-items";
 export interface Product extends PublishableItem<{
 	title: string;
 	slug: string;
-	subtitle: string | null;
+	subtitle?: string;
 	content: string;
 	link: string;
 	image: Single<Image>;

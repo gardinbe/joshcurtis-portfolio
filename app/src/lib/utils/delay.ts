@@ -14,4 +14,7 @@ export const delay = async (duration: number) =>
  */
 export const randomDelay = async (minDuration: number, maxDuration: number) =>
 	new Promise<void>(resolve =>
-		setTimeout(resolve, Math.floor(Math.random() * (maxDuration - minDuration)) + minDuration));
+		setTimeout(
+			resolve,
+			Math.floor(Math.random() * (maxDuration - minDuration)) + minDuration
+		));

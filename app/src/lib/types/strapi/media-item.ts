@@ -1,4 +1,4 @@
-import { UnpublishableItem } from './item';
+import { UnpublishableItem } from "./item";
 
 /**
  * A set of Strapi media item data.
@@ -42,7 +42,7 @@ export interface Image extends MediaItem<{
 /**
  * A Strapi image size format name.
  */
-export type ImageFormatName = keyof Image['attributes']['formats'];
+export type ImageFormatName = keyof Image["attributes"]["formats"];
 
 /**
  * A Strapi image size format.

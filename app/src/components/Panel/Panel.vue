@@ -1,140 +1,147 @@
 <template>
-	<Transition name="fade">
+	<Transition>
 		<div
-			v-if="openIf"
-			class="panel-backdrop"
-			@click="close"
-			@touchstart="touchStartHandler"
-			@touchmove="ev => touchMoveHandler(ev.touches[0]!.clientX)"
-			@touchend="touchEndHandler"
-		/>
-	</Transition>
-
-	<Transition name="slide-in-from-right">
-		<div
-			v-if="openIf"
-			ref="panelElRef"
-			class="panel"
-			:inert="inert"
+			v-if="open"
+			class="panel-container"
+			:inert="!!inert"
 		>
-			<slot />
+			<div
+				ref="panelBackdropElmt"
+				class="panel-backdrop"
+				@click.passive="backdropClick"
+				@touchstart.passive="backdropTouchStart"
+				@touchmove.passive="backdropTouchMove"
+				@touchend.passive="backdropTouchEnd"
+			/>
+
+			<div
+				ref="panelElmt"
+				class="panel"
+			>
+				<slot />
+			</div>
 		</div>
 	</Transition>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 const props = defineProps<{
-	inert?: boolean;
-	//TODO -> this smells. would prefer `v-if` on parent, but multiple transitions...
-	//and even if nesting classes in transition, more problems arise...
-	openIf: boolean;
-	close: () => void;
+	/** Whether the panel should be open or not. */
+	open: boolean;
+	/**
+	 * The function to execute for when the panel should be closed.
+	 *
+	 * **This must inherently set `open` to false.**
+	 */
+	closeAction: () => void;
+	/** Whether to keep body overflow hidden when the panel closes. */
 	keepOverflowHiddenOnClose?: boolean;
+	inert?: boolean;
 }>();
 
 const updateOverflow = () => {
-	document.body.style.overflow = props.openIf
+	document.body.style.overflow = props.open
 		? "hidden"
 		: props.keepOverflowHiddenOnClose
 			? "hidden"
 			: "";
 };
 
-onMounted(updateOverflow);
-watch(computed(() => props.openIf), updateOverflow);
+watch(computed(() => props.open), updateOverflow);
 
-
-/**
- * Close panel on ESC keypress.
- */
-document.addEventListener("keydown", ev => {
+const closeOnEscapeKey = (ev: KeyboardEvent) => {
 	if ((ev.key !== "Escape" && ev.key !== "Esc") || props.inert)
 		return;
-	props.close();
+
+	props.closeAction();
+};
+
+onMounted(() => {
+	document.addEventListener("keydown", closeOnEscapeKey, { passive: true });
 });
 
-const panelElRef = ref<HTMLElement | null>(null);
+onUnmounted(() => {
+	document.removeEventListener("keydown", closeOnEscapeKey);
+});
 
-/**
- * The position of the most recent Touch event, relative to the panel's
- * currently set starting position. Negative if backwards, positive if forwards.
- */
-let panelDistanceTravelled: number | null = null;
-let panelStartingPosX: number | null = null;
+const panelElmt = ref<HTMLElement | null>(null);
+const panelBackdropElmt = ref<HTMLElement | null>(null);
 
-const shortSwipe = {
-	/** Threshold time in milliseconds to check if this is a shortswipe. */
-	threshold: 250,
-	startTime: 0,
-	startPos: 0,
-	elapsed: 0,
-	isShortSwipe: false,
-	startTimer() {
-		this.startTime = Date.now();
-	},
-	stopTimer() {
-		this.elapsed = Date.now() - this.startTime;
-		this.isShortSwipe = this.elapsed <= this.threshold
-			&& panelDistanceTravelled !== null
-			&& panelDistanceTravelled > 0;
-	}
-};
-
-/**
- * Set the starting position of the panel.
- */
-const touchStartHandler = () => {
-	shortSwipe.startTimer();
-	panelStartingPosX = panelElRef.value?.getBoundingClientRect().left ?? 0;
-};
-
-/**
- * Attempt to slide the panel relative to `posX`.
- * @param posX - X position of TouchEvent
- */
-const touchMoveHandler = (posX: number) => {
-	if (panelElRef.value === null || panelStartingPosX === null)
+const backdropClick = (ev: MouseEvent) => {
+	if (ev.currentTarget !== panelBackdropElmt.value)
 		return;
 
-	panelDistanceTravelled = posX - panelStartingPosX;
+	props.closeAction();
+};
+
+/**
+ * The starting left distance from the panel's bounding client
+ * rectangle.
+ */
+let panelPosX: number | null = null;
+
+/**
+ * The horizontal distance travelled by the swipe from the
+ * starting horizontal position of the panel, `startPosX`.
+ *
+ * Negative if travelled backwards, positive if forwards.
+ */
+let swipeDistance: number | null = null;
+
+/**
+ * Threshold duration for a fast swipe (in milliseconds).
+ */
+const FAST_SWIPE_THRESHOLD = 250;
+
+let swipeStartTime: number | null = null;
+
+const backdropTouchStart = () => {
+	if (!panelElmt.value)
+		return;
+
+	swipeStartTime = Date.now();
+	panelPosX = panelElmt.value.getBoundingClientRect().left;
+};
+
+const backdropTouchMove = (ev: TouchEvent) => {
+	if (!panelElmt.value || panelPosX === null)
+		return;
+
+	const posX = ev.touches[0]!.clientX;
+	swipeDistance = posX - panelPosX;
 
 	//dont go backwards
-	if (panelDistanceTravelled < 0)
+	if (swipeDistance <= 0)
 		return;
 
-	//remove transition delay and set transform
-	panelElRef.value.style.transition = "unset";
-	panelElRef.value.style.transform = `translateX(${panelDistanceTravelled}px)`;
+	panelElmt.value.style.transition = "unset";
+	panelElmt.value.style.transform = `translateX(${swipeDistance}px)`;
 };
 
-/**
- * Check to see if the panel should remain open or if the panel should
- * be closed after `touchend` event is fired.
- */
-const touchEndHandler = () => {
-	if (panelElRef.value === null || panelDistanceTravelled === null)
-		return;
-
-	shortSwipe.stopTimer();
-	panelStartingPosX = null;
-
-	//readd transition delay and unset transform
-	panelElRef.value.style.transition = "";
-	panelElRef.value.style.transform = "";
-
+const backdropTouchEnd = () => {
 	if (
-		//if shortswipe is over the threshold
-		!shortSwipe.isShortSwipe
-		//if less than halfway dragged
-		&& panelDistanceTravelled < panelElRef.value.clientWidth / 2
+		!panelElmt.value
+		|| swipeDistance === null
+		|| swipeStartTime === null
 	)
 		return;
 
-	//close panel
-	panelDistanceTravelled = null;
-	props.close();
+	const elapsed = Date.now() - swipeStartTime;
+	const fastSwipe = elapsed < FAST_SWIPE_THRESHOLD;
+
+	panelElmt.value.style.transition = "";
+	panelElmt.value.style.transform = "";
+
+	if (
+		swipeDistance > panelElmt.value.clientWidth / 2
+		|| (fastSwipe && swipeDistance > 0)
+	)
+		props.closeAction();
+
+	panelPosX = null;
+	swipeDistance = null;
 };
 
 </script>

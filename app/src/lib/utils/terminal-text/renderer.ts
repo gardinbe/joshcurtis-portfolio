@@ -19,20 +19,23 @@ export interface TerminalTextRenderOptions {
 }
 
 /**
- * Apply a terminal-text/typewriter effect to an element with text nodes inside of
- * it.
- *
- * Using the provided syntax, modifiers and effects can be applied to the text.
+ * Handles the rendering of terminal text chars and keywords onto
+ * the document.
  */
 export class TerminalTextRenderer {
-	static readonly defaultRenderOptions: Required<OptionalProps<TerminalTextRenderOptions>> = {
-		predetermineHeight: false
-	};
+	/**
+	 * The default rendering options for a terminal text renderer instance.
+	 */
+	static readonly defaultRenderOptions: Required<OptionalProps<
+		TerminalTextRenderOptions
+	>> = {
+			predetermineHeight: false
+		};
 
 	private readonly cursor: HTMLElement;
 
 	/**
-	 * Creates an instance of the Terminal Text effect on an element.
+	 * Creates a new terminal text renderer instance.
 	 */
 	constructor() {
 		this.cursor = this.createCursorElmt();
@@ -152,7 +155,7 @@ export class TerminalTextRenderer {
 		node: Node,
 		fragments: TextFragment[]
 	) {
-		if (node.nextSibling !== null)
+		if (node.nextSibling)
 			node.parentNode!.insertBefore(this.cursor, node.nextSibling);
 		else if (node.parentNode !== elmt)
 			node.parentNode!.appendChild(this.cursor);

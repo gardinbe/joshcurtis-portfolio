@@ -29,6 +29,8 @@ export class TerminalTextParser {
 
 	/**
 	 * Return all the text nodes on an element.
+	 *
+	 * Recursively retrieves all text nodes within child nodes.
 	 * @param node - Target element/non-text node
 	 * @returns All text nodes
 	 */
@@ -62,7 +64,9 @@ export class TerminalTextParser {
 		//not technically a TextFragment: these are strings, not chars at this point
 		let chunks: TextFragment[] = [node.textContent];
 
-		const updateTextChunks = (updater: (chunk: string) => TextFragment[]) => {
+		const updateTextChunks = (
+			updater: (chunk: string) => TextFragment[]
+		) => {
 			//smelly and imperative
 			for (let index = 0; index < chunks.length; index++) {
 				const chunk = chunks[index];
@@ -157,7 +161,11 @@ export class TerminalTextParser {
 				? numericValue
 				: rawValue;
 
-			if (typeof value !== "number" && value !== "line" && value !== "element")
+			if (
+				typeof value !== "number"
+				&& value !== "line"
+				&& value !== "element"
+			)
 				throw new Error(`Terminal text delete modifier value '${value}' is invalid`);
 
 			return value;

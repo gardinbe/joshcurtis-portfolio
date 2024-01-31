@@ -1,5 +1,5 @@
-import { Collection, Single } from './type';
-import { Item } from './item';
+import { Collection, Single } from "./type";
+import { Item } from "./item";
 
 /**
  * A response from the Strapi API.

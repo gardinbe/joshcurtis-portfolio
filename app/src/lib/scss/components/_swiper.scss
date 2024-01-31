@@ -48,7 +48,7 @@
 			height: 3.75rem;
 			width: 3rem;
 
-			background-color: rgba($bg-secondary, 0.3);
+			background-color: rgba($bg-secondary, 0.6);
 			filter: opacity(1);
 			transition:
 				filter anim(fast),
@@ -146,6 +146,11 @@
 			@include hover-active-swap-focus-visible {
 				filter: opacity(1);
 				background-color: $bg-primary-d-3;
+			}
+
+			&:focus-visible {
+				border: 1px solid white;
+				outline: 2px solid $bg-primary-d-1;
 			}
 		}
 	}

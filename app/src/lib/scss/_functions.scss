@@ -1,5 +1,7 @@
 @use "sass:map";
 
+//TODO -> these should probably be variables
+
 @function spacing($size) {
 	@return map.get(
 		(
@@ -27,16 +29,19 @@
 	);
 }
 
-@function anim($speed: normal) {
+@function anim-speed($speed: normal) {
 	@return map.get(
-			(
-				very-slow: 500ms,
-				slow: 300ms,
-				normal: 150ms,
-				fast: 100ms,
-				very-fast: 75ms
-			),
-			$speed
-		)
-		ease-in-out;
+		(
+			very-slow: 500ms,
+			slow: 300ms,
+			normal: 150ms,
+			fast: 100ms,
+			very-fast: 75ms
+		),
+		$speed
+	);
+}
+
+@function anim($speed: normal) {
+	@return anim-speed($speed) $primary-timing-fn;
 }

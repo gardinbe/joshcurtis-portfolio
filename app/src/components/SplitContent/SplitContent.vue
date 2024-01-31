@@ -2,7 +2,6 @@
 	<section
 		class="split-content"
 		:class="{
-			'split-content--viewport-height': viewportHeight,
 			'split-content--evenly-sized': sizing === 'evenly-sized',
 			'split-content--enlarge-first': sizing === 'enlarge-first',
 			'split-content--enlarge-second': sizing === 'enlarge-second'
@@ -42,9 +41,7 @@
 import BackButton from "@/components/BackButton/BackButton.vue";
 
 defineProps<{
-	viewportHeight?: boolean;
 	secondSlotType: "image" | "swiper";
-	//TODO -> dataset this, instead of BEM modifier?
 	sizing: "evenly-sized" | "enlarge-first" | "enlarge-second";
 	hasButton?: boolean;
 }>();

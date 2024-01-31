@@ -1,3 +1,20 @@
+.content {
+	min-height: 100vh;
+	min-height: 100svh;
+
+	@include media-breakpoint-down(lg) {
+		min-height: unset;
+		min-height: unset;
+	}
+
+	:deep(.first) {
+		@include media-breakpoint-down(lg) {
+			min-height: 90vh;
+			min-height: 90svh;
+		}
+	}
+}
+
 .terminal-text {
 	@include font-size(1.1rem);
 	margin-bottom: spacing(lg);

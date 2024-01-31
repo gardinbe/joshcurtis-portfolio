@@ -1,11 +1,10 @@
 <!-- eslint-disable vue/no-v-html -->
-
 <template>
 	<SplitContent
+		class="content"
 		second-slot-type="image"
 		sizing="enlarge-first"
 		has-button
-		viewport-height
 	>
 		<template #button>
 			<NavMenu
@@ -28,10 +27,11 @@
 
 			<Button
 				class="contact-btn"
+				type="router-link"
 				mode="ghost"
 				size="large"
 				aria-label="Open contact page"
-				@click="router.push('contact')"
+				href="/contact"
 			>
 				{{ page.attributes.cta }}
 			</Button>
@@ -74,8 +74,7 @@
 				</p>
 
 				<p>
-					Download
-					<a
+					Download <a
 						target="_blank"
 						:href="strapiMedia.url(
 							page.attributes.resume.data.attributes.url
@@ -104,7 +103,7 @@ import Button from "@/components/Button/Button.vue";
 import TerminalText from "@/components/TerminalText/TerminalText.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import { strapi, strapiMedia } from "@/lib/services";
-import { contentError } from "@/lib/utils";
+import { throwContentError } from "@/lib/utils";
 
 const router = useRouter();
 
@@ -124,7 +123,7 @@ const navItems: NavItem[] = [
 ];
 
 const page = await strapi.getHomePage()
-	.catch(contentError);
+	.catch(throwContentError);
 
 </script>
 

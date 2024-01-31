@@ -9,23 +9,6 @@
 	background-color: $bg-primary;
 	color: $color-primary;
 
-	&__btn {
-		margin-bottom: spacing(lg);
-		margin-right: auto;
-	}
-
-	&--viewport-height {
-		.first {
-			min-height: 100vh;
-			min-height: 100svh;
-
-			@include media-breakpoint-down(lg) {
-				min-height: 95vh;
-				min-height: 95svh;
-			}
-		}
-	}
-
 	&--evenly-sized {
 		--split-content-columns: 1fr 1fr;
 	}
@@ -41,6 +24,11 @@
 	@include media-breakpoint-down(lg) {
 		--split-content-columns: 100%;
 		grid-template-rows: max-content;
+	}
+
+	&__btn {
+		margin-bottom: spacing(lg);
+		margin-right: auto;
 	}
 }
 
@@ -75,6 +63,7 @@
 
 .second {
 	display: flex;
+	align-items: center;
 	overflow: hidden;
 
 	@include media-breakpoint-down(lg) {
@@ -84,31 +73,26 @@
 	&--image {
 		max-height: 100%;
 
-		align-items: center;
-
 		@include media-breakpoint-down(lg) {
-			max-height: 90vh; //TODO -> check vh is suitable here
 			align-items: unset;
 		}
 
 		:deep(img) {
 			min-height: 100%;
-			width: 100%;
+			min-width: 100%;
 		}
 	}
 
 	&--swiper {
-		min-height: 400px;
-
 		position: relative;
 		background-color: white;
-		align-items: center;
 		color: $bg-secondary;
 
 		:deep(.swiper) {
 			flex-grow: 1; //when only 1 slide left
 			padding: spacing(md) 0;
 			height: 60%;
+			overflow-y: auto; //v short viewport -> allows atleast vertical scrolling
 
 			@include media-breakpoint-down(xxl) {
 				height: 70%;
@@ -125,6 +109,10 @@
 
 			@include media-breakpoint-down(md) {
 				padding: spacing(lg) 0;
+			}
+
+			.swiper-slide {
+				min-height: 200px;
 			}
 		}
 	}

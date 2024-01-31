@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<main class="not-found">
+	<div class="content">
 		<hgroup>
 			<h1>404</h1>
 			<h3>Page not found</h3>
@@ -12,10 +12,9 @@
 			<RouterLink
 				to="/"
 				v-html="'return to the homepage'"
-			/>
-			here.
+			/> here.
 		</p>
-	</main>
+	</div>
 </template>
 
 <script setup lang="ts"></script>

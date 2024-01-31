@@ -1,6 +1,53 @@
-.panel {
+.panel-container,
+.panel,
+.panel-backdrop {
+	transition-duration: anim-speed(slow);
+	transition-timing-function: $primary-timing-fn;
+}
+
+.panel-container {
 	z-index: 10;
 	position: fixed;
+	inset: 0;
+
+	&.v {
+		&-enter-active,
+		&-leave-active {
+			.panel {
+				transition-property: transform;
+			}
+
+			.panel-backdrop {
+				transition-property: filter;
+			}
+		}
+
+		&-enter-from,
+		&-leave-to {
+			.panel {
+				transform: translateX(100%);
+			}
+
+			.panel-backdrop {
+				filter: opacity(0);
+			}
+		}
+
+		&-enter-to,
+		&-leave-from {
+			.panel {
+				transform: translateX(0);
+			}
+
+			.panel-backdrop {
+				filter: opacity(1);
+			}
+		}
+	}
+}
+
+.panel {
+	position: absolute;
 	right: 0;
 	top: 0;
 	overflow: auto;
@@ -10,17 +57,14 @@
 
 	background-color: $bg-primary;
 	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.45);
-
-	transition: transform anim(slow);
 }
 
 .panel-backdrop {
-	z-index: 10;
-	position: fixed;
-	top: -50vh;
-	left: -50vw;
-	width: 200vw;
-	height: 200vh;
+	position: absolute;
+	top: -50%;
+	left: -50%;
+	width: 200%;
+	height: 200%;
 
 	background-color: #00000071;
 }

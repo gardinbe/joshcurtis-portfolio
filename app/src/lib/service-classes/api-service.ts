@@ -1,6 +1,7 @@
 import { merge } from "lodash";
 import { stringify } from "qs";
 import { OptionalProps } from "@/lib/types/utils";
+import { delay } from "@/lib/utils";
 
 /**
  * Options for an API service.
@@ -23,11 +24,6 @@ export interface ApiServiceOptions {
 	 */
 	baseParams?: Record<string, string> | null;
 	/**
-	 * Number of times to attempt a request before giving up.
-	 * @defaultValue 1 attempt
-	 */
-	requestAttempts?: number;
-	/**
 	 * Time to wait for a response (in seconds) before giving up.
 	 *
 	 * This applies to each individual request attempt.
@@ -37,30 +33,28 @@ export interface ApiServiceOptions {
 }
 
 /**
- * A service for handling and performing API requests, based on the Fetch
- * API.
+ * A service for handling and performing API requests.
+ *
+ * Based on the Fetch API.
  */
 export class ApiService<
-	TBaseResponse extends object = object,
-	TBaseParams extends object = object
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	TBaseResponse extends Record<string, any> = Record<string, any>,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	TBaseParams extends Record<string, any> = Record<string, any>
 > {
-	/**
-	 * The default options for any API service instance.
-	 */
-	static readonly defaultOptions: Required<OptionalProps<ApiServiceOptions>> = {
-		basePath: null,
-		baseParams: null,
-		requestAttempts: 1,
-		timeout: 30
-	};
+	static readonly defaultOptions: Required<OptionalProps<
+		ApiServiceOptions
+	>> = {
+			basePath: null,
+			baseParams: null,
+			timeout: 30
+		};
 
-	/**
-	 * The options set for this API service instance.
-	 */
 	protected readonly options: Required<ApiServiceOptions>;
 
 	/**
-	 * Creates an instance of an API service.
+	 * Creates a new API service instance.
 	 * @param options - API service options
 	 */
 	constructor(options: ApiServiceOptions) {
@@ -98,30 +92,21 @@ export class ApiService<
 			const response = await fetch(url, options);
 			if (!response.ok)
 				throw new Error("Response was not OK");
+
 			return response;
 		};
 
-		let attempts = 0;
+		const response = await new Promise<Response>((resolve, reject) => {
+			// TODO -> do actual cancellation here? see AbortController
+			void sendRequest()
+				.then(resolve)
+				.catch(reject);
 
-		const attemptRequest = async (): Promise<Response> => {
-			if (attempts >= this.options.requestAttempts)
-				throw new Error(`Maximum number of fetch request attempts (${this.options.requestAttempts}) has been reached`);
+			void delay(this.options.timeout * 1000)
+				.then(() =>
+					reject(`Request timed out after ${this.options.timeout * 1000} seconds`));
+		});
 
-			attempts++;
-
-			try {
-				return new Promise<Response>((resolve, reject) => {
-					// TODO -> do actual cancellation here, see AbortController
-					void sendRequest().then(resolve).catch(reject);
-					setTimeout(reject, this.options.timeout * 1000);
-				});
-
-			} catch (e) {
-				return await attemptRequest();
-			}
-		};
-
-		const response = await attemptRequest();
-		return response.json() as Promise<TResponse>;
+		return await response.json() as TResponse;
 	}
 }

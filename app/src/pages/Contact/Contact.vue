@@ -10,9 +10,10 @@
 			<Button
 				v-for="link of page.attributes.social_links.data"
 				:key="link.id"
-				class="social-link-icon"
-				mode="filled-dark"
 				:style="{ backgroundColor: link.attributes.background_color }"
+				class="social-link-icon"
+				type="anchor"
+				mode="filled-dark"
 				:href="link.attributes.url"
 			>
 				<StrapiImage
@@ -32,10 +33,10 @@ import StandardContent from "@/components/StandardContent/StandardContent.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import Button from "@/components/Button/Button.vue";
 import { strapi } from "@/lib/services";
-import { contentError } from "@/lib/utils";
+import { throwContentError } from "@/lib/utils";
 
 const page = await strapi.getContactPage()
-	.catch(contentError);
+	.catch(throwContentError);
 
 </script>
 

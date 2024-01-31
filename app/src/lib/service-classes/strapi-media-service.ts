@@ -28,20 +28,16 @@ export interface StrapiMediaServiceOptions {
  * media items.
  */
 export class StrapiMediaService {
-	/**
-	 * The default options for any Strapi media service instance.
-	 */
-	static readonly defaultOptions: Required<OptionalProps<StrapiMediaServiceOptions>> = {
-		defaultFallbackColor: null
-	};
+	static readonly defaultOptions: Required<OptionalProps<
+		StrapiMediaServiceOptions
+	>> = {
+			defaultFallbackColor: null
+		};
 
-	/**
-	 * The options set for this Strapi media service instance.
-	 */
 	private readonly options: Required<StrapiMediaServiceOptions>;
 
 	/**
-	 * Creates a new instance of a Strapi media service.
+	 * Creates a new Strapi media service instance.
 	 * @param options - Strapi media service options
 	 */
 	constructor(options: StrapiMediaServiceOptions) {

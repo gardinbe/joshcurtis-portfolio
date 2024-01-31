@@ -16,4 +16,4 @@ app.use(router);
 
 app.config.errorHandler = errorHandler(router);
 
-app.mount("#root");
+app.mount(document.body);

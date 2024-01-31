@@ -1,10 +1,10 @@
 .product {
-	$this: &;
+	$s: &;
 
 	@media (pointer: fine) {
 		&:hover,
 		&:focus-visible {
-			#{$this}__overlay {
+			#{$s}__overlay {
 				filter: opacity(1);
 			}
 		}
@@ -12,7 +12,7 @@
 
 	@media (pointer: coarse) {
 		&.swiper-slide-active {
-			#{$this}__overlay {
+			#{$s}__overlay {
 				filter: opacity(1);
 			}
 		}

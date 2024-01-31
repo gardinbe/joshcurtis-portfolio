@@ -1,16 +1,16 @@
 <template>
 	<div class="navMenu">
 		<button
-			ref="navMenuBtn"
+			ref="navMenuBtnElmt"
 			class="navMenu__btn"
-			@click="toggle"
+			@click.passive="toggle"
 		>
 			<span class="bar" />
 			<span class="bar" />
 			<span class="bar" />
 		</button>
 		<menu
-			ref="navMenu"
+			ref="navMenuElmt"
 			class="navMenu__items"
 		>
 			<li
@@ -19,7 +19,7 @@
 			>
 				<RouterLink
 					:to="item.link"
-					@click="close"
+					@click.passive="close"
 				>
 					{{ item.label }}
 				</RouterLink>
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 export interface NavItem {
 	label: string;
@@ -40,31 +40,40 @@ defineProps<{
 	items: NavItem[];
 }>();
 
-const navMenuBtn = ref<HTMLElement | null>(null);
-const navMenu = ref<HTMLElement | null>(null);
+const navMenuBtnElmt = ref<HTMLElement | null>(null);
+const navMenuElmt = ref<HTMLElement | null>(null);
+
 let opened = false;
 
-const toggle = () => opened ? close() : open();
+const toggle = () => opened
+	? close()
+	: open();
 
 onMounted(() => {
-	navMenuBtn.value!.dataset.visible = "false";
+	navMenuBtnElmt.value!.dataset.visible = "false";
+});
+
+onUnmounted(() => {
+	removeEventListener("click", closeWhenClickingOff);
 });
 
 const open = () => {
-	navMenuBtn.value!.dataset.visible = "true";
-	setTimeout(() => addEventListener("click", closeWhenClickingOff), 0);
+	navMenuBtnElmt.value!.dataset.visible = "true";
+	setTimeout(() =>
+		addEventListener("click", closeWhenClickingOff, { passive: true })
+		, 0);
 	opened = true;
 };
 
 const close = () => {
-	navMenuBtn.value!.dataset.visible = "false";
+	navMenuBtnElmt.value!.dataset.visible = "false";
 	removeEventListener("click", closeWhenClickingOff);
 	opened = false;
 };
 
 const closeWhenClickingOff = (ev: MouseEvent) => {
 	const target = ev.target as HTMLElement;
-	if (navMenu.value!.contains(target) === true)
+	if (navMenuElmt.value!.contains(target))
 		return;
 
 	close();

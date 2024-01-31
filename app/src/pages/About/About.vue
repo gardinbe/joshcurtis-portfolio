@@ -31,6 +31,7 @@
 			<StrapiImage
 				:image="page.attributes.image.data"
 				format="large"
+				eager
 			/>
 		</template>
 	</SplitContent>
@@ -41,10 +42,10 @@ import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import { strapi } from "@/lib/services";
-import { contentError } from "@/lib/utils";
+import { throwContentError } from "@/lib/utils";
 
 const page = await strapi.getAboutPage()
-	.catch(contentError);
+	.catch(throwContentError);
 
 </script>
 
