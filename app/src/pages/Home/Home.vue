@@ -14,7 +14,7 @@
 		</template>
 
 		<template #first>
-			<hgroup>
+			<hgroup class="heading">
 				<h1>{{ page.attributes.title }}</h1>
 			</hgroup>
 
