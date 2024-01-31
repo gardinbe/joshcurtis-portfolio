@@ -44,6 +44,7 @@ $faces: (
 
 @each $face in $faces {
 	@font-face {
+		font-display: swap;
 		font-family: $name;
 		font-style: normal;
 		font-weight: map.get($face, weight);
