@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "joshcurtis-portfolio-api",
-  "description": "Josh Curtis' portfolio API",
+  "name": "joshcurtis-portfolio-cms",
+  "description": "Strapi CMS for Josh Curtis' portfolio",
   "version": "1.0.0",
   "scripts": {
     "dev": "strapi develop",
@@ -18,16 +18,16 @@
     "eslint-plugin-tsdoc": "^0.2.17"
   },
   "dependencies": {
-    "@strapi/plugin-color-picker": "^4.19.0",
-    "@strapi/plugin-i18n": "^4.19.0",
-    "@strapi/plugin-users-permissions": "^4.19.0",
+    "@strapi/plugin-color-picker": "4.19.0",
+    "@strapi/plugin-i18n": "4.19.0",
+    "@strapi/plugin-users-permissions": "4.19.0",
     "@strapi/strapi": "4.19.0",
     "better-sqlite3": "9.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
     "strapi-plugin-populate-deep": "^3.0.1",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.11"
   },
   "strapi": {
     "uuid": "d4fa12f7-ad5f-43c3-a620-b13632374abd"

@@ -2,12 +2,14 @@
 
 This is [Josh Curtis](https://www.linkedin.com/in/josh-hcurtis)'s new portfolio.
 
-You can view it here: https://joshcurtis.co.uk
+You can view it here: https://joshuacurtis.dev
 
-Smooth transitions, aesthetic design, full and proper keyboard navigation, optimized
+Smooth transitions, aesthetic design, full keyboard navigation, optimized
 for performance... the list goes on!
 
-![desktop](https://github.com/gardinbe/joshcurtis-portfolio/assets/55744452/8bc144fa-b05b-4021-913f-f856ab362d73)
+![desktop](https://raw.githubusercontent.com/gardinbe/joshcurtis-portfolio/master/images/screenshots/desktop.jpg)
+
+<!-- this image was previously uploaded as an attachment to github -->
 
 Built using:
 - Strapi Headless CMS

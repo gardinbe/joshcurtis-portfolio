@@ -1,28 +1,28 @@
 services:
-  # the api
+  # the cms
   - type: web
     plan: starter
     # region: frankfurt # need to get upgrade
     numInstances: 1
-    name: joshc-portfolio-api
-    rootDir: api
+    name: joshuacurtis-portfolio-cms
+    rootDir: cms
     runtime: node
     branch: master
     buildCommand: npm install && npm run build
     startCommand: rsync -a public/ /data/public/ && npm start
     healthCheckPath: /_health
-    autoDeploy: false
+    autoDeploy: true
     disk:
       name: strapi-data
       mountPath: /data
       sizeGB: 20
     envVars:
       - key: NODE_VERSION
-        value: ~20.7.0
+        value: 20.11.0
       - key: NODE_ENV
         value: production
       - key: HOST_URL
-        value: https://api.joshuacurtis.co.uk
+        value: https://cms.joshuacurtis.dev
       - key: APP_KEYS
         generateValue: true
       - key: API_TOKEN_SALT
@@ -41,7 +41,7 @@ services:
         value: /data/public
   # the web app
   - type: web
-    name: joshc-portfolio-app
+    name: joshuacurtis-portfolio-app
     rootDir: app
     runtime: static
     branch: master
@@ -51,11 +51,11 @@ services:
     autoDeploy: true
     envVars:
       - key: NODE_VERSION
-        value: ~20.7.0
+        value: 20.11.0
       - key: NODE_ENV
         value: production
       - key: VITE_STRAPI_HOST
-        value: https://api.joshuacurtis.co.uk
+        value: https://cms.joshuacurtis.dev
     headers:
       - path: /*
         name: X-Frame-Options

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "joshcurtis-portfolio-app",
-  "description": "Josh Curtis' portfolio web app",
+  "description": "Web app for Josh Curtis' portfolio",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite --host",
