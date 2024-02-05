@@ -12,6 +12,8 @@ export class TerminalTextParser {
 	/**
 	 * Parse an element and return a map of all of it's text nodes with
 	 * their text fragments.
+	 *
+	 * Does not update or affect the content of any text nodes.
 	 * @param elmt - Target element
 	 * @returns Parsed text nodes with their text fragments
 	 */
@@ -19,10 +21,8 @@ export class TerminalTextParser {
 		const textNodes = this.getTextNodes(elmt);
 		const nodesWithFragments = new Map<Node, TextFragment[]>();
 
-		for (const node of textNodes) {
+		for (const node of textNodes)
 			nodesWithFragments.set(node, this.getTextFragments(node));
-			node.textContent = "";
-		}
 
 		return nodesWithFragments;
 	}

@@ -1,6 +1,6 @@
 @use "sass:map";
 
-//TODO -> these should probably be variables
+//TODO: these should probably be variables
 
 @function spacing($size) {
 	@return map.get(

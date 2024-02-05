@@ -97,7 +97,7 @@ export class ApiService<
 		};
 
 		const response = await new Promise<Response>((resolve, reject) => {
-			// TODO -> do actual cancellation here? see AbortController
+			// TODO: do actual cancellation here? see AbortController
 			void sendRequest()
 				.then(resolve)
 				.catch(reject);

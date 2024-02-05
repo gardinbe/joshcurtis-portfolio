@@ -11,6 +11,7 @@
 			You can
 			<RouterLink
 				to="/"
+				aria-label="Return to homepage"
 				v-html="'return to the homepage'"
 			/> here.
 		</p>

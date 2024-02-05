@@ -29,8 +29,8 @@
 
 		<template #second>
 			<StrapiImage
+				type="picture"
 				:image="page.attributes.image.data"
-				format="large"
 				eager
 			/>
 		</template>

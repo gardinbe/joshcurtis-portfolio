@@ -15,11 +15,13 @@
 				type="anchor"
 				mode="filled-dark"
 				:href="link.attributes.url"
+				:aria-label="link.attributes.name"
 			>
 				<StrapiImage
+					type="img"
 					:image="link.attributes.icon.data"
-					format="thumbnail"
-					:fallback-color="false"
+					target-format="thumbnail"
+					no-fallback-color
 					eager
 				/>
 			</Button>

@@ -28,7 +28,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 const props = defineProps<{
-	/** Whether the panel should be open or not. */
+	/** Whether or not the panel should be open. */
 	open: boolean;
 	/**
 	 * The function to execute for when the panel should be closed.
@@ -36,7 +36,7 @@ const props = defineProps<{
 	 * **This must inherently set `open` to false.**
 	 */
 	closeAction: () => void;
-	/** Whether to keep body overflow hidden when the panel closes. */
+	/** Keep body overflow hidden when the panel closes. */
 	keepOverflowHiddenOnClose?: boolean;
 	inert?: boolean;
 }>();

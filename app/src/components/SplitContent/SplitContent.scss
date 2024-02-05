@@ -52,7 +52,7 @@
 	}
 
 	&__content {
-		//TODO -> flex might not be preferred here
+		//TODO: flex might not be preferred here
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -77,9 +77,14 @@
 			align-items: unset;
 		}
 
-		:deep(img) {
-			min-height: 100%;
+		:deep(picture) {
 			min-width: 100%;
+			height: 100%;
+		}
+
+		:deep(img) {
+			min-width: 100%;
+			min-height: 100%;
 		}
 	}
 

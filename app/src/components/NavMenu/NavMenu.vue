@@ -3,6 +3,7 @@
 		<button
 			ref="navMenuBtnElmt"
 			class="navMenu__btn"
+			aria-label="Toggle menu"
 			@click.passive="toggle"
 		>
 			<span class="bar" />
@@ -19,6 +20,7 @@
 			>
 				<RouterLink
 					:to="item.link"
+					aria-label="Open page"
 					@click.passive="close"
 				>
 					{{ item.label }}

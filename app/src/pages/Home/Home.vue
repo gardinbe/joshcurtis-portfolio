@@ -30,8 +30,8 @@
 				type="router-link"
 				mode="ghost"
 				size="large"
-				aria-label="Open contact page"
 				href="/contact"
+				aria-label="Open contact page"
 			>
 				{{ page.attributes.cta }}
 			</Button>
@@ -47,6 +47,7 @@
 							<a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>.
 						</template>
 
@@ -54,6 +55,7 @@
 							and <a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>.
 						</template>
 
@@ -61,6 +63,7 @@
 							<a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>
 						</template>
 
@@ -68,6 +71,7 @@
 							<a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>,
 						</template>
 					</template>
@@ -79,6 +83,7 @@
 						:href="strapiMedia.url(
 							page.attributes.resume.data.attributes.url
 						)"
+						aria-label="My resume"
 					>my resume</a> here.
 				</p>
 			</div>
@@ -86,8 +91,8 @@
 
 		<template #second>
 			<StrapiImage
+				type="picture"
 				:image="page.attributes.image.data"
-				format="large"
 				eager
 			/>
 		</template>
@@ -107,19 +112,13 @@ import { throwContentError } from "@/lib/utils";
 
 const router = useRouter();
 
+const routeLink = (name: string) =>
+	router.resolve({ name }).href;
+
 const navItems: NavItem[] = [
-	{
-		label: "About",
-		link: router.resolve({ name: "about" }).href
-	},
-	{
-		label: "My work",
-		link: router.resolve({ name: "work" }).href
-	},
-	{
-		label: "Contact",
-		link: router.resolve({ name: "contact" }).href
-	}
+	{ label: "About", link: routeLink("about") },
+	{ label: "My work", link: routeLink("work") },
+	{ label: "Contact", link: routeLink("contact") }
 ];
 
 const page = await strapi.getHomePage()

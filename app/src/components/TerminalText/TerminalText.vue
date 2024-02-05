@@ -13,7 +13,7 @@ import { TerminalText } from "@/lib/utils";
 
 const props = defineProps<{
 	/**
-	 * Whether or not to predetermine the minimum height of an element.
+	 * Whether or not the minimum height of the element should be predetermined.
 	 *
 	 * If a `[[minHeight]]` keyword is used, then this will be where this height is
 	 * determined.

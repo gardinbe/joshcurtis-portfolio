@@ -7,7 +7,7 @@ import { delay, randomDelay } from "@/lib/utils/delay";
 
 export interface TerminalTextRenderOptions {
 	/**
-	 * Whether or not to predetermine the minimum height of an element.
+	 * Whether or not the minimum height of the element should be predetermined.
 	 *
 	 * If a `[[minHeight]]` keyword is used, then this will be where this height is
 	 * determined.
@@ -57,6 +57,10 @@ export class TerminalTextRenderer {
 		if (_options.predetermineHeight)
 			await this.setPredeterminedHeight(elmt, nodesWithFragments);
 
+		//remove existing content
+		for (const [node] of nodesWithFragments)
+			node.textContent = "";
+
 		elmt.style.visibility = "";
 
 		//and wait for all chars to be added
@@ -104,12 +108,13 @@ export class TerminalTextRenderer {
 
 		temporarilySetText();
 
+		//arbitrary small delay to wait for font to load.
+		//some fonts are larger/smaller than others, and this can affect
+		//the final rendered height.
+		//TODO: probably overkill, but could check for if target FontFace is loaded?
 		await delay(500);
 
 		elmt.style.minHeight = `${elmt.clientHeight}px`;
-
-		for (const [node] of nodesWithFragments)
-			node.textContent = "";
 	}
 
 	/**
@@ -180,7 +185,7 @@ export class TerminalTextRenderer {
 	private async insertFragment(node: Node, fragment: TextFragment) {
 		if (typeof fragment === "string") {
 			node.textContent = (node.textContent ?? "") + fragment;
-			//TODO -> perhaps a normal distribution would be more realistic
+			//TODO: perhaps a normal distribution would be more realistic
 			await randomDelay(10, 80);
 			return;
 		}

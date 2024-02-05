@@ -9,6 +9,7 @@
 			The application has ran into an internal error. Please try again later, or
 			<RouterLink
 				to="/"
+				aria-label="Return to homepage"
 				v-html="'return to the homepage'"
 			/> here.
 		</p>

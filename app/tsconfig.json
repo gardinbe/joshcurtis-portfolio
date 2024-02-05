@@ -3,6 +3,7 @@
 		"../tsconfig.types.json"
 	],
 	"compilerOptions": {
+		"exactOptionalPropertyTypes": false, //Makes it very hard to do optional props otherwise
 		"module": "ESNext",
 		"moduleResolution": "node",
 		"noEmit": true,

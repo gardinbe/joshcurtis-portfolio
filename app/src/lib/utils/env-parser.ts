@@ -41,4 +41,4 @@ export const envParser = {
 
 		return parsedValue;
 	}
-};
+} as const;

@@ -33,6 +33,7 @@
 				mode="filled"
 				size="large"
 				:href="page.attributes.link"
+				aria-label="Open page"
 			>
 				Visit the site
 			</Button>
@@ -40,8 +41,8 @@
 
 		<template #second>
 			<StrapiImage
+				type="picture"
 				:image="page.attributes.image.data"
-				format="large"
 				eager
 			/>
 		</template>

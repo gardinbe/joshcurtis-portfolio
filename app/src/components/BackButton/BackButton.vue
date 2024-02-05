@@ -1,8 +1,8 @@
 <template>
 	<RouterLink
 		class="back-btn"
-		aria-label="Go back"
 		:to="$route.path.slice(0, $route.path.lastIndexOf('/')) || '/'"
+		aria-label="Go back"
 	>
 		<FontAwesomeIcon icon="fa-solid fa-arrow-left" />
 	</RouterLink>
