@@ -6,7 +6,7 @@
 			:inert="!!inert"
 		>
 			<div
-				ref="panelBackdropElmt"
+				ref="panelBackdropEl"
 				class="panel-backdrop"
 				@click.passive="backdropClick"
 				@touchstart.passive="backdropTouchStart"
@@ -15,7 +15,7 @@
 			/>
 
 			<div
-				ref="panelElmt"
+				ref="panelEl"
 				class="panel"
 			>
 				<slot />
@@ -31,9 +31,9 @@ const props = defineProps<{
 	/** Whether or not the panel should be open. */
 	open: boolean;
 	/**
-	 * The function to execute for when the panel should be closed.
+	 * Function to execute for when the panel should be closed.
 	 *
-	 * **This must inherently set `open` to false.**
+	 * **This must inherently set `open` to false**.
 	 */
 	closeAction: () => void;
 	/** Keep body overflow hidden when the panel closes. */
@@ -66,27 +66,27 @@ onUnmounted(() => {
 	document.removeEventListener("keydown", closeOnEscapeKey);
 });
 
-const panelElmt = ref<HTMLElement | null>(null);
-const panelBackdropElmt = ref<HTMLElement | null>(null);
+const panelEl = ref<HTMLElement | null>(null);
+const panelBackdropEl = ref<HTMLElement | null>(null);
 
 const backdropClick = (ev: MouseEvent) => {
-	if (ev.currentTarget !== panelBackdropElmt.value)
+	if (ev.currentTarget !== panelBackdropEl.value)
 		return;
 
 	props.closeAction();
 };
 
 /**
- * The starting left distance from the panel's bounding client
+ * Starting left distance from the panel's bounding client
  * rectangle.
  */
 let panelPosX: number | null = null;
 
 /**
- * The horizontal distance travelled by the swipe from the
+ * Horizontal distance traveled by the swipe from the
  * starting horizontal position of the panel, `startPosX`.
  *
- * Negative if travelled backwards, positive if forwards.
+ * Negative if traveled backwards, positive if forwards.
  */
 let swipeDistance: number | null = null;
 
@@ -98,31 +98,31 @@ const FAST_SWIPE_THRESHOLD = 250;
 let swipeStartTime: number | null = null;
 
 const backdropTouchStart = () => {
-	if (!panelElmt.value)
+	if (!panelEl.value)
 		return;
 
 	swipeStartTime = Date.now();
-	panelPosX = panelElmt.value.getBoundingClientRect().left;
+	panelPosX = panelEl.value.getBoundingClientRect().left;
 };
 
 const backdropTouchMove = (ev: TouchEvent) => {
-	if (!panelElmt.value || panelPosX === null)
+	if (!panelEl.value || panelPosX === null)
 		return;
 
 	const posX = ev.touches[0]!.clientX;
 	swipeDistance = posX - panelPosX;
 
-	//dont go backwards
+	//don't go backwards
 	if (swipeDistance <= 0)
 		return;
 
-	panelElmt.value.style.transition = "unset";
-	panelElmt.value.style.transform = `translateX(${swipeDistance}px)`;
+	panelEl.value.style.transition = "unset";
+	panelEl.value.style.transform = `translateX(${swipeDistance}px)`;
 };
 
 const backdropTouchEnd = () => {
 	if (
-		!panelElmt.value
+		!panelEl.value
 		|| swipeDistance === null
 		|| swipeStartTime === null
 	)
@@ -131,11 +131,11 @@ const backdropTouchEnd = () => {
 	const elapsed = Date.now() - swipeStartTime;
 	const fastSwipe = elapsed < FAST_SWIPE_THRESHOLD;
 
-	panelElmt.value.style.transition = "";
-	panelElmt.value.style.transform = "";
+	panelEl.value.style.transition = "";
+	panelEl.value.style.transform = "";
 
 	if (
-		swipeDistance > panelElmt.value.clientWidth / 2
+		swipeDistance > panelEl.value.clientWidth / 2
 		|| (fastSwipe && swipeDistance > 0)
 	)
 		props.closeAction();

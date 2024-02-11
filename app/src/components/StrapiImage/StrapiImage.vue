@@ -18,7 +18,7 @@
 			>
 			<img
 				:src="strapiMedia.url(image.attributes.url)"
-				:alt="image.attributes.alternativeText ?? undefined"
+				:alt="image.attributes.alternativeText ?? DEFAULT_ALT_TEXT"
 				:width="image.attributes.width"
 				:height="image.attributes.height"
 				:loading="eager ? 'eager' : 'lazy'"
@@ -29,7 +29,7 @@
 		<img
 			:style="{ backgroundColor: _fallbackColor }"
 			:src="strapiMedia.url(imgFormat.url)"
-			:alt="image.attributes.alternativeText ?? undefined"
+			:alt="image.attributes.alternativeText ?? DEFAULT_ALT_TEXT"
 			:width="imgFormat.width"
 			:height="imgFormat.height"
 			:loading="eager ? 'eager' : 'lazy'"
@@ -40,26 +40,29 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Image, ImageFormat, ImageFormatName } from "@/lib/types/strapi";
-import { strapiMedia } from "@/lib/services";
-import { BSBreakpoint, bsBreakpoints } from "@/lib/utils";
+import { strapiMedia } from "@/lib/services/instances";
+import { BSBreakpoint, BS_BREAKPOINTS } from "@/lib/utils";
 
 const props = defineProps<{
-	/** The type of image. */
+	/** Type of image. */
 	type: "picture" | "img";
-	/** The Strapi image data. */
+	/** Strapi image data. */
 	image: Image;
 	/**
-	 * The target image format name.
+	 * Target image format name.
 	 *
-	 * If format does not exist, the next largest available format will
+	 * If the format does not exist, the next largest available format will
 	 * be selected.
 	 *
-	 * ***Note***: This is only applicable when `type` is set to `img`.
-	 * @defaultValue "medium"
+	 * - This is only applicable when `type` is set to `img`.
+	 * @defaultValue
+	 * ```typescript
+	 *	"medium"
+	 * ```
 	 */
 	targetFormat?: ImageFormatName;
 	/**
-	 * The breakpoint scaling factor for the image.
+	 * Breakpoint scaling factor for the image.
 	 *
 	 * The scaling factor is used as a multiplier applied to Bootstrap's
 	 * breakpoints:
@@ -81,8 +84,11 @@ const props = defineProps<{
 	 * so the min-widths will be *lower* for higher quality formats, and
 	 * vice-versa.
 	 *
-	 * ***Note***: This is only applicable when `type` is set to `picture`.
-	 * @defaultValue 1
+	 * - This is only applicable when `type` is set to `picture`.
+	 * @defaultValue
+	 * ```typescript
+	 *	1
+	 * ```
 	 */
 	breakpointScaling?: number;
 	/**
@@ -92,11 +98,13 @@ const props = defineProps<{
 	 */
 	eager?: boolean;
 	/**
-	 * Whether or not the image should ***not*** use the fallback background
+	 * Whether or not the image should **not** use the fallback background
 	 * color.
 	 */
 	noFallbackColor?: boolean;
 }>();
+
+const DEFAULT_ALT_TEXT = "Image";
 
 const _fallbackColor = computed(() =>
 	!props.noFallbackColor
@@ -111,10 +119,10 @@ const _breakpointScaling = computed(() =>
  * breakpoints.
  */
 const breakpoints: Partial<Record<ImageFormatName, BSBreakpoint>> = {
-	small: bsBreakpoints.XS,
-	medium: bsBreakpoints.SM,
-	large: bsBreakpoints.MD,
-	xlarge: bsBreakpoints.LG
+	small: BS_BREAKPOINTS.xs, //must start with smallest bs breakpoint!
+	medium: BS_BREAKPOINTS.sm,
+	large: BS_BREAKPOINTS.md,
+	xlarge: BS_BREAKPOINTS.lg
 };
 
 interface PictureSource {

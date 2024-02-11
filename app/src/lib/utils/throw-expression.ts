@@ -1,5 +1,5 @@
 /**
- * Shorthand to throw an error as an expression.
+ * Throws an error as an expression.
  * @param error - Error message or instance
  */
 export const throwExp = (error?: string | Error) => {

@@ -1,7 +1,6 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<SplitContent
-		second-slot-type="swiper"
+		second-slot="swiper"
 		sizing="enlarge-second"
 		has-button
 	>
@@ -10,7 +9,7 @@
 				<h1>{{ page.attributes.title }}</h1>
 			</hgroup>
 
-			<div v-html="parse(page.attributes.content)" />
+			<div v-html="md(page.attributes.content)" />
 		</template>
 
 		<template #second>
@@ -45,9 +44,12 @@
 					<div class="product__overlay">
 						<hgroup>
 							<h2>{{ product.attributes.title }}</h2>
-							<h6 v-if="product.attributes.subtitle">
+							<p
+								v-if="product.attributes.subtitle"
+								class="subtitle"
+							>
 								{{ product.attributes.subtitle }}
-							</h6>
+							</p>
 						</hgroup>
 					</div>
 				</SwiperSlide>
@@ -59,10 +61,9 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { useRouter } from "vue-router";
-import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import { strapi, strapiMedia } from "@/lib/services";
-import { throwContentError } from "@/lib/utils";
+import { cms, strapiMedia } from "@/lib/services/instances";
+import { md, throwContentError } from "@/lib/utils";
 
 const router = useRouter();
 
@@ -75,7 +76,7 @@ const productClick = (ev: MouseEvent) => {
 	void router.push(href);
 };
 
-const page = await strapi.getWorkPage()
+const page = await cms.getWorkPage()
 	.catch(throwContentError);
 
 </script>

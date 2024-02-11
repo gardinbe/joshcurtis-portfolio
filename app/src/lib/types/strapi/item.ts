@@ -8,7 +8,7 @@ export type Item = Component | UnpublishableItem | PublishableItem;
  * @internal
  */
 interface BaseItem {
-	/** The item's integer ID. */
+	/** Item integer ID. */
 	id: number;
 }
 
@@ -25,7 +25,7 @@ export interface Component extends BaseItem { }
 export interface UnpublishableItem<
 	TAttributes extends Record<string, unknown> = Record<string, unknown>
 > extends BaseItem {
-	/** The item's attributes. */
+	/** Item attributes. */
 	attributes: TAttributes & {
 		createdAt: string;
 		updatedAt: string;

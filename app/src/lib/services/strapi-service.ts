@@ -1,36 +1,37 @@
-import { merge } from "lodash";
-import { ApiService, ApiServiceOptions } from "@/lib/service-classes/api-service";
+import { ApiService, ApiServiceOptions } from "@/lib/services/api-service";
 import { StrapiResponse, SingleResponse, CollectionResponse, StrapiRequestParams, Item, SingleRequestParams, CollectionRequestParams } from "@/lib/types/strapi";
-import { OptionalProps } from "@/lib/types/utils";
+import { DefaultOptions, Options } from "@/lib/types/utils";
 import { throwExp } from "@/lib/utils";
 
 /**
- * Options for a base Strapi service.
+ * Options for a Strapi service.
  */
-export interface BaseStrapiServiceOptions extends ApiServiceOptions { }
+export interface StrapiServiceOptions extends ApiServiceOptions { }
 
 /**
  * Service for handling and performing requests to a Strapi API.
  */
-export class BaseStrapiService extends ApiService<StrapiResponse, StrapiRequestParams> {
-	static override readonly defaultOptions: Required<OptionalProps<
-		BaseStrapiServiceOptions
-	>> = merge({}, ApiService.defaultOptions);
+export class StrapiService extends ApiService<StrapiResponse, StrapiRequestParams> {
+	static override readonly DEFAULT_OPTIONS: DefaultOptions<StrapiServiceOptions> =
+		ApiService.DEFAULT_OPTIONS;
 
-	protected override readonly options: Required<BaseStrapiServiceOptions>;
+	protected override readonly options: Options<StrapiServiceOptions>;
 
 	/**
-	 * Creates a new base Strapi service instance.
+	 * Creates a new Strapi service instance.
 	 * @param options - Strapi service options
 	 */
-	constructor(options: BaseStrapiServiceOptions) {
-		const _options = merge({}, BaseStrapiService.defaultOptions, options);
+	constructor(options: StrapiServiceOptions) {
+		const _options = StrapiService.createOptions(
+			StrapiService.DEFAULT_OPTIONS,
+			options
+		);
 		super(_options);
 		this.options = _options;
 	}
 
 	/**
-	 * Retrieve a single item from the Strapi API.
+	 * Retrieves a single item from the Strapi API.
 	 * @param endpoint - Target endpoint
 	 * @param params - Request parameters
 	 * @param options - Fetch request options
@@ -48,7 +49,7 @@ export class BaseStrapiService extends ApiService<StrapiResponse, StrapiRequestP
 	}
 
 	/**
-	 * Retrieve a collection of items from the Strapi API.
+	 * Retrieves a collection of items from the Strapi API.
 	 * @param endpoint - Target endpoint
 	 * @param params - Request parameters
 	 * @param options - Fetch request options
@@ -66,7 +67,7 @@ export class BaseStrapiService extends ApiService<StrapiResponse, StrapiRequestP
 	}
 
 	/**
-	 * Retrieve the first item within a collection of items from the Strapi API.
+	 * Retrieves the first item within a collection of items from the Strapi API.
 	 * @param endpoint - Target endpoint
 	 * @param params - Request parameters
 	 * @param options - Fetch request options

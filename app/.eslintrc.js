@@ -27,11 +27,18 @@ module.exports = {
 		}
 	},
 	"rules": {
+		"vue/no-v-html": ["off"],
 		"vue/multi-word-component-names": ["off"],
 		"vue/html-indent": ["error", "tab"],
 		"vue/no-useless-v-bind": ["error", {
 			"ignoreIncludesComment": true,
 			"ignoreStringEscape": true
-		}]
+		}],
+		"vue/no-v-text-v-html-on-component": [
+			"error",
+			{
+				"allow": ["router-link", "nuxt-link", "terminal-typer"]
+			}
+		]
 	}
 };

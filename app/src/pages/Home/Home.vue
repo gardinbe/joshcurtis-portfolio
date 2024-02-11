@@ -1,8 +1,7 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<SplitContent
 		class="content"
-		second-slot-type="image"
+		second-slot="image"
 		sizing="enlarge-first"
 		has-button
 	>
@@ -18,12 +17,12 @@
 				<h1>{{ page.attributes.title }}</h1>
 			</hgroup>
 
-			<TerminalText
-				class="terminal-text"
-				predetermine-height
-			>
-				<div v-html="parse(page.attributes.content)" />
-			</TerminalText>
+			<TerminalTyper
+				class="terminal-typer"
+				no-layout-shift
+				:cursor="{ symbol: '▮' }"
+				v-html="md(page.attributes.content)"
+			/>
 
 			<Button
 				class="contact-btn"
@@ -101,14 +100,13 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import NavMenu, { NavItem } from "@/components/NavMenu/NavMenu.vue";
 import Button from "@/components/Button/Button.vue";
-import TerminalText from "@/components/TerminalText/TerminalText.vue";
+import TerminalTyper from "@/components/TerminalTyper/TerminalTyper.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import { strapi, strapiMedia } from "@/lib/services";
-import { throwContentError } from "@/lib/utils";
+import { cms, strapiMedia } from "@/lib/services/instances";
+import { md, throwContentError } from "@/lib/utils";
 
 const router = useRouter();
 
@@ -121,7 +119,7 @@ const navItems: NavItem[] = [
 	{ label: "Contact", link: routeLink("contact") }
 ];
 
-const page = await strapi.getHomePage()
+const page = await cms.getHomePage()
 	.catch(throwContentError);
 
 </script>

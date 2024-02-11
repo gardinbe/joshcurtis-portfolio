@@ -1,7 +1,6 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<SplitContent
-		second-slot-type="image"
+		second-slot="image"
 		sizing="enlarge-first"
 		has-button
 	>
@@ -22,7 +21,7 @@
 					class="info-block"
 				>
 					<h4>{{ infoBlock.title }}</h4>
-					<div v-html="parse(infoBlock.content)" />
+					<div v-html="md(infoBlock.content)" />
 				</div>
 			</div>
 		</template>
@@ -38,13 +37,12 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import { strapi } from "@/lib/services";
-import { throwContentError } from "@/lib/utils";
+import { cms } from "@/lib/services/instances";
+import { md, throwContentError } from "@/lib/utils";
 
-const page = await strapi.getAboutPage()
+const page = await cms.getAboutPage()
 	.catch(throwContentError);
 
 </script>

@@ -1,7 +1,10 @@
 <template>
-	<div class="navMenu">
+	<div
+		ref="menuEl"
+		class="navMenu"
+	>
 		<button
-			ref="navMenuBtnElmt"
+			ref="btnEl"
 			class="navMenu__btn"
 			aria-label="Toggle menu"
 			@click.passive="toggle"
@@ -11,7 +14,7 @@
 			<span class="bar" />
 		</button>
 		<menu
-			ref="navMenuElmt"
+			ref="itemsEl"
 			class="navMenu__items"
 		>
 			<li
@@ -42,8 +45,17 @@ defineProps<{
 	items: NavItem[];
 }>();
 
-const navMenuBtnElmt = ref<HTMLElement | null>(null);
-const navMenuElmt = ref<HTMLElement | null>(null);
+const menuEl = ref<HTMLElement | null>(null);
+const btnEl = ref<HTMLElement | null>(null);
+const itemsEl = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+	btnEl.value!.dataset.visible = "false";
+});
+
+onUnmounted(() => {
+	removeEventListener("click", handleWindowClick);
+});
 
 let opened = false;
 
@@ -51,31 +63,21 @@ const toggle = () => opened
 	? close()
 	: open();
 
-onMounted(() => {
-	navMenuBtnElmt.value!.dataset.visible = "false";
-});
-
-onUnmounted(() => {
-	removeEventListener("click", closeWhenClickingOff);
-});
-
 const open = () => {
-	navMenuBtnElmt.value!.dataset.visible = "true";
-	setTimeout(() =>
-		addEventListener("click", closeWhenClickingOff, { passive: true })
-		, 0);
+	btnEl.value!.dataset.visible = "true";
+	addEventListener("click", handleWindowClick, { passive: true });
 	opened = true;
 };
 
 const close = () => {
-	navMenuBtnElmt.value!.dataset.visible = "false";
-	removeEventListener("click", closeWhenClickingOff);
+	btnEl.value!.dataset.visible = "false";
+	removeEventListener("click", handleWindowClick);
 	opened = false;
 };
 
-const closeWhenClickingOff = (ev: MouseEvent) => {
+const handleWindowClick = (ev: MouseEvent) => {
 	const target = ev.target as HTMLElement;
-	if (navMenuElmt.value!.contains(target))
+	if (menuEl.value!.contains(target))
 		return;
 
 	close();

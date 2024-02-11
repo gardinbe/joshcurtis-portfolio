@@ -1,54 +1,54 @@
-import { DeepReadonly } from "vue";
+import { DeepReadonly } from "ts-essentials";
 
 /**
- * A Boostrap breakpoint name.
+ * A Bootstrap breakpoint name.
  */
 export type BSBreakpointName =
-	"XS" |
-	"SM" |
-	"MD" |
-	"LG" |
-	"XL" |
-	"XXL";
+	"xs" |
+	"sm" |
+	"md" |
+	"lg" |
+	"xl" |
+	"xxl";
 
 /**
  * A set of Bootstrap breakpoint upper and lower boundaries.
  */
 export interface BSBreakpoint {
-	/** The lower boundary of the breakpoint. */
+	/** Lower boundary of the breakpoint. */
 	min: number;
-	/** The upper boundary of the breakpoint. */
+	/** Upper boundary of the breakpoint. */
 	max?: number;
 }
 
 /**
  * Object of Bootstrap breakpoints.
  *
- * ***Note***: When using `max-width` in media queries, the value should be
+ * - When using `max-width` in media queries, the value should be
  * set to the upper boundary, `max`, subtracted by `0.02px`.
  */
-export const bsBreakpoints: DeepReadonly<Record<BSBreakpointName, BSBreakpoint>> = {
-	XS: {
+export const BS_BREAKPOINTS: DeepReadonly<Record<BSBreakpointName, BSBreakpoint>> = {
+	xs: {
 		min: 0,
 		max: 576
 	},
-	SM: {
+	sm: {
 		min: 576,
 		max: 768
 	},
-	MD: {
+	md: {
 		min: 768,
 		max: 992
 	},
-	LG: {
+	lg: {
 		min: 992,
 		max: 1200
 	},
-	XL: {
+	xl: {
 		min: 1200,
 		max: 1400
 	},
-	XXL: {
+	xxl: {
 		min: 1400
 	}
 };
