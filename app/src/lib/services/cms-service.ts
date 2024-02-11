@@ -1,31 +1,32 @@
-import { merge } from "lodash";
-import { BaseStrapiService, BaseStrapiServiceOptions } from "@/lib/service-classes/base-strapi-service";
+import { StrapiService, StrapiServiceOptions } from "@/lib/services/strapi-service";
 import { Product } from "@/lib/types/strapi-data/collection-items";
 import { AboutPage, ContactPage, HomePage, WorkPage } from "@/lib/types/strapi-data/single-items";
-import { OptionalProps } from "@/lib/types/utils";
+import { DefaultOptions, Options } from "@/lib/types/utils";
 
 /**
- * Options for a Strapi service.
+ * Options for a CMS service.
  */
-export interface StrapiServiceOptions extends BaseStrapiServiceOptions { }
+export interface CMSServiceOptions extends StrapiServiceOptions { }
 
 /**
- * A service for handling and performing specific requests to the
- * Portfolio Strapi API.
+ * A service for handling and performing specific requests to the Strapi
+ * CMS API.
  */
-export class StrapiService extends BaseStrapiService {
-	static override readonly defaultOptions: Required<OptionalProps<
-		StrapiServiceOptions
-	>> = merge({}, BaseStrapiService.defaultOptions);
+export class CMSService extends StrapiService {
+	static override readonly DEFAULT_OPTIONS: DefaultOptions<CMSServiceOptions> =
+		StrapiService.DEFAULT_OPTIONS;
 
-	protected override readonly options: Required<StrapiServiceOptions>;
+	protected override readonly options: Options<CMSServiceOptions>;
 
 	/**
-	 * Creates a new Strapi service instance.
-	 * @param options - Portfolio Strapi service options
+	 * Creates a new CMS service instance.
+	 * @param options - CMS service options
 	 */
-	constructor(options: StrapiServiceOptions) {
-		const _options = merge({}, BaseStrapiService.defaultOptions, options);
+	constructor(options: CMSServiceOptions) {
+		const _options = CMSService.createOptions(
+			CMSService.DEFAULT_OPTIONS,
+			options
+		);
 		super(_options);
 		this.options = _options;
 	}

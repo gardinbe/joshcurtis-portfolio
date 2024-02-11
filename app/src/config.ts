@@ -6,6 +6,6 @@ export default {
 		?? throwExp("Missing 'VITE_STRAPI_HOST' environment variable"),
 	/** Hostname of the Strapi API's media provider. */
 	STRAPI_MEDIA_HOST: envParser.str(import.meta.env.VITE_STRAPI_MEDIA_HOST),
-	/** The time to wait for a response (in seconds) before giving up. */
+	/** Time to wait for a response (in seconds) before giving up. */
 	STRAPI_TIMEOUT: envParser.num(import.meta.env.VITE_STRAPI_TIMEOUT)
 } as const;

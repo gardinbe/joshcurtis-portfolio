@@ -1,8 +1,7 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<SplitContent
 		class="content"
-		second-slot-type="image"
+		second-slot="image"
 		sizing="enlarge-first"
 		has-button
 	>
@@ -18,20 +17,20 @@
 				<h1>{{ page.attributes.title }}</h1>
 			</hgroup>
 
-			<TerminalText
-				class="terminal-text"
-				predetermine-height
-			>
-				<div v-html="parse(page.attributes.content)" />
-			</TerminalText>
+			<TerminalTyper
+				class="terminal-typer"
+				no-layout-shift
+				:cursor="{ symbol: '▮' }"
+				v-html="md(page.attributes.content)"
+			/>
 
 			<Button
 				class="contact-btn"
 				type="router-link"
 				mode="ghost"
 				size="large"
-				aria-label="Open contact page"
 				href="/contact"
+				aria-label="Open contact page"
 			>
 				{{ page.attributes.cta }}
 			</Button>
@@ -47,6 +46,7 @@
 							<a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>.
 						</template>
 
@@ -54,6 +54,7 @@
 							and <a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>.
 						</template>
 
@@ -61,6 +62,7 @@
 							<a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>
 						</template>
 
@@ -68,6 +70,7 @@
 							<a
 								target="_blank"
 								:href="link.attributes.url"
+								:aria-label="link.attributes.name"
 							>{{ link.attributes.name }}</a>,
 						</template>
 					</template>
@@ -79,6 +82,7 @@
 						:href="strapiMedia.url(
 							page.attributes.resume.data.attributes.url
 						)"
+						aria-label="My resume"
 					>my resume</a> here.
 				</p>
 			</div>
@@ -86,8 +90,8 @@
 
 		<template #second>
 			<StrapiImage
+				type="picture"
 				:image="page.attributes.image.data"
-				format="large"
 				eager
 			/>
 		</template>
@@ -96,33 +100,26 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { parse } from "marked";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
 import NavMenu, { NavItem } from "@/components/NavMenu/NavMenu.vue";
 import Button from "@/components/Button/Button.vue";
-import TerminalText from "@/components/TerminalText/TerminalText.vue";
+import TerminalTyper from "@/components/TerminalTyper/TerminalTyper.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import { strapi, strapiMedia } from "@/lib/services";
-import { throwContentError } from "@/lib/utils";
+import { cms, strapiMedia } from "@/lib/services/instances";
+import { md, throwContentError } from "@/lib/utils";
 
 const router = useRouter();
 
+const routeLink = (name: string) =>
+	router.resolve({ name }).href;
+
 const navItems: NavItem[] = [
-	{
-		label: "About",
-		link: router.resolve({ name: "about" }).href
-	},
-	{
-		label: "My work",
-		link: router.resolve({ name: "work" }).href
-	},
-	{
-		label: "Contact",
-		link: router.resolve({ name: "contact" }).href
-	}
+	{ label: "About", link: routeLink("about") },
+	{ label: "My work", link: routeLink("work") },
+	{ label: "Contact", link: routeLink("contact") }
 ];
 
-const page = await strapi.getHomePage()
+const page = await cms.getHomePage()
 	.catch(throwContentError);
 
 </script>

@@ -1,5 +1,5 @@
 import config from "@/config";
-import { StrapiMediaService } from "@/lib/service-classes/strapi-media-service";
+import { StrapiMediaService } from "@/lib/services/strapi-media-service";
 
 /**
  * Strapi media service instance.

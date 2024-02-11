@@ -28,8 +28,8 @@
 		<div
 			class="second"
 			:class="{
-				'second--image': secondSlotType === 'image',
-				'second--swiper': secondSlotType === 'swiper'
+				'second--image': secondSlot === 'image',
+				'second--swiper': secondSlot === 'swiper'
 			}"
 		>
 			<slot name="second" />
@@ -41,7 +41,7 @@
 import BackButton from "@/components/BackButton/BackButton.vue";
 
 defineProps<{
-	secondSlotType: "image" | "swiper";
+	secondSlot: "image" | "swiper";
 	sizing: "evenly-sized" | "enlarge-first" | "enlarge-second";
 	hasButton?: boolean;
 }>();

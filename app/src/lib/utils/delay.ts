@@ -1,5 +1,6 @@
 /**
- * Creates a timeout wrapped in a promise that resolves after a given `duration`.
+ * Creates a timeout wrapped in a promise that resolves after a given
+ * `duration`.
  * @param duration - Duration in milliseconds
  * @returns Void promise that resolves after duration
  */
@@ -7,7 +8,8 @@ export const delay = async (duration: number) =>
 	new Promise<void>(resolve => setTimeout(resolve, duration));
 
 /**
- * Creates a timeout wrapped in a promise that resolves after a random duration between `minDuration` and `maxDuration`.
+ * Creates a timeout wrapped in a promise that resolves after a random
+ * duration between `minDuration` and `maxDuration`.
  * @param minDuration - Minimum duration in milliseconds
  * @param maxDuration - Maximum duration in milliseconds
  * @returns Void promise that resolves after duration

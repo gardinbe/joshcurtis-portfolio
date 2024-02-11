@@ -1,6 +1,6 @@
 import { Router } from "vue-router";
 
-enum AppError {
+const enum AppError {
 	NOT_FOUND = "NOT_FOUND_ERROR",
 	INTERNAL = "INTERNAL_ERROR",
 	CONTENT = "CONTENT_ERROR"

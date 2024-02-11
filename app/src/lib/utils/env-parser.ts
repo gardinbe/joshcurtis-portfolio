@@ -1,9 +1,9 @@
 /**
- * Functions to parse environment variables.
+ * Object with functions to parse environment variables.
  */
 export const envParser = {
 	/**
-	 * Parse and resolve an environment variable as a string.
+	 * Parses and resolves an environment variable as a string.
 	 * @param value - Target environment variable value
 	 * @returns Parsed value
 	 */
@@ -12,7 +12,7 @@ export const envParser = {
 	},
 
 	/**
-	 * Parse and resolve an environment variable as a boolean.
+	 * Parses and resolves an environment variable as a boolean.
 	 * @param value - Target environment variable value
 	 * @returns Parsed value
 	 */
@@ -27,7 +27,7 @@ export const envParser = {
 	},
 
 	/**
-	 * Parse and resolve an environment variable as a number.
+	 * Parses and resolves an environment variable as a number.
 	 * @param value - Target environment variable value
 	 * @returns Parsed value
 	 */
@@ -41,4 +41,4 @@ export const envParser = {
 
 		return parsedValue;
 	}
-};
+} as const;

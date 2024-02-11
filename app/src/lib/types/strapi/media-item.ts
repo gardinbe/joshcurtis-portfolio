@@ -23,6 +23,16 @@ export interface MediaItem<
 }> { }
 
 /**
+ * A Strapi image size format name.
+ */
+export type ImageFormatName =
+	"thumbnail" |
+	"small" |
+	"medium" |
+	"large" |
+	"xlarge";
+
+/**
  * A set of Strapi image item data.
  *
  * Contains several properties about an image, including it's formats.
@@ -30,19 +40,8 @@ export interface MediaItem<
  * An image may or may not have larger formats available: it depends on its original size.
  */
 export interface Image extends MediaItem<{
-	formats: {
-		thumbnail?: ImageFormat; //no predetermined width for thumbnails
-		small?: ImageFormat<500>;
-		medium?: ImageFormat<750>;
-		large?: ImageFormat<1000>;
-		xlarge?: ImageFormat<1920>;
-	};
+	formats: Partial<Record<ImageFormatName, ImageFormat>>;
 }> { }
-
-/**
- * A Strapi image size format name.
- */
-export type ImageFormatName = keyof Image["attributes"]["formats"];
 
 /**
  * A Strapi image size format.

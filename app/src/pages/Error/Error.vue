@@ -1,16 +1,18 @@
-<!-- eslint-disable vue/no-v-text-v-html-on-component -->
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<div class="content">
 		<hgroup>
 			<h1>Internal application error</h1>
 		</hgroup>
 		<p>
-			The application has ran into an internal error. Please try again later, or
+			The application has unfortunately ran into an internal error.
+		</p>
+		<p>
+			Please
 			<RouterLink
 				to="/"
+				aria-label="Return to homepage"
 				v-html="'return to the homepage'"
-			/> here.
+			/>, or try again later.
 		</p>
 	</div>
 </template>

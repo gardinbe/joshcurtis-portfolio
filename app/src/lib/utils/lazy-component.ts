@@ -5,12 +5,12 @@ import Loader from "@/components/Loader/Loader.vue";
  * Lazy-loads a component with a loader.
  *
  * Routes can only resolve single components, so we create an
- * intermediary component to show/switch loader and route
+ * intermediary component to show/switch loader and the route
  * component.
  *
  * https://stackoverflow.com/a/59092610
  *
- * This is dodgy Vue business...
+ * *This is dodgy Vue business...*
  * @param component - Target component to be lazy-loaded
  */
 export const lazy = <T extends Component>(component: Promise<T>) => {

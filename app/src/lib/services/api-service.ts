@@ -1,6 +1,6 @@
-import { merge } from "lodash";
 import { stringify } from "qs";
-import { OptionalProps } from "@/lib/types/utils";
+import { mergeDeepRight } from "ramda";
+import { DefaultOptions, Options } from "@/lib/types/utils";
 import { delay } from "@/lib/utils";
 
 /**
@@ -12,22 +12,33 @@ export interface ApiServiceOptions {
 	 */
 	hostname: string;
 	/**
-	 * Base URL path of the API. This will be appended to the hostname on every request.
+	 * Base URL path of the API. This will be appended to the hostname
+	 * on every request.
 	 *
 	 * Include a leading, **but not a trailing slash - it's automatically appended**.
-	 * @defaultValue null
+	 * @defaultValue
+	 * ```typescript
+	 *	null
+	 * ```
 	 */
 	basePath?: string | null;
 	/**
 	 * Base URL parameters to be passed on every request.
-	 * @defaultValue null
+	 *
+	 * Any subsequently passed parameters will be deeply merged with these.
+	 * @defaultValue
+	 * ```typescript
+	 *	{}
+	 * ```
 	 */
-	baseParams?: Record<string, string> | null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	baseParams?: Record<string, any>;
 	/**
 	 * Time to wait for a response (in seconds) before giving up.
-	 *
-	 * This applies to each individual request attempt.
-	 * @defaultValue 30 seconds
+	 * @defaultValue
+	 * ```typescript
+	 *	30 //seconds
+	 * ```
 	 */
 	timeout?: number;
 }
@@ -43,26 +54,42 @@ export class ApiService<
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	TBaseParams extends Record<string, any> = Record<string, any>
 > {
-	static readonly defaultOptions: Required<OptionalProps<
-		ApiServiceOptions
-	>> = {
-			basePath: null,
-			baseParams: null,
-			timeout: 30
-		};
+	static readonly DEFAULT_OPTIONS: DefaultOptions<ApiServiceOptions> = {
+		basePath: null,
+		baseParams: {},
+		timeout: 30
+	};
 
-	protected readonly options: Required<ApiServiceOptions>;
+	static createOptions(
+		defaultOptions: DefaultOptions<ApiServiceOptions>,
+		options: ApiServiceOptions
+	): Options<ApiServiceOptions> {
+		return {
+			...Object.assign({},
+				defaultOptions,
+				options),
+			baseParams: mergeDeepRight(
+				defaultOptions.baseParams,
+				options.baseParams ?? {}
+			)
+		};
+	}
+
+	protected readonly options: Options<ApiServiceOptions>;
 
 	/**
 	 * Creates a new API service instance.
 	 * @param options - API service options
 	 */
 	constructor(options: ApiServiceOptions) {
-		this.options = merge({}, ApiService.defaultOptions, options);
+		this.options = ApiService.createOptions(
+			ApiService.DEFAULT_OPTIONS,
+			options
+		);
 	}
 
 	/**
-	 * Send a GET request to the API.
+	 * Sends a GET request to the API.
 	 *
 	 * The response data type should be provided to provide effective typings.
 	 * @param endpoint - Target endpoint
@@ -79,14 +106,21 @@ export class ApiService<
 		params?: TParams,
 		options?: RequestInit
 	) {
-		const _params = merge({}, this.options.baseParams, params);
-		const encodedParams = "?" + stringify(_params);
+		const _params = mergeDeepRight(
+			this.options.baseParams,
+			params ?? {}
+		);
+
+		const encodedParams = stringify(_params);
 
 		const url = this.options.hostname
-			+ (this.options.basePath ?? "")
+			+ (this.options.basePath
+				?? "")
 			+ "/"
 			+ endpoint
-			+ encodedParams;
+			+ (encodedParams
+				? "?" + encodedParams
+				: "");
 
 		const sendRequest = async () => {
 			const response = await fetch(url, options);
@@ -96,8 +130,8 @@ export class ApiService<
 			return response;
 		};
 
+		// TODO: do actual cancellation here? see AbortController
 		const response = await new Promise<Response>((resolve, reject) => {
-			// TODO -> do actual cancellation here? see AbortController
 			void sendRequest()
 				.then(resolve)
 				.catch(reject);

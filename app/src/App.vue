@@ -5,9 +5,12 @@
 			<AsyncComponent :component="ComponentA" />
 		</main>
 
-		<!-- TODO -> this panel routing solution is scuffed -->
+		<!-- TODO: this panel routing solution is scuffed -->
 		<!-- handle route level 2 `/a/b` -->
-		<RouterView v-slot="{ Component: ComponentB }">
+		<RouterView
+			v-if="$route.matched.some(route => route.name === 'home')"
+			v-slot="{ Component: ComponentB }"
+		>
 			<Panel
 				:open="!!ComponentB"
 				:close-action="routeTo('/')"
@@ -49,5 +52,3 @@ const routeTo = (path: string) =>
 	};
 
 </script>
-
-<style src="@/lib/scss/main.scss" />

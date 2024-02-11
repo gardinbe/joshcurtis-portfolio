@@ -1,5 +1,4 @@
-import { merge } from "lodash";
-import { OptionalProps } from "@/lib/types/utils";
+import { DefaultOptions, Options } from "@/lib/types/utils";
 import { Image, ImageFormatName } from "@/lib/types/strapi";
 
 /**
@@ -18,7 +17,10 @@ export interface StrapiMediaServiceOptions {
 	 * Default fallback media color.
 	 *
 	 * The default background color shown behind media while it loads in.
-	 * @defaultValue null
+	 * @defaultValue
+	 * ```typescript
+	 *	null
+	 * ```
 	 */
 	defaultFallbackColor?: string | null;
 }
@@ -28,32 +30,44 @@ export interface StrapiMediaServiceOptions {
  * media items.
  */
 export class StrapiMediaService {
-	static readonly defaultOptions: Required<OptionalProps<
-		StrapiMediaServiceOptions
-	>> = {
-			defaultFallbackColor: null
-		};
+	static readonly DEFAULT_OPTIONS: DefaultOptions<StrapiMediaServiceOptions> = {
+		defaultFallbackColor: null
+	};
 
-	private readonly options: Required<StrapiMediaServiceOptions>;
+	static createOptions(
+		defaultOptions: DefaultOptions<StrapiMediaServiceOptions>,
+		options: StrapiMediaServiceOptions
+	): Options<StrapiMediaServiceOptions> {
+		return Object.assign({},
+			defaultOptions,
+			options);
+	}
+
+	private readonly options: Options<StrapiMediaServiceOptions>;
 
 	/**
 	 * Creates a new Strapi media service instance.
 	 * @param options - Strapi media service options
 	 */
 	constructor(options: StrapiMediaServiceOptions) {
-		this.options = merge({}, StrapiMediaService.defaultOptions, options);
+		this.options = StrapiMediaService.createOptions(
+			StrapiMediaService.DEFAULT_OPTIONS,
+			options
+		);
 	}
 
 	/**
-	 * The default background color shown behind media while it loads in.
+	 * Returns the default background color shown behind media while it
+	 * loads in.
 	 */
 	get fallbackColor() {
 		return this.options.defaultFallbackColor;
 	}
 
 	/**
-	 * Resolve and return a Strapi media item's URL by prepending the media
-	 * provider's hostname if necessary.
+	 * Resolves and returns a Strapi media item's URL.
+	 *
+	 * Prepends the Strapi media provider's hostname if necessary.
 	 * @param url - Media URL
 	 * @returns Resolved media URL
 	 */
@@ -64,7 +78,7 @@ export class StrapiMediaService {
 	}
 
 	/**
-	 * Resolve and return a Strapi image's format.
+	 * Resolves and returns a Strapi image's format.
 	 *
 	 * If the target format does not exist on the image, the next largest format will
 	 * be returned.
@@ -79,7 +93,7 @@ export class StrapiMediaService {
 	}
 
 	/**
-	 * Create and return a React.CSSProperties object with background image and
+	 * Creates and returns a React.CSSProperties object with background image and
 	 * color set using a Strapi image, a Strapi image format and a fallback color.
 	 * @param image - Image data
 	 * @param targetFormat - Target image format

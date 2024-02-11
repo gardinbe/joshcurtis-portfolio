@@ -1,7 +1,6 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<SplitContent
-		second-slot-type="image"
+		second-slot="image"
 		sizing="enlarge-first"
 		has-button
 	>
@@ -10,12 +9,15 @@
 				<h1>
 					{{ page.attributes.title }}
 				</h1>
-				<h4 v-if="page.attributes.subtitle">
+				<p
+					v-if="page.attributes.subtitle"
+					class="subtitle subtitle--large"
+				>
 					{{ page.attributes.subtitle }}
-				</h4>
+				</p>
 			</hgroup>
 
-			<div v-html="parse(page.attributes.content)" />
+			<div v-html="md(page.attributes.content)" />
 			<ul class="tags">
 				<li
 					v-for="tag of page.attributes.tags.data"
@@ -33,6 +35,7 @@
 				mode="filled"
 				size="large"
 				:href="page.attributes.link"
+				aria-label="Open page"
 			>
 				Visit the site
 			</Button>
@@ -40,8 +43,8 @@
 
 		<template #second>
 			<StrapiImage
+				type="picture"
 				:image="page.attributes.image.data"
-				format="large"
 				eager
 			/>
 		</template>
@@ -49,13 +52,12 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from "marked";
 import { useRouter } from "vue-router";
 import Button from "@/components/Button/Button.vue";
 import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
 import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import { strapi } from "@/lib/services";
-import { throwNotFoundError, notFoundError } from "@/lib/utils";
+import { cms } from "@/lib/services/instances";
+import { md, throwNotFoundError, notFoundError } from "@/lib/utils";
 
 const router = useRouter();
 
@@ -63,7 +65,7 @@ const slug = router.currentRoute.value.params.slug;
 if (typeof slug !== "string")
 	throw notFoundError();
 
-const page = await strapi.getProduct({ slug })
+const page = await cms.getProduct({ slug })
 	.catch(throwNotFoundError);
 
 </script>
