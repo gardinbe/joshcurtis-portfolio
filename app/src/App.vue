@@ -38,8 +38,8 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { computed } from "vue";
-import Panel from "@/components/Panel/Panel.vue";
-import AsyncComponent from "@/components/AsyncComponent/AsyncComponent.vue";
+import Panel from "~/components/Panel/Panel.vue";
+import AsyncComponent from "~/components/AsyncComponent/AsyncComponent.vue";
 
 const router = useRouter();
 

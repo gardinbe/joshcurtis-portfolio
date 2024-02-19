@@ -44,7 +44,6 @@ export const throwContentError = () => {
 	throw contentError();
 };
 
-
 /**
  * Returns an `Error` instance that indicates that there was an internal
  * application error.

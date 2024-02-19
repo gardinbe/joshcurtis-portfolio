@@ -1,5 +1,5 @@
-import { SocialLink } from "@/lib/types/strapi-data/collection-items";
-import { PublishableItem, MediaItem, Single, Collection, Image } from "@/lib/types/strapi";
+import { SocialLink } from "~/lib/types/strapi-data/collection-items";
+import { PublishableItem, MediaItem, Single, Collection, Image } from "~/lib/types/strapi";
 
 export interface HomePage extends PublishableItem<{
 	title: string;

@@ -1,7 +1,10 @@
-@import "@/lib/scss/mixins";
+@import "~/lib/scss/mixins";
 
 .swiper {
-	$swiper-pagination-mt: spacing(md);
+	$pagination-height: 0.9rem;
+	$pagination-mt: spacing(md);
+
+	position: relative;
 
 	display: flex;
 	flex-direction: column;
@@ -36,82 +39,56 @@
 		}
 	}
 
-	&-button {
-		&-next,
-		&-prev {
-			--swiper-btn-offset: #{spacing(lg)};
-			position: absolute;
-			top: 50%;
-			z-index: 3;
-			border-radius: radius(md);
-			margin-top: calc(3rem * -0.5 - $swiper-pagination-mt);
-			height: 3.75rem;
-			width: 3rem;
+	&-btn {
+		--swiper-btn-offset: #{spacing(lg)};
+		z-index: 3;
+		position: absolute;
 
-			background-color: rgba($bg-secondary, 0.6);
+		top: calc(50% - ($pagination-height + $pagination-mt) * 0.5);
+		transform: translateY(-50%);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+
+		border-radius: radius(md);
+		background-color: rgba($bg-secondary, 0.6);
+		filter: opacity(0.75);
+
+		color: $color-primary;
+		font-size: 2rem;
+		padding: 15px 15px;
+
+		transition:
+			filter anim(fast),
+			background-color anim(fast);
+
+		@include hover-active-swap-focus-visible {
+			background-color: $bg-secondary;
 			filter: opacity(1);
-			transition:
-				filter anim(fast),
-				background-color anim(fast);
-
-			@include hover-active-swap-focus-visible {
-				background-color: $bg-secondary;
-			}
-
-			@include media-breakpoint-down(xxl) {
-				--swiper-btn-offset: #{spacing(sm)};
-			}
-
-			@include media-breakpoint-down(sm) {
-				display: none;
-			}
-
-			&.swiper-button-disabled {
-				filter: opacity(0);
-				cursor: unset;
-				pointer-events: none;
-			}
-
-			&:after {
-				position: absolute;
-				inset: 0;
-
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				margin-top: -0.4rem;
-
-				color: $color-primary;
-				font-size: 4.2rem;
-
-				transition:
-					color anim(fast),
-					filter anim(fast);
-
-				@include media-breakpoint-down(xxl) {
-					font-size: 3.6rem;
-				}
-
-				@include media-breakpoint-down(lg) {
-					font-size: 3.2rem;
-				}
-			}
 		}
 
-		&-next {
+		@include media-breakpoint-down(xxl) {
+			--swiper-btn-offset: #{spacing(sm)};
+		}
+
+		@include media-breakpoint-down(sm) {
+			display: none;
+		}
+
+		&.swiper-button-disabled {
+			filter: opacity(0);
+			cursor: unset;
+			pointer-events: none;
+		}
+
+		&--next {
 			right: var(--swiper-btn-offset);
-
-			&:after {
-				content: "\203A";
-			}
 		}
 
-		&-prev {
+		&--prev {
 			left: var(--swiper-btn-offset);
-
-			&:after {
-				content: "\2039";
-			}
 		}
 	}
 
@@ -121,15 +98,13 @@
 		justify-content: center;
 		gap: 10px;
 
-		margin-top: $swiper-pagination-mt;
+		margin-top: $pagination-mt;
 
 		z-index: 3;
 
 		&-bullet {
-			$size: 0.9rem;
-
-			height: $size;
-			width: $size;
+			height: $pagination-height;
+			width: $pagination-height;
 			background-color: $bg-primary;
 			border-radius: 100%;
 
@@ -149,7 +124,7 @@
 			}
 
 			&:focus-visible {
-				border: 1px solid white;
+				border: 2px solid white;
 				outline: 2px solid $bg-primary-d-1;
 			}
 		}

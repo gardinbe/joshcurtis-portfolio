@@ -4,14 +4,14 @@
 @import "mixins";
 
 //libs
-@import "~/bootstrap/scss/variables";
-@import "~/bootstrap/scss/functions";
-@import "~/bootstrap/scss/mixins/breakpoints";
-@import "~/bootstrap/scss/vendor/rfs";
-@import "~/bootstrap/scss/bootstrap-reboot";
-@import "~/bootstrap/scss/utilities";
-@import "~/bootstrap/scss/utilities/api";
-// @import "~/swiper/swiper";
+@import "~modules/bootstrap/scss/variables";
+@import "~modules/bootstrap/scss/functions";
+@import "~modules/bootstrap/scss/mixins/breakpoints";
+@import "~modules/bootstrap/scss/vendor/rfs";
+@import "~modules/bootstrap/scss/bootstrap-reboot";
+@import "~modules/bootstrap/scss/utilities";
+@import "~modules/bootstrap/scss/utilities/api";
+// @import "~modules/swiper/swiper";
 
 //fonts
 @import "fonts/inter";
@@ -23,3 +23,4 @@
 
 //global components
 @import "components/swiper";
+@import "components/terminal-typer";

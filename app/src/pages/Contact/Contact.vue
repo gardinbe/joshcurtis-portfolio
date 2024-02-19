@@ -29,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import StandardContent from "@/components/StandardContent/StandardContent.vue";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import Button from "@/components/Button/Button.vue";
-import { cms } from "@/lib/services/instances";
-import { md, throwContentError } from "@/lib/utils";
+import StandardContent from "~/components/StandardContent/StandardContent.vue";
+import StrapiImage from "~/components/StrapiImage/StrapiImage.vue";
+import Button from "~/components/Button/Button.vue";
+import { cms } from "~/lib/services/instances";
+import { md, throwContentError } from "~/lib/utils";
 
 const page = await cms.getContactPage()
 	.catch(throwContentError);

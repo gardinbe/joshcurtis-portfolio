@@ -1,13 +1,14 @@
-import "@/lib/scss/main.scss";
+import "~/lib/scss/main.scss";
+
 import * as fontawesome from "@fortawesome/fontawesome-svg-core";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import * as swiper from "swiper/element/bundle";
 import { createApp } from "vue";
-import router from "@/router";
-import App from "@/App.vue";
-import { errorHandler } from "@/lib/utils";
+import router from "~/router";
+import App from "~/App.vue";
+import { errorHandler } from "~/lib/utils";
 
-fontawesome.library.add(faArrowLeft);
+fontawesome.library.add(faArrowLeft, faChevronLeft, faChevronRight);
 
 swiper.register();
 

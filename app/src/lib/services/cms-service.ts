@@ -1,7 +1,7 @@
-import { StrapiService, StrapiServiceOptions } from "@/lib/services/strapi-service";
-import { Product } from "@/lib/types/strapi-data/collection-items";
-import { AboutPage, ContactPage, HomePage, WorkPage } from "@/lib/types/strapi-data/single-items";
-import { DefaultOptions, Options } from "@/lib/types/utils";
+import { StrapiService, StrapiServiceOptions } from "~/lib/services/strapi-service";
+import { Product } from "~/lib/types/strapi-data/collection-items";
+import { AboutPage, ContactPage, HomePage, WorkPage } from "~/lib/types/strapi-data/single-items";
+import { RequiredOptions } from "~/lib/types/utils";
 
 /**
  * Options for a CMS service.
@@ -13,20 +13,18 @@ export interface CMSServiceOptions extends StrapiServiceOptions { }
  * CMS API.
  */
 export class CMSService extends StrapiService {
-	static override readonly DEFAULT_OPTIONS: DefaultOptions<CMSServiceOptions> =
-		StrapiService.DEFAULT_OPTIONS;
+	static override createOptions(options: CMSServiceOptions): RequiredOptions<CMSServiceOptions> {
+		return StrapiService.createOptions(options);
+	}
 
-	protected override readonly options: Options<CMSServiceOptions>;
+	protected override readonly options: RequiredOptions<CMSServiceOptions>;
 
 	/**
 	 * Creates a new CMS service instance.
-	 * @param options - CMS service options
+	 * @param options - Options
 	 */
 	constructor(options: CMSServiceOptions) {
-		const _options = CMSService.createOptions(
-			CMSService.DEFAULT_OPTIONS,
-			options
-		);
+		const _options = CMSService.createOptions(options);
 		super(_options);
 		this.options = _options;
 	}

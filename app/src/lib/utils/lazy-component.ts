@@ -1,5 +1,5 @@
 import { Component, defineAsyncComponent, defineComponent, h } from "vue";
-import Loader from "@/components/Loader/Loader.vue";
+import Loader from "~/components/Loader/Loader.vue";
 
 /**
  * Lazy-loads a component with a loader.

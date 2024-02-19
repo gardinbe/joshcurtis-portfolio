@@ -1,6 +1,6 @@
 <template>
 	<div
-		ref="menuEl"
+		ref="el"
 		class="navMenu"
 	>
 		<button
@@ -45,7 +45,7 @@ defineProps<{
 	items: NavItem[];
 }>();
 
-const menuEl = ref<HTMLElement | null>(null);
+const el = ref<HTMLElement | null>(null);
 const btnEl = ref<HTMLElement | null>(null);
 const itemsEl = ref<HTMLElement | null>(null);
 
@@ -59,9 +59,11 @@ onUnmounted(() => {
 
 let opened = false;
 
-const toggle = () => opened
-	? close()
-	: open();
+const toggle = () => {
+	opened
+		? close()
+		: open();
+};
 
 const open = () => {
 	btnEl.value!.dataset.visible = "true";
@@ -77,10 +79,9 @@ const close = () => {
 
 const handleWindowClick = (ev: MouseEvent) => {
 	const target = ev.target as HTMLElement;
-	if (menuEl.value!.contains(target))
-		return;
 
-	close();
+	if (!el.value!.contains(target))
+		close();
 };
 
 </script>

@@ -20,8 +20,7 @@
 			<TerminalTyper
 				class="terminal-typer"
 				no-layout-shift
-				:cursor="{ symbol: '▮' }"
-				v-html="md(page.attributes.content)"
+				:content="md(page.attributes.content)"
 			/>
 
 			<Button
@@ -100,13 +99,13 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import NavMenu, { NavItem } from "@/components/NavMenu/NavMenu.vue";
-import Button from "@/components/Button/Button.vue";
-import TerminalTyper from "@/components/TerminalTyper/TerminalTyper.vue";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import { cms, strapiMedia } from "@/lib/services/instances";
-import { md, throwContentError } from "@/lib/utils";
+import SplitContent from "~/components/SplitContent/SplitContent.vue";
+import NavMenu, { NavItem } from "~/components/NavMenu/NavMenu.vue";
+import Button from "~/components/Button/Button.vue";
+import TerminalTyper from "~/components/TerminalTyper/TerminalTyper.vue";
+import StrapiImage from "~/components/StrapiImage/StrapiImage.vue";
+import { cms, strapiMedia } from "~/lib/services/instances";
+import { md, throwContentError } from "~/lib/utils";
 
 const router = useRouter();
 

@@ -53,11 +53,11 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import Button from "@/components/Button/Button.vue";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import { cms } from "@/lib/services/instances";
-import { md, throwNotFoundError, notFoundError } from "@/lib/utils";
+import Button from "~/components/Button/Button.vue";
+import StrapiImage from "~/components/StrapiImage/StrapiImage.vue";
+import SplitContent from "~/components/SplitContent/SplitContent.vue";
+import { cms } from "~/lib/services/instances";
+import { md, throwNotFoundError, notFoundError } from "~/lib/utils";
 
 const router = useRouter();
 

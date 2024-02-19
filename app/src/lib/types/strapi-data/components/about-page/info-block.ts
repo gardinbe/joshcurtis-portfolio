@@ -1,4 +1,4 @@
-import { Component } from "@/lib/types/strapi";
+import { Component } from "~/lib/types/strapi";
 
 export interface InfoBlock extends Component {
 	title: string;

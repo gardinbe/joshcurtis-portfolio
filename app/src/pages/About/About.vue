@@ -37,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import StrapiImage from "@/components/StrapiImage/StrapiImage.vue";
-import { cms } from "@/lib/services/instances";
-import { md, throwContentError } from "@/lib/utils";
+import SplitContent from "~/components/SplitContent/SplitContent.vue";
+import StrapiImage from "~/components/StrapiImage/StrapiImage.vue";
+import { cms } from "~/lib/services/instances";
+import { md, throwContentError } from "~/lib/utils";
 
 const page = await cms.getAboutPage()
 	.catch(throwContentError);

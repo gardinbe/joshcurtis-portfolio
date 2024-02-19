@@ -1,7 +1,7 @@
-import { ApiService, ApiServiceOptions } from "@/lib/services/api-service";
-import { StrapiResponse, SingleResponse, CollectionResponse, StrapiRequestParams, Item, SingleRequestParams, CollectionRequestParams } from "@/lib/types/strapi";
-import { DefaultOptions, Options } from "@/lib/types/utils";
-import { throwExp } from "@/lib/utils";
+import { ApiService, ApiServiceOptions } from "~/lib/services/api-service";
+import { StrapiResponse, SingleResponse, CollectionResponse, StrapiRequestParams, Item, SingleRequestParams, CollectionRequestParams } from "~/lib/types/strapi";
+import { RequiredOptions } from "~/lib/types/utils";
+import { throwExp } from "~/lib/utils";
 
 /**
  * Options for a Strapi service.
@@ -12,20 +12,18 @@ export interface StrapiServiceOptions extends ApiServiceOptions { }
  * Service for handling and performing requests to a Strapi API.
  */
 export class StrapiService extends ApiService<StrapiResponse, StrapiRequestParams> {
-	static override readonly DEFAULT_OPTIONS: DefaultOptions<StrapiServiceOptions> =
-		ApiService.DEFAULT_OPTIONS;
+	static override createOptions(options: StrapiServiceOptions): RequiredOptions<StrapiServiceOptions> {
+		return ApiService.createOptions(options);
+	}
 
-	protected override readonly options: Options<StrapiServiceOptions>;
+	protected override readonly options: RequiredOptions<StrapiServiceOptions>;
 
 	/**
 	 * Creates a new Strapi service instance.
-	 * @param options - Strapi service options
+	 * @param options - Options
 	 */
 	constructor(options: StrapiServiceOptions) {
-		const _options = StrapiService.createOptions(
-			StrapiService.DEFAULT_OPTIONS,
-			options
-		);
+		const _options = StrapiService.createOptions(options);
 		super(_options);
 		this.options = _options;
 	}

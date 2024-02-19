@@ -1,5 +1,5 @@
-import config from "@/config";
-import { CMSService, CMSServiceOptions } from "@/lib/services/cms-service";
+import config from "~/config";
+import { CMSService, CMSServiceOptions } from "~/lib/services/cms-service";
 
 const options: CMSServiceOptions = {
 	hostname: config.STRAPI_HOST,

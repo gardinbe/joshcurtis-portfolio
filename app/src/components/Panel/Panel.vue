@@ -52,10 +52,8 @@ const updateOverflow = () => {
 watch(computed(() => props.open), updateOverflow);
 
 const closeOnEscapeKey = (ev: KeyboardEvent) => {
-	if ((ev.key !== "Escape" && ev.key !== "Esc") || props.inert)
-		return;
-
-	props.closeAction();
+	if ((ev.key === "Escape" || ev.key === "Esc") && !props.inert)
+		props.closeAction();
 };
 
 onMounted(() => {
@@ -70,10 +68,8 @@ const panelEl = ref<HTMLElement | null>(null);
 const panelBackdropEl = ref<HTMLElement | null>(null);
 
 const backdropClick = (ev: MouseEvent) => {
-	if (ev.currentTarget !== panelBackdropEl.value)
-		return;
-
-	props.closeAction();
+	if (ev.currentTarget === panelBackdropEl.value)
+		props.closeAction();
 };
 
 /**
