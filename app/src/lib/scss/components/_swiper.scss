@@ -10,13 +10,16 @@
 	flex-direction: column;
 	overflow: hidden;
 
-	&:active {
-		cursor: grab;
-	}
-
 	&-wrapper {
 		display: flex;
 		height: 100%;
+		width: fit-content;
+
+		cursor: grab;
+
+		&:active {
+			cursor: grabbing;
+		}
 	}
 
 	&-slide {

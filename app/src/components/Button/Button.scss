@@ -25,7 +25,7 @@
 		transform: scale(1.055);
 	}
 
-	&--large {
+	&--lg {
 		@include font-size(1.4rem);
 		padding: 16px 28px;
 	}

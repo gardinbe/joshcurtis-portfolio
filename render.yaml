@@ -18,7 +18,7 @@ services:
       sizeGB: 20
     envVars:
       - key: NODE_VERSION
-        value: 20.11.0
+        value: 21.6.2
       - key: NODE_ENV
         value: production
       - key: HOST_URL
@@ -51,7 +51,7 @@ services:
     autoDeploy: true
     envVars:
       - key: NODE_VERSION
-        value: 20.11.0
+        value: 21.6.2
       - key: NODE_ENV
         value: production
       - key: VITE_STRAPI_HOST

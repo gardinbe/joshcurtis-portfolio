@@ -3,6 +3,10 @@
   "name": "joshcurtis-portfolio-cms",
   "description": "Strapi CMS for Josh Curtis' portfolio",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=16.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
     "dev": "strapi develop",
     "start": "strapi start",
@@ -32,9 +36,5 @@
   },
   "strapi": {
     "uuid": "d4fa12f7-ad5f-43c3-a620-b13632374abd"
-  },
-  "engines": {
-    "node": ">=16.0.0 <=20.x.x",
-    "npm": ">=6.0.0"
   }
 }

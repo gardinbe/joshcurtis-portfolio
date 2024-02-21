@@ -6,20 +6,22 @@ import { compression } from "vite-plugin-compression2";
 export default defineConfig({
 	plugins: [
 		vue(),
-		compression(), //gzip
+		compression({
+			algorithm: "gzip",
+			exclude: [/\.(br)$/, /\.(gz)$/]
+		}),
 		compression({
 			algorithm: "brotliCompress",
-			exclude: [/\.(br)$/, /\.(gz)$/],
-			deleteOriginalAssets: false
-		}) //brotli
+			exclude: [/\.(br)$/, /\.(gz)$/]
+		})
 	],
 	resolve: {
 		alias: {
-			"~modules": path.resolve(__dirname, "node_modules"),
-			"~": path.resolve(__dirname, "src")
+			"~modules": path.resolve(import.meta.dirname, "node_modules"),
+			"~": path.resolve(import.meta.dirname, "src")
 		}
 	},
-	publicDir: path.resolve(__dirname, "public"),
+	publicDir: path.resolve(import.meta.dirname, "public"),
 	css: {
 		preprocessorOptions: {
 			scss: {

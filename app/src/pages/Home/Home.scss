@@ -21,7 +21,11 @@
 
 .terminal-typer {
 	@include font-size(1.1rem);
-	margin-bottom: spacing(lg);
+	margin-bottom: spacing(xl);
+
+	@include media-breakpoint-down(lg) {
+		margin-bottom: spacing(lg);
+	}
 }
 
 .contact-btn {

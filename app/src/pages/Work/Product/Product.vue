@@ -11,7 +11,7 @@
 				</h1>
 				<p
 					v-if="page.attributes.subtitle"
-					class="subtitle subtitle--large"
+					class="subtitle subtitle--lg"
 				>
 					{{ page.attributes.subtitle }}
 				</p>
