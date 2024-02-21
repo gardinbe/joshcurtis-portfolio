@@ -793,6 +793,7 @@ export interface ApiAboutAbout extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
+    meta: Attribute.Component<'page.meta'> & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     content: Attribute.RichText & Attribute.Required;
     image: Attribute.Media & Attribute.Required;
@@ -827,6 +828,7 @@ export interface ApiContactContact extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
+    meta: Attribute.Component<'page.meta'> & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     content: Attribute.RichText & Attribute.Required;
     social_links: Attribute.Relation<
@@ -864,6 +866,7 @@ export interface ApiHomeHome extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
+    meta: Attribute.Component<'page.meta'> & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     content: Attribute.RichText & Attribute.Required;
     cta: Attribute.String & Attribute.Required;
@@ -896,6 +899,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    meta: Attribute.Component<'page.meta'> & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     slug: Attribute.UID<'api::product.product', 'title'> & Attribute.Required;
     subtitle: Attribute.String;
@@ -1007,6 +1011,7 @@ export interface ApiWorkWork extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
+    meta: Attribute.Component<'page.meta'> & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     content: Attribute.RichText & Attribute.Required;
     products: Attribute.Relation<

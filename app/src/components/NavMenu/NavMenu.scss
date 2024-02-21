@@ -1,5 +1,6 @@
 .navMenu {
 	position: relative;
+	user-select: none;
 
 	//just for keyboard navigation, :has() is okay here
 	&:has(a:focus-visible) &__items {

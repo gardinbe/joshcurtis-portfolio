@@ -17,6 +17,19 @@
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import { useHead } from "@unhead/vue";
+import { generateTitle, generateCanonicalUrl } from "~/lib/utils";
+
+const router = useRouter();
+
+useHead({
+	title: generateTitle("Page not found"),
+	meta: [{ name: "description", content: "The page or content you are for does not exist or has been removed." }],
+	link: [{ rel: "canonical", href: generateCanonicalUrl(router) }]
+});
+
+</script>
 
 <style scoped src="./NotFound.scss" />
