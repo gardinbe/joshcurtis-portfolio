@@ -18,7 +18,7 @@ services:
       sizeGB: 20
     envVars:
       - key: NODE_VERSION
-        value: 21.6.2
+        value: 20.11.1
       - key: NODE_ENV
         value: production
       - key: HOST_URL
