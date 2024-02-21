@@ -26,7 +26,7 @@
 			}"
 			:href="href ?? ''"
 			target="_blank"
-			:aria-label="ariaLabel"
+			:aria-label="ariaLabel ?? ''"
 		>
 			<slot />
 		</a>
@@ -41,7 +41,7 @@
 				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'
 			}"
-			:aria-label="ariaLabel"
+			:aria-label="ariaLabel ?? ''"
 		>
 			<slot />
 		</button>

@@ -1,4 +1,4 @@
-import { envParser, throwExp } from "@/lib/utils";
+import { envParser, throwExp } from "~/lib/utils";
 
 export default {
 	/** Hostname of the Strapi API. */

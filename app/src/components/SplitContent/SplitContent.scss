@@ -92,10 +92,18 @@
 		position: relative;
 		background-color: white;
 		color: $bg-secondary;
+		padding: spacing(md) 0;
+
+		@include media-breakpoint-down(lg) {
+			padding: spacing(xl) 0;
+		}
+
+		@include media-breakpoint-down(md) {
+			padding: spacing(lg) 0;
+		}
 
 		:deep(.swiper) {
 			flex-grow: 1; //when only 1 slide left
-			padding: spacing(md) 0;
 			height: 60%;
 			overflow-y: auto; //v short viewport -> allows atleast vertical scrolling
 
@@ -109,11 +117,6 @@
 
 			@include media-breakpoint-down(lg) {
 				height: 100%;
-				padding: spacing(xl) 0;
-			}
-
-			@include media-breakpoint-down(md) {
-				padding: spacing(lg) 0;
 			}
 
 			.swiper-slide {

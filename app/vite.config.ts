@@ -15,8 +15,8 @@ export default defineConfig({
 	],
 	resolve: {
 		alias: {
-			"~": path.resolve(__dirname, "node_modules"),
-			"@": path.resolve(__dirname, "src")
+			"~modules": path.resolve(__dirname, "node_modules"),
+			"~": path.resolve(__dirname, "src")
 		}
 	},
 	publicDir: path.resolve(__dirname, "public"),
@@ -24,13 +24,13 @@ export default defineConfig({
 		preprocessorOptions: {
 			scss: {
 				additionalData: `
-					@import "~/bootstrap/scss/functions";
-					@import "~/bootstrap/scss/mixins/breakpoints";
-					@import "~/bootstrap/scss/variables";
-					@import "~/bootstrap/scss/vendor/rfs";		
-					@import "@/lib/scss/functions";
-					@import "@/lib/scss/mixins";
-					@import "@/lib/scss/variables";
+					@import "~modules/bootstrap/scss/functions";
+					@import "~modules/bootstrap/scss/mixins/breakpoints";
+					@import "~modules/bootstrap/scss/variables";
+					@import "~modules/bootstrap/scss/vendor/rfs";		
+					@import "~/lib/scss/functions";
+					@import "~/lib/scss/mixins";
+					@import "~/lib/scss/variables";
 				`
 			}
 		}

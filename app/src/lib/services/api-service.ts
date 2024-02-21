@@ -1,7 +1,7 @@
 import { stringify } from "qs";
 import { mergeDeepRight } from "ramda";
-import { DefaultOptions, Options } from "@/lib/types/utils";
-import { delay } from "@/lib/utils";
+import { RequiredOptions } from "~/lib/types/utils";
+import { delay, merge } from "~/lib/utils";
 
 /**
  * Options for an API service.
@@ -54,38 +54,30 @@ export class ApiService<
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	TBaseParams extends Record<string, any> = Record<string, any>
 > {
-	static readonly DEFAULT_OPTIONS: DefaultOptions<ApiServiceOptions> = {
-		basePath: null,
-		baseParams: {},
-		timeout: 30
-	};
-
-	static createOptions(
-		defaultOptions: DefaultOptions<ApiServiceOptions>,
-		options: ApiServiceOptions
-	): Options<ApiServiceOptions> {
+	static createOptions(options: ApiServiceOptions): RequiredOptions<ApiServiceOptions> {
 		return {
-			...Object.assign({},
-				defaultOptions,
-				options),
+			...merge(
+				{
+					basePath: null,
+					timeout: 30
+				},
+				options
+			),
 			baseParams: mergeDeepRight(
-				defaultOptions.baseParams,
+				{},
 				options.baseParams ?? {}
 			)
 		};
 	}
 
-	protected readonly options: Options<ApiServiceOptions>;
+	protected readonly options: RequiredOptions<ApiServiceOptions>;
 
 	/**
 	 * Creates a new API service instance.
-	 * @param options - API service options
+	 * @param options - Options
 	 */
 	constructor(options: ApiServiceOptions) {
-		this.options = ApiService.createOptions(
-			ApiService.DEFAULT_OPTIONS,
-			options
-		);
+		this.options = ApiService.createOptions(options);
 	}
 
 	/**

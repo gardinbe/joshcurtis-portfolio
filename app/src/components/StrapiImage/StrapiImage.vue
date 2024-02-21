@@ -39,9 +39,9 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Image, ImageFormat, ImageFormatName } from "@/lib/types/strapi";
-import { strapiMedia } from "@/lib/services/instances";
-import { BSBreakpoint, BS_BREAKPOINTS } from "@/lib/utils";
+import { Image, ImageFormat, ImageFormatName } from "~/lib/types/strapi";
+import { strapiMedia } from "~/lib/services/instances";
+import { BSBreakpoint, BS_BREAKPOINTS } from "~/lib/utils";
 
 const props = defineProps<{
 	/** Type of image. */

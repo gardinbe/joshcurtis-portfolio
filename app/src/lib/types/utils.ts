@@ -7,6 +7,6 @@ export type OptionalProps<T> = Pick<T,
 	{ [K in keyof T]-?: object extends Pick<T, K> ? K : never }[keyof T]
 >;
 
-export type Options<T> = DeepRequired<T>;
+export type RequiredOptions<T> = DeepRequired<T>;
 
-export type DefaultOptions<T> = DeepRequired<OptionalProps<T>>;
+// export type DefaultOptions<T> = DeepRequired<OptionalProps<T>>;

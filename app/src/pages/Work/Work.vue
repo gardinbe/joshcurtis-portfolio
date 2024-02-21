@@ -14,11 +14,14 @@
 
 		<template #second>
 			<Swiper
-				id="productSwiper"
+				tabindex="-1"
 				:speed="150"
 				:space-between="16"
 				centered-slides
-				navigation
+				:navigation="{
+					prevEl: '.swiper-btn--prev',
+					nextEl: '.swiper-btn--next'
+				}"
 				:pagination="{ clickable: true }"
 				:breakpoints="{
 					1400: { slidesPerView: 2 },
@@ -53,17 +56,24 @@
 						</hgroup>
 					</div>
 				</SwiperSlide>
+				<button class="swiper-btn swiper-btn--prev">
+					<FontAwesomeIcon icon="fa-solid fa-chevron-left" />
+				</button>
+				<button class="swiper-btn swiper-btn--next">
+					<FontAwesomeIcon icon="fa-solid fa-chevron-right" />
+				</button>
 			</Swiper>
 		</template>
 	</SplitContent>
 </template>
 
 <script setup lang="ts">
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { useRouter } from "vue-router";
-import SplitContent from "@/components/SplitContent/SplitContent.vue";
-import { cms, strapiMedia } from "@/lib/services/instances";
-import { md, throwContentError } from "@/lib/utils";
+import SplitContent from "~/components/SplitContent/SplitContent.vue";
+import { cms, strapiMedia } from "~/lib/services/instances";
+import { md, throwContentError } from "~/lib/utils";
 
 const router = useRouter();
 

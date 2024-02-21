@@ -1,28 +1,75 @@
-import { EffectBuilder, RenderState } from "../types";
-import { Effect } from "./base";
+import { EffectBuilder } from "../types";
+import { Effect, EffectInterval, EffectContext } from "./abstract";
 
-export class InsertEffect extends Effect<string> {
-	static builder: EffectBuilder<InsertEffect> = {
-		key: "insert",
-		create(rawValue) {
-			return new InsertEffect(rawValue);
-		}
-	};
+interface InsertEffectContext extends EffectContext {
+	text: string;
+	interval: EffectInterval;
+}
 
-	async apply(state: RenderState) {
-		const chars = [...this.value];
+export class InsertEffect extends Effect<InsertEffectContext> {
+	static builder(interval: EffectInterval): EffectBuilder<InsertEffect> {
+		return {
+			key: "insert",
+			create: ctx =>
+				new InsertEffect({
+					containers: ctx.containers,
+					cursor: ctx.cursor,
+					text: ctx.rawValue,
+					interval
+				})
+		};
+	}
 
-		for (const char of chars) {
-			if (state.currentInvisibleTextNode)
-				state.currentInvisibleTextNode.textContent =
-					state.currentInvisibleTextNode.textContent!.slice(1);
+	async apply() {
+		const { visible, invisible } = this.ctx.containers;
 
-			state.currentTextNode.textContent! += char;
-			await InsertEffect.applyInterval(state.options.intervals.insert);
+		this.removePlaceholder(visible);
+
+		const insertChar = (charEl: HTMLElement) => {
+
+			//must remove first: even if for a split-second, the insertion of a
+			//character can extend a word, causing it to wrap at the end of a line,
+			//fucking up the position of the cursor.
+
+			invisible.firstChild?.remove();
+			visible.append(charEl);
+			this.ctx.cursor.moveTo(charEl);
+		};
+
+		const charEls = this.createCharEls(this.ctx.text);
+
+		for (const charEl of charEls) {
+			insertChar(charEl);
+			await Effect.interval(this.ctx.interval);
 		}
 	}
 
-	applyInstantly(state: RenderState) {
-		state.currentTextNode.textContent! += this.value;
+	applyInvisible() {
+		const { invisible } = this.ctx.containers;
+
+		this.removePlaceholder(invisible);
+
+		invisible.append(
+			...this.createCharEls(this.ctx.text)
+		);
+	}
+
+	private removePlaceholder(container: HTMLElement) {
+		if (
+			container.lastChild
+			&& (container.lastChild as HTMLElement).classList.contains("placeholder")
+		)
+			container.lastChild.remove();
+	}
+
+	private createCharEls(text: string): HTMLElement[] {
+		return [...text]
+			.map(this.createCharEl.bind(this));
+	}
+
+	private createCharEl(char: string): HTMLElement {
+		const wrapper = document.createElement("span");
+		wrapper.textContent = char;
+		return wrapper;
 	}
 }

@@ -5,5 +5,6 @@ export * from "./env-parser";
 export * from "./escape-regex";
 export * from "./lazy-component";
 export * from "./markdown";
+export * from "./merge";
 export * from "./terminal-typer";
 export * from "./throw-expression";

@@ -1,46 +1,21 @@
 import { Effect } from "./effects";
-import { TerminalTyperRendererOptions } from "./renderer";
-import { Options } from "@/lib/types/utils";
+import { Cursor } from "./cursor";
 
-//TODO: perhaps provide a normal distribution option, could be more realistic
-/** Interval for an effect. */
-export type EffectInterval = {
-	variance: "constant";
-	value: number;
-} | {
-	variance: "random";
-	min: number;
-	max: number;
-};
+/** Object of visible and invisible character containers. */
+export interface CharContainers {
+	visible: HTMLElement;
+	invisible: HTMLElement;
+}
 
-/** State of a rendering operation. */
-export interface RenderState {
-	currentTextNode: Text;
-	currentInvisibleTextNode?: Text | undefined;
+/** A terminal-typer context for an effect. */
+export interface Context {
 	cursor: Cursor;
-	options: Options<TerminalTyperRendererOptions>;
+	containers: CharContainers;
+	rawValue: string;
 }
 
-/** A cursor element and functions to perform actions to it. */
-export interface Cursor {
-	el: HTMLElement;
-	startBlinking(): void;
-	stopBlinking(): void;
-}
-
+/** An effect builder used to create instances of effects. */
 export interface EffectBuilder<TEffect extends Effect = Effect> {
-	/**
-	 * Key name for the effect used to identify the effect within a
-	 * string.
-	 *
-	 * **This cannot contain leading or trailing whitespace**.
-	 */
 	key: string;
-	/**
-	 * Creates an instance of the target effect.
-	 *
-	 * This should parse the raw value into one which the effect expects.
-	 * @param rawValue - Unparsed, raw value
-	 */
-	create(rawValue: string): TEffect;
+	create(ctx: Context): TEffect;
 }

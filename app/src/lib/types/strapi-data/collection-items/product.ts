@@ -1,5 +1,5 @@
-import { PublishableItem, Single, Image, Collection } from "@/lib/types/strapi";
-import { ProductTag } from "@/lib/types/strapi-data/collection-items";
+import { PublishableItem, Single, Image, Collection } from "~/lib/types/strapi";
+import { ProductTag } from "~/lib/types/strapi-data/collection-items";
 
 export interface Product extends PublishableItem<{
 	title: string;

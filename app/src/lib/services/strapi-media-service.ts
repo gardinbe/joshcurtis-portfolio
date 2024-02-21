@@ -1,5 +1,6 @@
-import { DefaultOptions, Options } from "@/lib/types/utils";
-import { Image, ImageFormatName } from "@/lib/types/strapi";
+import { RequiredOptions } from "~/lib/types/utils";
+import { Image, ImageFormatName } from "~/lib/types/strapi";
+import { merge } from "~/lib/utils";
 
 /**
  * Options for a Strapi media service.
@@ -30,30 +31,23 @@ export interface StrapiMediaServiceOptions {
  * media items.
  */
 export class StrapiMediaService {
-	static readonly DEFAULT_OPTIONS: DefaultOptions<StrapiMediaServiceOptions> = {
-		defaultFallbackColor: null
-	};
-
-	static createOptions(
-		defaultOptions: DefaultOptions<StrapiMediaServiceOptions>,
-		options: StrapiMediaServiceOptions
-	): Options<StrapiMediaServiceOptions> {
-		return Object.assign({},
-			defaultOptions,
-			options);
+	static createOptions(options: StrapiMediaServiceOptions): RequiredOptions<StrapiMediaServiceOptions> {
+		return merge(
+			{
+				defaultFallbackColor: null
+			},
+			options
+		);
 	}
 
-	private readonly options: Options<StrapiMediaServiceOptions>;
+	private readonly options: RequiredOptions<StrapiMediaServiceOptions>;
 
 	/**
 	 * Creates a new Strapi media service instance.
-	 * @param options - Strapi media service options
+	 * @param options - Options
 	 */
 	constructor(options: StrapiMediaServiceOptions) {
-		this.options = StrapiMediaService.createOptions(
-			StrapiMediaService.DEFAULT_OPTIONS,
-			options
-		);
+		this.options = StrapiMediaService.createOptions(options);
 	}
 
 	/**

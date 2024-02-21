@@ -1,48 +1,105 @@
-import { EffectBuilder, RenderState } from "../types";
-import { Effect } from "./base";
-import { throwExp } from "@/lib/utils";
-import { delay } from "@/lib/utils/delay";
+import { EffectBuilder } from "../types";
+import { strToInt } from "../utils";
+import { Effect, EffectInterval, EffectContext } from "./abstract";
+import { delay } from "~/lib/utils";
 
-export class DeleteEffect extends Effect<number | "nodeContent"> {
-	static builder: EffectBuilder<DeleteEffect> = {
-		key: "delete",
-		create(rawValue) {
-			const intValue = parseInt(rawValue);
-			const value = rawValue === "nodeContent"
-				? rawValue
-				: !isNaN(intValue)
-					? intValue
-					: throwExp(`Terminal-typer delete effect value '${rawValue}' is invalid`);
+export type DeleteEffectInterval = EffectInterval & {
+	/** Delay duration after the first character deletion. */
+	afterFirstChar?: number | null;
+};
 
-			return new DeleteEffect(value);
-		}
-	};
+interface DeleteEffectContext extends EffectContext {
+	/** Quantity of characters to delete. */
+	quantity: number | "nodeContent";
+	interval: DeleteEffectInterval;
+}
 
-	async apply(state: RenderState) {
-		let remaining = this.value === "nodeContent"
-			? state.currentTextNode.textContent!.length
-			: this.value;
+export class DeleteEffect extends Effect<DeleteEffectContext> {
+	static builder(interval: DeleteEffectInterval): EffectBuilder<DeleteEffect> {
+		return {
+			key: "delete",
+			create: ctx =>
+				new DeleteEffect({
+					containers: ctx.containers,
+					cursor: ctx.cursor,
+					quantity: ctx.rawValue === "nodeContent"
+						? ctx.rawValue
+						: strToInt(ctx.rawValue),
+					interval
+				})
+		};
+	}
 
-		const deleteLastChar = () => {
-			state.currentTextNode.textContent =
-				state.currentTextNode.textContent!.slice(0, -1);
+	//TODO: currently, the main limitation is that its very annoying to
+	//be able to climb up the dom tree and delete characters from previous
+	//character containers... would need to keep track of all active
+	//containers... cannot be bothered !
+	//for now, just being able to work with the current containers is fine.
+
+	async apply() {
+		const { visible } = this.ctx.containers;
+
+		let remaining = this.remaining(visible);
+
+		const removeChar = () => {
+			this.removeLastChild(visible);
+			this.ctx.cursor.moveTo(visible.lastChild as HTMLElement);
+			remaining--;
 		};
 
-		if (state.options.intervals.delete.afterFirstCharacter) {
-			deleteLastChar();
-			await delay(state.options.intervals.delete.afterFirstCharacter);
+		if (
+			this.ctx.interval.afterFirstChar
+			&& visible.lastChild
+			&& remaining > 0
+		) {
+			removeChar();
+			await delay(this.ctx.interval.afterFirstChar);
 		}
 
-		while (remaining > 0) {
-			deleteLastChar();
-			await DeleteEffect.applyInterval(state.options.intervals.delete);
+		while (
+			visible.lastChild
+			&& remaining > 0
+		) {
+			removeChar();
+			await Effect.interval(this.ctx.interval);
+		}
+	}
+
+	applyInvisible() {
+		const { invisible } = this.ctx.containers;
+
+		let remaining = this.remaining(invisible);
+
+		while (
+			invisible.lastChild
+			&& remaining > 0
+		) {
+			this.removeLastChild(invisible);
 			remaining--;
 		}
 	}
 
-	applyInstantly(state: RenderState) {
-		state.currentTextNode.textContent = this.value === "nodeContent"
-			? ""
-			: state.currentTextNode.textContent!.slice(0, -this.value);
+	private remaining(container: HTMLElement): number {
+		return this.ctx.quantity === "nodeContent"
+			? container.childNodes.length
+			: this.ctx.quantity;
+	}
+
+	private removeLastChild(container: HTMLElement) {
+
+		//zero-width-space placeholder hack to keep empty spans with atleast
+		//one character, as otherwise empty spans will collapse their height.
+
+		if (container.firstChild === container.lastChild)
+			this.addPlaceholder(container);
+
+		container.lastChild?.remove();
+	}
+
+	private addPlaceholder(container: HTMLElement) {
+		const placeholderEl = document.createElement("span");
+		placeholderEl.classList.add("placeholder");
+		placeholderEl.innerHTML = "&#8203;";
+		container.prepend(placeholderEl);
 	}
 }

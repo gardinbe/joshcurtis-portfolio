@@ -5,13 +5,13 @@ const config: Config = ({ env }) => {
 	const client = env("DATABASE_CLIENT")
 		?? throwExp("Missing 'DATABASE_CLIENT' environment variable");
 
-	const clientConfig = databaseClientConfigs.get(client)
+	const clientConfig = databaseClientConfigs(env)[client]
 		?? throwExp("Invalid database connection type provided");
 
 	return {
 		connection: {
 			client,
-			...clientConfig(env),
+			...clientConfig,
 			acquireConnectionTimeout: env.int("DATABASE_CONNECTION_TIMEOUT", 60000)
 		}
 	};
