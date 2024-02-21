@@ -16,6 +16,8 @@
 		transform anim(),
 		filter anim();
 
+	user-select: none;
+
 	@include media-breakpoint-down(md) {
 		@include font-size(1.15rem);
 		padding: 8px 20px;

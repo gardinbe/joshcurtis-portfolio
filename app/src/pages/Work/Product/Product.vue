@@ -53,11 +53,12 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { useHead } from "@unhead/vue";
 import Button from "~/components/Button/Button.vue";
 import StrapiImage from "~/components/StrapiImage/StrapiImage.vue";
 import SplitContent from "~/components/SplitContent/SplitContent.vue";
 import { cms } from "~/lib/services/instances";
-import { md, throwNotFoundError, notFoundError } from "~/lib/utils";
+import { md, throwNotFoundError, notFoundError, generatePageHead } from "~/lib/utils";
 
 const router = useRouter();
 
@@ -67,6 +68,8 @@ if (typeof slug !== "string")
 
 const page = await cms.getProduct({ slug })
 	.catch(throwNotFoundError);
+
+useHead(generatePageHead(page.attributes.meta, router));
 
 </script>
 

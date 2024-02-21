@@ -17,6 +17,19 @@
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import { useHead } from "@unhead/vue";
+import { generateTitle, generateCanonicalUrl } from "~/lib/utils";
+
+const router = useRouter();
+
+useHead({
+	title: generateTitle("Internal application error"),
+	meta: [{ name: "description", content: "The application has unfortunately ran into an internal error." }],
+	link: [{ rel: "canonical", href: generateCanonicalUrl(router) }]
+});
+
+</script>
 
 <style scoped src="./Error.scss" />

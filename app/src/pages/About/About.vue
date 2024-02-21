@@ -37,13 +37,19 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+import { useHead } from "@unhead/vue";
 import SplitContent from "~/components/SplitContent/SplitContent.vue";
 import StrapiImage from "~/components/StrapiImage/StrapiImage.vue";
 import { cms } from "~/lib/services/instances";
-import { md, throwContentError } from "~/lib/utils";
+import { md, throwContentError, generatePageHead } from "~/lib/utils";
+
+const router = useRouter();
 
 const page = await cms.getAboutPage()
 	.catch(throwContentError);
+
+useHead(generatePageHead(page.attributes.meta, router));
 
 </script>
 

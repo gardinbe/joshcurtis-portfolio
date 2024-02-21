@@ -68,12 +68,13 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+import { useHead } from "@unhead/vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { useRouter } from "vue-router";
 import SplitContent from "~/components/SplitContent/SplitContent.vue";
 import { cms, strapiMedia } from "~/lib/services/instances";
-import { md, throwContentError } from "~/lib/utils";
+import { md, throwContentError, generatePageHead } from "~/lib/utils";
 
 const router = useRouter();
 
@@ -88,6 +89,8 @@ const productClick = (ev: MouseEvent) => {
 
 const page = await cms.getWorkPage()
 	.catch(throwContentError);
+
+useHead(generatePageHead(page.attributes.meta, router));
 
 </script>
 
