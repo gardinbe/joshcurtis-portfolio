@@ -3,7 +3,7 @@
 		<RouterLink
 			class="btn"
 			:class="{
-				'btn--large': size === 'large',
+				'btn--lg': size === 'large',
 				'btn--filled': mode === 'filled',
 				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'
@@ -19,7 +19,7 @@
 			type="button"
 			class="btn"
 			:class="{
-				'btn--large': size === 'large',
+				'btn--lg': size === 'large',
 				'btn--filled': mode === 'filled',
 				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'
@@ -36,7 +36,7 @@
 			type="button"
 			class="btn"
 			:class="{
-				'btn--large': size === 'large',
+				'btn--lg': size === 'large',
 				'btn--filled': mode === 'filled',
 				'btn--filled-dark': mode === 'filled-dark',
 				'btn--ghost': mode === 'ghost'

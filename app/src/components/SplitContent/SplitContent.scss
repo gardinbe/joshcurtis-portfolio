@@ -27,8 +27,12 @@
 	}
 
 	&__btn {
-		margin-bottom: spacing(lg);
+		margin-bottom: spacing(xl);
 		margin-right: auto;
+
+		@include media-breakpoint-down(lg) {
+			margin-bottom: spacing(lg);
+		}
 	}
 }
 
@@ -37,10 +41,10 @@
 	flex-direction: column;
 
 	overflow-y: auto;
-	padding: spacing(xxl);
+	padding: spacing(xxxl);
 
 	@include media-breakpoint-down(xxl) {
-		padding: spacing(xl);
+		padding: spacing(xxl);
 	}
 
 	@include media-breakpoint-down(lg) {
@@ -95,7 +99,7 @@
 		padding: spacing(md) 0;
 
 		@include media-breakpoint-down(lg) {
-			padding: spacing(xl) 0;
+			padding: spacing(xxl) 0;
 		}
 
 		@include media-breakpoint-down(md) {

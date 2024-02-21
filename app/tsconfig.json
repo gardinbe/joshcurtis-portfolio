@@ -26,6 +26,6 @@
 	"include": [
 		"**/*.ts",
 		"**/*.vue",
-		".eslintrc.js"
+		".eslintrc.cjs"
 	]
 }

@@ -43,18 +43,22 @@ body {
 }
 
 hgroup {
-	margin-bottom: spacing(md);
+	margin-bottom: spacing(lg);
+
+	@include media-breakpoint-down(lg) {
+		margin-bottom: spacing(md);
+	}
 
 	> *:last-child {
 		margin-bottom: unset;
 	}
 
 	.subtitle {
-		font-weight: 700;
+		font-weight: 500;
 		line-height: 1.2;
 
-		&--large {
-			@include font-size(1.5rem);
+		&--lg {
+			@include font-size(1.35rem);
 		}
 	}
 }

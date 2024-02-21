@@ -5,7 +5,12 @@
 	display: flex;
 	gap: 0.5rem;
 	flex-wrap: wrap;
-	margin-top: spacing(md);
+	margin-top: spacing(xl);
+	margin-bottom: unset;
+
+	@include media-breakpoint-down(lg) {
+		margin-top: spacing(lg);
+	}
 }
 
 .tag {
@@ -14,7 +19,7 @@
 	background-color: $bg-primary-d-2;
 	padding: 5px 16px;
 	border-radius: radius(md);
-	font-weight: bold;
+	font-weight: 700;
 
 	&::selection {
 		background-color: var(--tag-color);
@@ -23,5 +28,5 @@
 }
 
 .link {
-	margin-top: spacing(md);
+	margin-top: spacing(lg);
 }
